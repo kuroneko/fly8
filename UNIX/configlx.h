@@ -44,7 +44,6 @@
 #define HAVE_UDP	1
 #define HAVE_FIFO	1
 #define HAVE_SELECT	1
-#define HAVE_SVGALIB	1
 
 
 #if defined(USE_GAME) || defined(USE_JOY) || defined(USE_GP)

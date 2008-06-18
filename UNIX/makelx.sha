@@ -11,7 +11,7 @@
 CPP=	$(CC)
 CFLAGS=	-I.. -O0 -E
 
-AWK=	awk
+AWK=	gawk --traditional
 DEL=	rm
 COPY=	cp
 REN=	mv

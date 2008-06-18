@@ -8,15 +8,17 @@
 # machine specific makefile for Linux
 #
 
-# Remove USE_JOY    on non intel platforms.
-# Remove USE_BGRASM on non intel platforms.
+# Remove USE_JOY    on non-i386 platforms
+# Remove USE_BGRASM on non-i386 platforms
+# Remove HAVE_SVGALIB on non-i386 platforms
 #
-CFLAGS= $(XFLAGS) -I.. -I. -DUSE_JOY -DUSE_GP -DDEBUG_BGR -DUSE_BGRASM \
-	-DHAVE_MIDI=1 -DHAVE_GETTIMEOFDAY=1
+CFLAGS= $(XFLAGS) -I.. -I. \
+	-DUSE_GP -DDEBUG_BGR -DHAVE_MIDI=1 -DHAVE_GETTIMEOFDAY=1 \
+#	-DUSE_JOY -DUSE_BGRASM -DHAVE_SVGALIB=1
 
 # Remove JSDIR on non intel platforms.
 #
-JSDIR=	jsdir
+#JSDIR=	jsdir
 
 COBJS=  drivers.o console.o timer.o unix.o mouse.o misc.o fifo.o udp.o \
 	xkeys.o grx.o gri.o bgr.o grstat.o \
