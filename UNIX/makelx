@@ -10,11 +10,12 @@
 
 # Remove USE_JOY    on non-i386 platforms
 # Remove USE_BGRASM on non-i386 platforms
-# Remove HAVE_SVGALIB on non-i386 platforms
+# Remove HAVE_SVGALIB on non-i386 platforms or if you just don't have svgalib
 #
 CFLAGS= $(XFLAGS) -I.. -I. \
 	-DUSE_GP -DDEBUG_BGR -DHAVE_MIDI=1 -DHAVE_GETTIMEOFDAY=1 \
-#	-DUSE_JOY -DUSE_BGRASM -DHAVE_SVGALIB=1
+#	-DUSE_JOY -DUSE_BGRASM \
+#	-DHAVE_SVGALIB=1
 
 # Remove JSDIR on non intel platforms.
 #
