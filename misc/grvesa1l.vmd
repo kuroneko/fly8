@@ -1,0 +1,11 @@
+# grvesa1l.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These are for all 1MB VESA cards with linear video memory.
+#
+
+:640x480x256:0x4101:256:0:0:640:480:3:275:206:8:8:1
+:800x600x256:0x4103:256:0:0:800:600:2:275:206:8:8:1
+:1024x768x256:0x4105:256:0:0:1024:768:1:275:206:8:8:1

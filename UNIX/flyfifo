@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# flyfifo
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# An example of setting up two FIFOs for head-to-head. In real life the two
+# processes will be started on different screens.
+#
+# You may need to use the following form to create the FIFOs:
+#	/usr/etc/mknod ff81 p
+
+
+mkfifo ff81
+mkfifo ff82
+rm fly1.log fly2.log
+fly8 r dnfifo.1:if=ff81:of=ff82:pack Tone N1 Lfly1.log $* &
+fly8 r dnfifo.1:if=ff82:of=ff81:pack Tone N2 Lfly2.log $* &

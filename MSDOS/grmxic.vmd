@@ -1,0 +1,15 @@
+# grmxic.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These modes to be used with the MSDOS grfast video driver.
+# These are for a 1MB MXIC 8600 based card.
+#
+
+:320x200x256:0x13:256:0:0:320:200:16:275:206:8:8:1
+:640x350x256:0x57:256:0:0:640:350:4:275:206:8:8:1
+:640x400x256:0x58:256:0:0:640:400:3:275:206:8:8:1
+:640x480x256:0x59:256:0:0:640:480:3:275:206:8:8:1
+:800x600x256:0x5a:256:0:0:800:600:2:275:206:8:8:1
+:1024x768x256:0x5b:256:0:0:1024:768:1:275:206:8:8:1

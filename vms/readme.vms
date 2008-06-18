@@ -1,0 +1,72 @@
+[ 4 Oct 96 EL]
+
+This is a temporary directory, and will be merged into /UNIX soon.
+
+
+The *.c and *.h files are from the old version 1.11
+
+Some file names were truncated and some were renamed to fit with the 8.3
+file name rules of msdos.
+
+file name       original name
+---------       -------------
+aaa_note.vms    aaa_notes.vms
+compile_.com    compile_portable_vms_axp.com
+1.com           compile_portable_vms_decc.com
+2.com           compile_vms_axp.com
+3.com           compile_vms_decc.com
+configvm.h      config_vms.h
+4.h             config_vms_net.h
+link_dec.com    link_decc.com
+5.com           preproc_shapes.com
+vms_axp_.opt    vms_axp_12.opt
+6.opt           vms_axp_net.opt
+7.opt           vms_decc_12.opt
+
+
+Original zip file contents:
+
+ Length  Method   Size  Ratio   Date    Time    CRC-32  Attr  Name
+ ------  ------   ----- -----   ----    ----   -------- ----  ----
+   2688  DeflatN   1183  56%  09-30-96  09:56  df263fc5 ---  aaa_notes.vms
+   5781  DeflatN   2042  65%  09-30-96  09:56  357d396b ---  bgr.c
+   1221  DeflatN    520  58%  09-30-96  09:56  cb864cc1 ---  bgr.h
+  10883  DeflatN   1043  91%  09-30-96  09:56  3e84e146 ---  compile_portable_vms_axp.com
+  10467  DeflatN   1055  90%  09-30-96  09:56  d7be05da ---  compile_portable_vms_decc.com
+    965  DeflatN    272  72%  09-30-96  09:56  65c41324 ---  compile_vms_axp.com
+    704  DeflatN    201  72%  09-30-96  09:56  9287a8fc ---  compile_vms_decc.com
+    343  DeflatN    137  61%  09-30-96  09:56  cb0ab076 ---  config.com
+   1409  DeflatN    560  61%  09-30-96  09:56  8a686f28 ---  config_vms.h
+   1484  DeflatN    606  60%  09-30-96  09:56  8b6c76bd ---  config_vms_net.h
+    899  DeflatN    470  48%  09-30-96  09:56  9ddc025c ---  console.c
+   1371  DeflatN    533  62%  09-30-96  09:56  d3e9faa2 ---  drivers.c
+    243  DeflatN     85  66%  09-30-96  09:56  e36ef36d ---  fcntl.h
+   6351  DeflatN   2062  68%  09-30-96  09:56  e6475126 ---  fifo.c
+  14860  DeflatN   6383  58%  09-30-96  09:56  d5b2df2c ---  fly.hlp
+   7056  DeflatN   2397  67%  09-30-96  09:56  8de447fc ---  fly8udp.c
+   1041  DeflatN    485  54%  09-30-96  09:56  128bbfa4 ---  fly8udp.h
+   9498  DeflatN   2946  69%  09-30-96  09:56  ecaa59d0 ---  gri.c
+   1423  DeflatN    567  61%  09-30-96  09:56  90703949 ---  grstat.c
+   7493  DeflatN   2418  68%  09-30-96  09:56  0973ae86 ---  grx.c
+    355  DeflatN    219  39%  09-30-96  09:56  152571e3 ---  grx.h
+   1789  DeflatN    752  58%  09-30-96  09:56  7a772c24 ---  joyport.c
+    385  DeflatN    224  42%  09-30-96  09:56  ba766495 ---  link_axp.com
+    387  DeflatN    225  42%  09-30-96  09:56  6a2b138c ---  link_decc.com
+    237  DeflatN    145  39%  09-30-96  09:56  a4a335ed ---  misc.c
+   2208  DeflatN    876  61%  09-30-96  09:56  5ecf6c97 ---  mouse.c
+    285  DeflatN    170  41%  09-30-96  09:56  a006283e ---  mouse.h
+    856  DeflatN    268  69%  09-30-96  09:56  98df3c54 ---  preproc_parms.com
+   2282  DeflatN    334  86%  09-30-96  09:56  ff9bd308 ---  preproc_shapes.com
+   1582  DeflatN    739  54%  09-30-96  09:56  4e9bd111 ---  timer.c
+   6304  DeflatN   2141  67%  09-30-96  09:56  fceae9fe ---  udp.c
+   5068  DeflatN   1857  64%  09-30-96  09:56  a719f984 ---  udpmgr.c
+   1153  DeflatN    543  53%  09-30-96  09:56  b205e554 ---  vms.c
+    118  DeflatN     58  51%  09-30-96  09:56  706be699 ---  vms_axp.opt
+    161  DeflatN     68  58%  09-30-96  09:56  3ef02e43 ---  vms_axp_12.opt
+     32  Stored      32   0%  09-30-96  09:56  d5c49e72 ---  vms_axp_net.opt
+    114  DeflatN     54  53%  09-30-96  09:56  2d6a82e2 ---  vms_decc.opt
+    157  DeflatN     64  60%  09-30-96  09:56  bd9c4c08 ---  vms_decc_12.opt
+   1858  DeflatN    847  55%  09-30-96  09:56  727b08a2 ---  xkeys.c
+    278  DeflatN    175  38%  09-30-96  09:56  ffb9b95c ---  xkeys.h
+ ------          ------  ---                                  -------
+ 111789           35756  69%                                       40

@@ -1,0 +1,64 @@
+/* --------------------------------- target.vx ------------------------------ */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_TARGET.
+*/
+
+#include "shape.h"
+
+#if 0
+#define	S	10
+static VERTEX vx_target[] = {		/* 2D 4 edges */
+	{{ 0,  S,  0}, V_MOVE},
+	{{-S,  0,  0}, V_DRAW},
+	{{ 0, -S,  0}, V_DRAW},
+	{{ S,  0,  0}, V_DRAW},
+	{{ 0,  S,  0}, V_DRAW},
+
+	{{ 0,  0,  0}, V_EOF}
+};
+#endif
+
+#if 0
+#define	S	5
+static VERTEX vx_target[] = {		/* 3D 9 edges */
+	{{   0,   0, 2*S}, V_MOVE},
+	{{   0,-2*S,   0}, V_DRAW},
+	{{   0,   0,-2*S}, V_DRAW},
+	{{ 2*S,   S,   0}, V_DRAW},
+	{{-2*S,   S,   0}, V_DRAW},
+	{{   0,-2*S,   0}, V_DRAW},
+	{{ 2*S,   S,   0}, V_DRAW},
+	{{   0,   0, 2*S}, V_DRAW},
+	{{-2*S,   S,   0}, V_DRAW},
+	{{   0,   0,-2*S}, V_DRAW},
+
+	{{   0,   0,   0}, V_EOF}
+};
+#endif
+
+#if 1
+#define	S	10
+static VERTEX vx_target[] = {		/* 3D 12 edges */
+	{{  0,   0,   S}, V_MOVE},
+	{{  S,   0,   0}, V_DRAW},
+	{{  0,   0,  -S}, V_DRAW},
+	{{ -S,   0,   0}, V_DRAW},
+	{{  0,   0,   S}, V_DRAW},
+	{{  0,   S,   0}, V_DRAW},
+	{{  0,   0,  -S}, V_DRAW},
+	{{  0,  -S,   0}, V_DRAW},
+	{{  0,   0,   S}, V_DRAW},
+
+	{{  0,   S,   0}, V_MOVE},
+	{{  S,   0,   0}, V_DRAW},
+	{{  0,  -S,   0}, V_DRAW},
+	{{ -S,   0,   0}, V_DRAW},
+	{{  0,   S,   0}, V_DRAW},
+
+	{{  0,   0,   0}, V_EOF}
+};
+#endif

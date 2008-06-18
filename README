@@ -1,0 +1,176 @@
+/* --------------------------------- readme --------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+ *
+ * Last update: 21 February 1998
+*/
+
+This archive has the full sources for all the platforms. Some special
+msdos support is in a separate archive.
+
+After unzipping it (make sure the directory structure is created) do:
+
+
+msdos
+=====
+
+>msdos\config c8
+
+This is for the c8.00 (vc 1.0/1.5) compiler, or try c7 (c7.00) or qc
+(QuickC). Now it also has 'b2, 'b3' and 'b4' for the Borland C compilers
+up to 4.5.
+
+Now you can do 'nmake all'. Finally do 'nmake install' to get a proper
+execution directory. You will need to have cpp.exe and awk.exe which are
+included in the msdos binary release.
+
+
+With c7.00 use 'nmk' to avoid memory shortage.
+
+
+Qc has problems hacking it, better do it manually as:
+	cd gr
+	nmk
+	cd ..\serial
+	nmk
+	cd ..\net
+	nmk
+	cd ..\fly8
+	nmk sys         (repeat this if it dies until it does it!)
+	nmk fly
+	nmk util
+	nmk parm
+	nmk shape
+	nmk install
+
+
+The executable will be compressed with lzexe, if you do not have it then
+remove these lines from the makefile (both at the top and in the /msdos
+and /utils directories).
+
+With Borland C, 'make' suffrered a horrible death just looking at the
+makefile, so I use other make programs for b2/b3. b3 does not work from
+inside a win31 dos box.
+
+
+msdos/djgpp
+===========
+
+>djgpp\config v1
+
+There is now a DJGPP port in the DJGPP directory. It was tested with 1.10
+1.11 and 1.12. Note that it does not support double buffering except for
+ET4000 cards or VESA compliant BIOSes.
+
+'nd' can be used if you use NDmake instead of the stock v1 make.
+'v2' is now fully supported.
+
+
+unix/X11
+========
+
+Please look at the readme file in the unix directory. It was tested on
+Linux, Sun SparcStation and SGI Irix. Others had it built on many other
+unix systems.
+
+
+Amiga
+=====
+
+Used to work but I have no machine to test on. But the (untested, and now
+badly out of date) sources are included.
+
+
+
+mswin
+=====
+
+Read the readme in /mswin.
+
+mswin 3.1
+=========
+
+>mswin\config vc
+
+Supported and works. However, it is very slow and not recommended (I tested
+it on a Diamond Stealth Pro with 2MB on a 486DX2/66 and it was SLOW.
+
+Good news, Michael did a WinG port and it is much faster, actually
+playable. To build use:
+
+>mswin\config vc wing
+
+More good news, we now have winsock support. It uses UDP and is
+compatible with the unix/udp driver and msdos/pcudp driver. To build
+use:
+
+>mswin\config vc udp
+
+NOTE: the supplied makefiles have both WinG and UDP enabled. If you do
+not build with both then un/comment the necessary lines at the top of
+'makefile' and 'mswin\makefile'. The makefiles are designed to go with:
+
+>mswin\config vc wing udp
+
+mswin NT (VC)
+=============
+
+same as win 3.1 but add 'nt' to the setup, like in:
+>mswin\config vc nt wing udp
+
+You will need WinG installed (until I start using native NT) for
+the fast graphics.
+
+mswin NT (gcc)
+==============
+
+For b18 release of GnuWin32 compiler use:
+>mswin\config gw nt udp
+
+There is no library for WinG. There is no lib or header for ddraw.
+
+Copy mswin\mmsystem.cyg to the include directory as mmsystem.h.
+
+You can also use the MinGnuWim32 compiler, a derivative of the Cygnus
+GnuWin32 project.
+
+>mswin\config mingw nt udp
+
+I had some problems with the path being corrupted (I added a dummy
+first part).
+
+'make': running NT commands creates a batch file that gets overwritten
+if a make in a subdir does that too. Also, continuation of NT commands
+do not work properly so the makefile has some rather long lines at
+times.
+
+mswin NT (lcc)
+==============
+
+It builds with the lcc-win32 compiler.
+>mswin\config lcc nt udp wing ddraw
+
+If you are missing the wing32.lib then I included /mswin/wing32.exp.
+Build it in /lccpub/buildlib. The wing header and DLL are available for
+download from microsoft.
+
+
+OS/2
+====
+
+>os2\config xx [dive] [udp]
+
+xx: the compiler to use, va=Visual Age ex=emx
+dive: the direct video feature of OS/2
+udp: enable networking over udp (not yet for va).
+
+Note that for emx, the top makefile requires to know where the
+tools dir is (for things like os2.h, dive,h etc). You need to
+adjust the line at the top:
+
+TOOLSDIR=s:/ibmcpp/include/os2
+
+
+Regards
+	Eyal Lebedinsky         (eyal@eyal.emu.id.au)

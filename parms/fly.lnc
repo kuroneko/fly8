@@ -1,0 +1,142 @@
+/* --------------------------------- fly.lnc -------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* This is a list of objects that make the landscape
+ *
+ * note that here x=east, y=north, z=up .
+*/
+
+#include "parms.h"
+
+O_RUNWAY, CC_DEFAULT,			/* runway A */
+	V(0), V(0), V(0),		/* position x, y, z */
+	D(0), D(0), D(0),		/* heading, roll, pitch */
+
+O_TOWER, CC_DEFAULT,
+	V(200), V(200), V(0),
+	D(0), D(0), D(0),
+
+O_HOUSE, CC_RED,
+	V(100+20*0), V(100+40*0), V(0),
+	D(0), D(0), D(0),
+
+O_HOUSE, CC_GREEN,
+	V(100+20*1), V(100+40*1), V(0),
+	D(0), D(0), D(0),
+
+O_HOUSE, CC_MAGENTA,
+	V(100+20*2), V(100+40*2), V(0),
+	D(0), D(0), D(0),
+
+O_HOUSE, CC_LBLUE,
+	V(100+20*3), V(100+40*3), V(0),
+	D(0), D(0), D(0),
+
+O_RUNWAY, CC_DEFAULT,			/* runway B */
+	V(10000), V(10000), V(0),
+	D(0), D(0), D(0),
+
+O_TOWER, CC_DEFAULT,
+	V(10000+200), V(10000+200), V(0),
+	D(0), D(0), D(0),
+
+O_DEFINE+1, V_METERS,			/* river */
+	6,
+	V(-4000),	V(-2000),	V(0),	V_MOVE,
+	V(0),		V(-2000),	V(0),	V_DRAW,
+	V(4000),	V(0),		V(0),	V_DRAW,
+	V(6000),	V(2000),	V(0),	V_DRAW,
+	V(8000),	V(6000),	V(0),	V_DRAW,
+	V(14000),	V(12000),	V(0),	V_DRAW,
+
+O_LOCAL+1, CC_LBLUE,
+	V(0), V(0), V(0),
+	D(0), D(0), D(0),
+
+O_DEFINE+2, V_METERS,	/* Tower from ACM */
+	76,
+	V(7),	V(7),	V(0),	V_MOVE,
+	V(-7),	V(7),	V(0),	V_DRAW,
+	V(-4),	V(4),	V(20),	V_DRAW,
+	V(4),	V(4),	V(20),	V_DRAW,
+	V(7),	V(7),	V(0),	V_DRAW,
+	V(4),	V(4),	V(20),	V_MOVE,
+	V(-4),	V(4),	V(20),	V_DRAW,
+	V(-4),	V(4),	V(21),	V_DRAW,
+	V(4),	V(4),	V(21),	V_DRAW,
+	V(4),	V(4),	V(20),	V_DRAW,
+	V(0),	V(4),	V(21),	V_MOVE,
+	V(0),	V(4),	V(21),	V_DRAW,
+	V(0),	V(4),	V(24),	V_DRAW,
+	V(0),	V(4),	V(24),	V_DRAW,
+	V(0),	V(4),	V(21),	V_DRAW,
+	V(5),	V(5),	V(24),	V_MOVE,
+	V(-5),	V(5),	V(24),	V_DRAW,
+	V(0),	V(0),	V(25),	V_DRAW,
+	V(5),	V(5),	V(24),	V_DRAW,
+	V(-7),	V(-7),	V(0),	V_MOVE,
+	V(7),	V(-7),	V(0),	V_DRAW,
+	V(4),	V(-4),	V(20),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_DRAW,
+	V(-7),	V(-7),	V(0),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_MOVE,
+	V(4),	V(-4),	V(20),	V_DRAW,
+	V(4),	V(-4),	V(21),	V_DRAW,
+	V(-4),	V(-4),	V(21),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_DRAW,
+	V(0),	V(-4),	V(21),	V_MOVE,
+	V(0),	V(-4),	V(21),	V_DRAW,
+	V(0),	V(-4),	V(24),	V_DRAW,
+	V(0),	V(-4),	V(24),	V_DRAW,
+	V(0),	V(-4),	V(21),	V_DRAW,
+	V(-5),	V(-5),	V(24),	V_MOVE,
+	V(5),	V(-5),	V(24),	V_DRAW,
+	V(0),	V(0),	V(25),	V_DRAW,
+	V(-5),	V(-5),	V(24),	V_DRAW,
+	V(7),	V(7),	V(0),	V_MOVE,
+	V(7),	V(-7),	V(0),	V_DRAW,
+	V(4),	V(-4),	V(20),	V_DRAW,
+	V(4),	V(4),	V(20),	V_DRAW,
+	V(7),	V(7),	V(0),	V_DRAW,
+	V(4),	V(4),	V(20),	V_MOVE,
+	V(4),	V(-4),	V(20),	V_DRAW,
+	V(4),	V(-4),	V(21),	V_DRAW,
+	V(4),	V(4),	V(21),	V_DRAW,
+	V(4),	V(4),	V(20),	V_DRAW,
+	V(4),	V(0),	V(21),	V_MOVE,
+	V(4),	V(0),	V(21),	V_DRAW,
+	V(4),	V(0),	V(24),	V_DRAW,
+	V(4),	V(0),	V(24),	V_DRAW,
+	V(4),	V(0),	V(21),	V_DRAW,
+	V(5),	V(5),	V(24),	V_MOVE,
+	V(5),	V(-5),	V(24),	V_DRAW,
+	V(0),	V(0),	V(25),	V_DRAW,
+	V(5),	V(5),	V(24),	V_DRAW,
+	V(-7),	V(-7),	V(0),	V_MOVE,
+	V(-7),	V(7),	V(0),	V_DRAW,
+	V(-4),	V(4),	V(20),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_DRAW,
+	V(-7),	V(-7),	V(0),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_MOVE,
+	V(-4),	V(4),	V(20),	V_DRAW,
+	V(-4),	V(4),	V(21),	V_DRAW,
+	V(-4),	V(-4),	V(21),	V_DRAW,
+	V(-4),	V(-4),	V(20),	V_DRAW,
+	V(-4),	V(0),	V(21),	V_MOVE,
+	V(-4),	V(0),	V(21),	V_DRAW,
+	V(-4),	V(0),	V(24),	V_DRAW,
+	V(-4),	V(0),	V(24),	V_DRAW,
+	V(-4),	V(0),	V(21),	V_DRAW,
+	V(-5),	V(-5),	V(24),	V_MOVE,
+	V(-5),	V(5),	V(24),	V_DRAW,
+	V(0),	V(0),	V(25),	V_DRAW,
+	V(-5),	V(-5),	V(24),	V_DRAW,
+
+O_LOCAL+2, CC_GRAY,
+	V(80), V(80), V(0),
+	D(0), D(0), D(0),
+
+O_EOF 	/* eof, must be last */

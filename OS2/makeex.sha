@@ -1,0 +1,67 @@
+# makeex.sha
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# makefile for shapes, unix version. Note, on some systems (e.g. BSD)
+# you will need to use 'nawk' instead of 'awk'.
+
+CPP=	$(CC)
+CFLAGS=	-I.. -O0 -E
+
+AWK=	awk
+DEL=	rm
+COPY=	cp
+REN=	mv
+
+SHAPES= runway.vxx m61.vxx mk82.vxx gtarget.vxx target.vxx viewer.vxx \
+	classic.vxx crater.vxx house.vxx smoke.vxx tower.vxx broken.vxx \
+	box.vxx chute.vxx wf15.vxx wf16.vxx wf18.vxx car.vxx
+
+ACM=	runway.avx tower.avx f16.avx
+ACMF=	f16.fvx
+
+
+.SUFFIXES: .vx .vxx .acm .avx .fvx
+
+.vx.vxx:
+	$(COPY) $*.vx $*.c
+	$(CPP) $(CFLAGS) $*.c >$*.i
+	$(DEL) $*.c
+	$(AWK) -f f8shape.awk $*
+	$(DEL) $*.i
+	$(DEL) $*.003
+
+.acm.avx:
+	$(AWK) -f acm2avx.awk $*
+	$(CPP) $(CFLAGS) $*.c >avx.i
+	$(DEL) $*.c
+	$(AWK) -f f8shape.awk avx
+	$(DEL) avx.i
+	$(DEL) avx.003
+	-$(DEL) $*.avx
+	$(REN) avx.vxx $*.avx
+
+.acm.fvx:
+	$(AWK) -f acm2fvx.awk $*
+	$(CPP) $(CFLAGS) $*.c >fvx.i
+	$(DEL) $*.c
+	$(AWK) -f f8shape.awk fvx
+	$(DEL) fvx.i
+	$(DEL) fvx.003
+	-$(DEL) $*.fvx
+	$(REN) fvx.vxx $*.fvx
+
+all:	shapes
+
+shapes:	$(SHAPES) $(ACM) $(ACMF)
+
+clean:
+	-$(DEL) *.vxx
+	-$(DEL) *.fvx
+	-$(DEL) *.avx
+	-$(DEL) *.i
+	-$(DEL) *.c
+	-$(DEL) *.00?

@@ -1,0 +1,12 @@
+# gracumos.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These modes to be used with the MSDOS grfast video driver.
+# These are for a 1MB AcuMos
+#
+
+:320x200x256:0x13:256:0:0:320:200:16:275:206:8:8:1
+:640x480x256:0x5f:256:0:0:640:480:3:275:206:8:8:1
+:800x600x256:0x5c:256:0:0:800:600:2:275:206:8:8:1

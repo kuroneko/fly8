@@ -1,0 +1,36 @@
+#!/bin/sh
+
+cp UNIX/make$1.top	Makefile
+cp UNIX/make$1		UNIX/Makefile
+cp UNIX/config$1.h	config.h
+
+cp UNIX/make$1.sha	shapes/Makefile
+cp UNIX/make$1.par	parms/Makefile
+cp UNIX/make$1.uti	utils/Makefile
+cp UNIX/js/makelx	UNIX/js/Makefile
+
+cp COMMON/stick.h	UNIX
+cp COMMON/stick.c	UNIX
+cp COMMON/misc.c	UNIX
+cp COMMON/bgr.h		UNIX
+cp COMMON/bgr.c		UNIX
+cp COMMON/bgrasm.x	UNIX
+cp COMMON/grstat.c	UNIX
+cp COMMON/mouse.h	UNIX
+cp COMMON/mouse.c	UNIX
+cp COMMON/vgr.h		UNIX
+cp COMMON/vgr.c		UNIX
+cp COMMON/fly8udp.h	UNIX
+cp COMMON/fly8udp.c	UNIX
+cp COMMON/udp.c		UNIX
+cp COMMON/udpmgr.c	UNIX
+cp COMMON/plsound.c	UNIX
+cp COMMON/plsound.h	UNIX
+
+chmod +x		UNIX/fly
+chmod +x		UNIX/flytty
+chmod +x		UNIX/flyfifo
+chmod +x		UNIX/flyudp
+chmod +x		UNIX/server
+chmod +x		UNIX/mgr
+chmod +x		docs/do*

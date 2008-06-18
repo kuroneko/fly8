@@ -1,0 +1,24 @@
+/* --------------------------------- mmsystem.h ----------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* A replacement for mmsystem.h for cygwin32. Put it in the include
+ * directory
+*/
+
+#ifndef CYGNUS_INCLUDE_MMSYSTEM_H
+#define CYGNUS_INCLUDE_MMSYSTEM_H
+
+WINAPI DWORD	timeGetTime (void);
+
+typedef UINT	HMIDIOUT;
+
+#define MIDI_MAPPER     ((UINT)-1)
+
+WINAPI UINT	midiOutOpen (HMIDIOUT*, UINT, DWORD, DWORD, DWORD);
+WINAPI UINT	midiOutClose (HMIDIOUT);
+WINAPI UINT	midiOutShortMsg (HMIDIOUT, DWORD);
+
+#endif /* ifndef CYGNUS_INCLUDE_MMSYSTEM_H */

@@ -1,0 +1,146 @@
+/* --------------------------------- flight.doc ----------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+
+The models
+----------
+
+Classic
+
+   This one simulates a trivial motion model. It always moves in the
+direction it is pointing. It has no limits on G loading. It can fly
+equaly well underground (so you cannot land it). It is only useful for
+learning how the controls work
+
+
+Basic
+
+   A basic simulation which includes some basic features only. It is
+more real than the 'classic' but cannot show any of the subtle effects.
+
+
+Xplane
+
+   An experimental model which uses some more common derivatives. It is
+now obsolete and probably does not work.
+
+
+Yplane
+
+   A model based on aerodynamic derivates. It is fast (still written in
+fixed point). Properly simulates many effects. Reallistic landing gear.
+
+   This model will respond to the debug W switch by allowing untrimmed
+pitch moment. Normally the only pitch moment is the one from the
+elevators (and the corresponding damping).
+
+
+Fplane
+
+   This model is actually two models in one. The first is identical to
+Yplane (derivatives) and the second simulates the actual aerodynamics
+phenonena. However, this model uses floating point and as such is much
+easier to work with.
+
+   This model will respond to the debug W switch by allowing untrimmed
+pitch moment. Normally the only pitch moment is the one from the
+elevators (and the corresponding damping).
+
+   If you set the debug Z switch then the fundamental model will be
+used, otherwize the derivative based model is used; this is useful for
+comparing the two models.
+
+   If you set the debug Y switch then the 'yplane' model will be
+activated instead; this is useful for comparing the two models (if the Z
+option is turned off!).
+
+
+Adding a new model
+------------------
+
+As an example, suppose we want to work on a new model based on the
+fundamental model of fplane. Let's call this one the zplane model. We
+copy fplane.c to zplane.c and rename the entry point from
+dynamics_fplane() to dynamics_zplane(). Now we remove the part which
+does the derivative based model and remove the dependency on the debug Y
+and W switches.  We now have the new model.
+
+We add the new model to prm.c. This includes the prototype and the entry
+in the table initializers list which follows. You must add the new model
+at the end of the list.
+
+Now we add the new module to the makefile; just search for one of the
+other modules (say 'ofplane') and do the same thing for 'ozplane'.
+
+If we really want to do a clean job then we want to also define a
+manifest constant for the new model. To plane.h we add something like
+
+#define MODEL_ZPLANE	5
+
+at the same place where the other models are defined. Note that the
+number here is the index into the models table in prm.c. Modifying
+plane.h will cause many modules to be recompiled.
+
+Finally, for neatness, we create a new parameter file which we will
+modify as the model is developed. In the /parms directory we copy
+f16.prc to zplane.prc. We add zplane.prm to the makefile and then (at
+the top level) we do 'make parm'. Then we copy the new zplane.prm to the
+install directory and change the fly.ini there to default to the new
+model using the parameter 'Pzplane'.
+
+
+Adding a new parameter
+----------------------
+
+First we decide on the type (short, fraction, angle or long) and make
+a clear comment about it. Also note the units to be used.
+
+We now need to add the new parameter to the following:
+
+plane.h:
+   This declares the new parameter.
+
+prm.c:
+   This reads the new parameter. The parameter MUST be added in the
+correct position that will be used in the *.prc file (it has nothing to
+do with the order in plane.h but we keep everything in the same order
+for easier maintenance).
+
+parms/*.prc:
+   Here we supply the new value. We make sure that the a new parameter
+is added to ALL the *.prc files, otherwise they will not be read
+correctly.
+
+Finally, use the new parameter in the your model. Note how the program
+handles the fixed point data, just follow the exmaples of other
+parameters for converting the input values to floating point.
+
+Now, at the top level, we do 'make fly parm install'. Note that if we
+changed any files in the install directory then these will be
+overwritten, so make sure you keep a copy of these (like the *.ini and
+*.vmd and *.max) files elsewhere to be restored.
+
+
+General notes
+-------------
+
+Fly8 uses the following conventions for the axes:
+
+X	right
+Y	forward
+Z	upward
+aX	pitch (up)
+aY	roll (clockwise)
+aZ	yaw (left)
+
+This is different from the standard aerodynamic conventions where X and
+Y are swapped and Z is the oppsite sign. In the fplane model the fly8
+values are converted to local variables which conform to the common
+standard so one may ignore this problem there.
+
+If you have questions about any other aspect of the program then I can
+be contacted as eyal@eyal.emu.id.au; I will be interested in adding
+new material to the program if you care to contribute it.

@@ -1,0 +1,20 @@
+/* --------------------------------- smoke.vx ------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_SMOKE.
+*/
+
+#include "shape.h"
+
+#define S	1
+static VERTEX vx_smoke[] = {
+	{{-S,  0,  0}, V_MOVE},
+	{{+S,  0,  0}, V_DRAW},
+	{{ 0, +S,  0}, V_DRAW},
+	{{-S,  0,  0}, V_DRAW},
+
+	{{ 0,  0,  0}, V_EOF}
+};

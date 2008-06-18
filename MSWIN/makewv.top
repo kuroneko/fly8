@@ -1,0 +1,633 @@
+# makewv.top
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+# top level makefile for WIN 3.1, ms vc1
+# Note that some modules are compiled with special options due to compiler bugs.
+
+SYSTEM= 	MSWIN
+CC=		cl
+MAKE=		nmake
+COPY=		copy
+DEL=		del
+REN=		ren
+
+OO=		.obj
+LO=		.lib
+EO=		.exe
+OOUT=		-Fo
+EOUT=		-Fe
+
+RSP=		$(TEMP)\libfly8.rsp
+CRSP=		$(TEMP)\linkfly8.rsp
+FLIB=		$(TEMP)\fly8$(LO)
+ROOTDIR=	d:\games\fly8
+TOPDIR=		$(ROOTDIR)\src
+FLY8DIR=	fly8
+THISDIR=	$(TOPDIR)\$(FLY8DIR)		# This is where we run 'make'
+INSTPATH=	$(ROOTDIR)
+INSTDIR=	wv
+INSTFLY8=	$(INSTPATH)\$(INSTDIR)
+RELDIR=		$(INSTPATH)
+VERNAME=	f8112
+BINNAME=	$(VERNAME)$(INSTDIR)
+
+# basic options.
+#
+OFLAGSB=	-DSYS_$(SYSTEM)=1 -f- -Gs -AL -W4
+
+# vc options.
+#
+OFLAGSW=	$(OFLAGSB) -G3 -GA -GEs
+
+# If you have assembly support, define:
+#	-DUSE_ASM
+# If you want to use C support with debuging enabled, define:
+#	-DDEBUG_MULDIV
+# for internal consistency checking debuging enabled, define:
+#	-DCHECK_GR
+# for internal memory manager verification, define:
+#	-DCHECK_MEM
+# To assist debugging, make all functions external:
+#	-DLOCAL_FUNC=extern
+# To enable memory trace add:
+#	-DDEBUG_MEM
+# If you still have problems then you still have these available:
+#	-DNEED_STRICMP=1 -DNEED_STRNICMP=1 -DNEED_LABS=1
+#
+OFLAGSD=	$(OFLAGSW) -DUSE_ASM
+
+# no optimization at all.
+#
+OFLAGSN=	$(OFLAGSD) -Od -Gs0
+
+# size (memory) optimization.
+# this is -O1 without the -Gf. Use it to reduce size by about 60k.
+#
+OFLAGSS=	$(OFLAGSD) -Owes -Gy #-Ob1 -OV0
+
+# time (speed) optimization.
+# -O2 screws up near strings, so the following is -O2 without the -Gf.
+#
+OFLAGST=	$(OFLAGSD) -Owcegilnot -Gy
+
+# options for inlining. Add this to time-critical modules.
+# high inlining is '-Ob2 -OV4', low inlining is '-Ob1 -OV0'.
+#
+OFLAGSO=	$(OFLAGST) -DINLINE -Ob2 -OV4 
+
+# standard optimization flags
+#
+OFLAGS=		$(OFLAGST)
+
+# With winsock:
+#
+WLIBS=	winsock$(LO)
+
+# No winsock:
+#
+#WLIBS=
+
+SHFLAGS=
+
+CFLAGSX=	$(OFLAGSO) $(SHFLAGS)		# used on subdirectories
+CFLAGSN=	$(OFLAGSN) $(SHFLAGS)		# not optimized at all
+CFLAGS=		$(OFLAGS)  $(SHFLAGS)		# standard (speed) optimized
+CFLAGSS=	$(OFLAGSS) $(SHFLAGS)		# space optimized
+CFLAGSO=	$(OFLAGSO) $(SHFLAGS)		# highly optimized
+CFLAGSB=	$(OFLAGSB) $(SHFLAGS)		# for ifuncsm
+
+LL=	
+GLIB=	
+SLIB=	
+PLIB=	
+
+# IMPORTANT NOTE: check_stack() in fly8.c allocates a large automatic
+# array to measure stack usage. On systems where the stack size in fixed
+# in advance you MUST ensure that this array does not violate the stack
+# size. MSDOS is an example of a system where this is the case so that
+# the following /ST:4000 allocates enough stack for the chunk[3000] array
+# used.
+
+LCFLAGS= $(OFLAGSB)
+LFLAGS= /NOD /SE:256 /PACKCODE /F
+
+#	objects
+#
+OOBJS=	obasic$(OO) object$(OO) obox$(OO) obroken$(OO) ochute$(OO) \
+	oclassic$(OO) ocrater$(OO) ofplane$(OO) oground$(OO) ogtarget$(OO) \
+	ohouse$(OO) olow$(OO) om61$(OO) omk82$(OO) opaddoc$(OO) oplane$(OO) \
+	orunway$(OO) osmoke$(OO) otarget$(OO) otower$(OO) oviewer$(OO) \
+	oxplane$(OO) oyplane$(OO) ogen$(OO) ocar$(OO)
+
+#	Portable programs
+#
+
+COBJS=	airdata$(OO) alarms$(OO) altitude$(OO) autop$(OO) body$(OO) \
+	btrail$(OO) cockpit$(OO) colors$(OO) command$(OO) compass$(OO) \
+	debug$(OO) grmgr$(OO) editstr$(OO) engine$(OO) field$(OO) fly8$(OO) \
+	fly8str$(OO) gear$(OO) heading$(OO) hud$(OO) hudmenu$(OO) ifuncs$(OO) \
+	info$(OO) init$(OO) kbdmgr$(OO) keypad$(OO) lamps$(OO) land$(OO) \
+	log$(OO) loop$(OO) macros$(OO) mat$(OO) max$(OO) memory$(OO) menu$(OO) \
+	menus$(OO) message$(OO) nav$(OO) need$(OO) netmgr$(OO) nogr$(OO) \
+	nokbd$(OO) nosound$(OO) nosystem$(OO) notimer$(OO) objects$(OO) \
+	panel$(OO) pid$(OO) piper$(OO) pitch$(OO) player$(OO) ptrmgr$(OO) \
+	prm$(OO) radar$(OO) random$(OO) remote$(OO) show$(OO) sixdof$(OO) \
+	sky$(OO) sndmgr$(OO) speed$(OO) stack$(OO) stfont1$(OO) stfont2$(OO) \
+	stores$(OO) stroke$(OO) symbols$(OO) system$(OO) term$(OO) tunes$(OO) \
+	util$(OO) views$(OO) vmodes$(OO) vv$(OO) waypoint$(OO) window$(OO) \
+	buffers$(OO) lnd$(OO) \
+	$(OOBJS)
+
+OBJS=	$(COBJS)
+
+HFILES=	fly.h colors.h config.h
+HPLANE=	$(HFILES) plane.h hud.h
+LIBS=	llibcew$(LO) libw$(LO) wing$(LO) mmsystem$(LO) toolhelp$(LO) $(WLIBS)
+
+.PRECIOUS: itabs.c
+
+now:	fly
+
+all:	fly util dat
+
+fly:	need$(OO) sys fly8$(EO)
+
+dat:	parm shape
+
+sys:	need$(OO)
+	cd $(SYSTEM)
+	$(MAKE) XFLAGS="$(CFLAGSX)"  SYSTEM=$(SYSTEM) CC=$(CC) all
+	cd ..
+
+parm:
+	cd parms
+	$(MAKE) SHFLAGS="$(SHFLAGS)" SYSTEM=$(SYSTEM) CC=$(CC) all
+	cd ..
+
+shape:
+	cd shapes
+	$(MAKE) SHFLAGS="$(SHFLAGS)" SYSTEM=$(SYSTEM) CC=$(CC) all
+	cd ..
+
+util:	need$(OO)
+	cd utils
+	$(MAKE) XFLAGS="$(CFLAGSB)" SYSTEM=$(SYSTEM) CC=$(CC) all
+	cd ..
+
+$(FLIB):	$(OBJS) version
+	echo $(FLIB) >$(RSP)
+	echo y >>$(RSP)
+	echo +show +objects +object +log +ptrmgr +grmgr +keypad +pid   &>>$(RSP)
+	echo +debug +remote +kbdmgr +ifuncs +autop +mat +hud +info     &>>$(RSP)
+	echo +stroke +cockpit +tunes +views +command +body +land +sky  &>>$(RSP)
+	echo +random +sndmgr +macros +player +netmgr +memory +stfont1  &>>$(RSP)
+	echo +stfont2 +menu +menus +oground +obox +orunway +ochute     &>>$(RSP)
+	echo +ohouse +om61 +otarget +obroken +oviewer +opaddoc +loop   &>>$(RSP)
+	echo +oplane +oclassic +obasic +oxplane +vmodes +colors +omk82 &>>$(RSP)
+	echo +editstr +window +message +otower +olow +radar +heading   &>>$(RSP)
+	echo +altitude +speed +pitch +nav +init +term +util +ogtarget  &>>$(RSP)
+	echo +piper +ocrater +osmoke +hudmenu +system +nosound +stack  &>>$(RSP)
+	echo +need +max +nosystem +notimer +engine +version +oyplane   &>>$(RSP)
+	echo +sixdof +gear +ofplane +panel +prm +symbols +field +lnd   &>>$(RSP)
+	echo +compass +airdata +nokbd +stores +lamps +fly8str +ogen    &>>$(RSP)
+	echo +btrail +vv +waypoint +alarms +nogr +buffers +ocar;        >>$(RSP)
+	if exist $(FLIB) $(DEL) $(FLIB)
+	lib @$(RSP)
+	$(DEL) $(RSP)
+
+fly8$(EO):	fly8$(OO) $(SYSTEM)\fly8sys$(LO) $(FLIB)
+	echo $(LCFLAGS) $(EOUT)fly8 fly8$(OO) -Fm >$(CRSP)
+	echo -link $(LFLAGS) $(FLIB) $(SYSTEM)\fly8sys >>$(CRSP)
+	echo $(LIBS) >>$(CRSP)
+	echo $(SYSTEM)\fly8.def >>$(CRSP)
+	$(CC) @$(CRSP)
+	$(DEL) $(CRSP)
+
+clean:	cleanfly cleansys cleandat cleanutl
+
+cleanfly:
+	-$(DEL) itabs.c
+	-$(DEL) *$(EO)
+	-$(DEL) *$(OO)
+	-$(DEL) *$(LO)
+	-$(DEL) *.rsp
+	-$(DEL) *.map
+	-$(DEL) errs
+	-$(DEL) xxx
+
+cleansys:
+	cd $(SYSTEM)
+	$(MAKE) clean
+	cd ..
+
+cleandat:
+	cd shapes
+	$(MAKE) clean
+	cd ..\parms
+	$(MAKE) clean
+	cd ..
+
+cleanutl:
+	cd utils
+	$(MAKE) clean
+	cd ..
+
+install:
+	-md $(INSTFLY8)
+	$(COPY) fly8$(EO)		$(INSTFLY8)
+	$(COPY) fly8.map		$(INSTFLY8)
+	-$(COPY) $(SYSTEM)\*$(EO)	$(INSTFLY8)
+	$(COPY) misc\*.max		$(INSTFLY8)
+	$(COPY) misc\*.adv		$(INSTFLY8)
+	$(COPY) misc\*.b50		$(INSTFLY8)
+	$(COPY) misc\*.f22		$(INSTFLY8)
+	$(COPY) utils\*$(EO)		$(INSTFLY8)
+	$(COPY) $(SYSTEM)\fly.ini	$(INSTFLY8)
+	$(COPY) $(SYSTEM)\*.vmd		$(INSTFLY8)
+	$(COPY) $(SYSTEM)\readme.*	$(INSTFLY8)
+	$(COPY) $(SYSTEM)\*.ico		$(INSTFLY8)
+	$(COPY) shapes\*.vxx		$(INSTFLY8)
+	$(COPY) shapes\wf16.vxx		$(INSTFLY8)\plane.vxx
+	$(COPY) parms\*.prm		$(INSTFLY8)
+	$(COPY) parms\*.nav		$(INSTFLY8)
+	$(COPY) parms\*.lnd		$(INSTFLY8)
+	$(COPY) docs\*.doc		$(INSTFLY8)
+	$(COPY) docs\bugs.txt		$(INSTFLY8)
+	-md $(INSTFLY8)\data
+	$(COPY) parms.h			$(INSTFLY8)\data
+	$(COPY) shape.h			$(INSTFLY8)\data
+	$(COPY) colors.h		$(INSTFLY8)\data
+	$(COPY) parms\expr.awk		$(INSTFLY8)\data
+	$(COPY) parms\*.prc		$(INSTFLY8)\data
+	$(COPY) parms\*.lnc		$(INSTFLY8)\data
+	$(COPY) parms\*.nac		$(INSTFLY8)\data
+	$(COPY) misc\build.bat		$(INSTFLY8)\data
+	$(COPY) c:\bin\awk$(EO)		$(INSTFLY8)\data
+	$(COPY) c:\bin\cpp$(EO)		$(INSTFLY8)\data
+
+reinstall:
+	$(COPY) fly8$(EO)		$(INSTFLY8)
+	$(COPY) fly8.map		$(INSTFLY8)
+	-$(COPY) $(SYSTEM)\*$(EO)	$(INSTFLY8)
+	$(COPY) utils\*$(EO)		$(INSTFLY8)
+
+release:	backup relbin
+	$(COPY) docs\release.txt $(RELDIR)\$(VERNAME).txt
+
+backup:	relsrc
+
+relsrc:
+	-md $(RELDIR)
+	-$(DEL) $(RELDIR)\$(SYSTEM)s.zip
+	cd ..
+	pkzip -P -x*.obj -x*$(LO) -x*.rsp $(RELDIR)\$(SYSTEM)s \
+		$(FLY8DIR)\$(SYSTEM)\*.*
+	cd $(FLY8DIR)
+
+relbin:
+	-md $(RELDIR)
+	-$(DEL) $(RELDIR)\$(BINNAME).zip
+	cd $(INSTFLY8)
+	-$(DEL) *.log
+	-$(DEL) *.mac
+	pkzip -rP $(RELDIR)\$(BINNAME) *.*
+	cd $(THISDIR)
+
+# Use this to create itabs.c, then use -DEXT_TAB for ifuncs
+#
+ifuncsm$(OO):	ifuncs.c $(HFILES) 
+	$(CC) $(CFLAGSB) -DGEN_TAB $(OOUT)$*$(OO) -c ifuncs.c
+
+ifuncsm$(EO):	ifuncsm$(OO) debug$(OO)
+	$(CC) $(LCFLAGS) ifuncsm$(OO) debug$(OO)
+
+itabs.c:	ifuncsm$(EO)
+	ifuncsm >itabs.c
+
+# optimization flags are carefuly selected. Only CFLAGSN is used with bug
+# ridden complers to avoid failures; the other options are not platform
+# dependent.
+
+airdata$(OO):	airdata.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+alarms$(OO):	alarms.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+altitude$(OO):	altitude.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+autop$(OO):	autop.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+body$(OO):	body.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+btrail$(OO):	btrail.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+buffers$(OO):	buffers.c $(HFILES)
+	$(CC) $(CFLAGSO) -c $*.c
+
+cockpit$(OO):	cockpit.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+colors$(OO):	colors.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+command$(OO):	command.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+compass$(OO):	compass.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+debug$(OO):	debug.c $(HFILES) 
+	$(CC) $(CFLAGSS) -c $*.c
+
+editstr$(OO):	editstr.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+engine$(OO):	engine.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+field$(OO):	field.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+fly8$(OO):	fly8.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+fly8str$(OO):	fly8str.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+gear$(OO):	gear.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+grmgr$(OO):	grmgr.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+hddmenu$(OO):	hddmenu.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+heading$(OO):	heading.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+hud$(OO):	hud.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+hudmenu$(OO):	hudmenu.c $(HPLANE)
+	$(CC) $(CFLAGSS) -c $*.c
+
+ifuncs$(OO):	ifuncs.c itabs.c $(HFILES)
+	$(CC) $(CFLAGSO) -DEXT_TABS -c $*.c
+
+info$(OO):	info.c $(HPLANE)
+	$(CC) $(CFLAGSS) -c $*.c
+
+# vc1.5 dies if -G3.
+#
+init$(OO):	init.c $(HFILES)
+	$(CC) $(CFLAGSS) -G2 -c $*.c
+
+kbdmgr$(OO):	kbdmgr.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+keypad$(OO):	keypad.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+lamps$(OO):	lamps.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+# micro&soft strikes again...
+#
+land$(OO):	land.c $(HFILES)
+	$(CC) $(CFLAGS) -G2 -c $*.c
+
+lnd$(OO):	lnd.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+log$(OO):	log.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+loop$(OO):	loop.c $(HPLANE)
+	$(CC) $(CFLAGSS) -c $*.c
+
+macros$(OO):	macros.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+mat$(OO):	mat.c $(HFILES)
+	$(CC) $(CFLAGSO) -c $*.c
+
+max$(OO):	max.c $(HFILES) keydef.h keymap.h keyname.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+memory$(OO):	memory.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+menu$(OO):	menu.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+menus$(OO):	menus.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+netmgr$(OO):	netmgr.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+message$(OO):	message.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+nav$(OO):	nav.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+need$(OO):	need.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+nogr$(OO):	nogr.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+nokbd$(OO):	nokbd.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+nosound$(OO):	nosound.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+nosystem$(OO):	nosystem.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+notimer$(OO):	notimer.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+obasic$(OO):	obasic.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+object$(OO):	object.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+objects$(OO):	objects.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+obox$(OO):	obox.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+obroken$(OO):	obroken.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+ocar$(OO):	ocar.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+ochute$(OO):	ochute.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+oclassic$(OO):	oclassic.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+ocrater$(OO):	ocrater.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+ofplane$(OO):	ofplane.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+ogen$(OO):	ogen.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+oground$(OO):	oground.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+ogtarget$(OO):	ogtarget.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+ohouse$(OO):	ohouse.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+olow$(OO):	olow.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+om61$(OO):	om61.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+omk82$(OO):	omk82.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+opaddoc$(OO):	opaddoc.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+oplane$(OO):	oplane.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+orunway$(OO):	orunway.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+osmoke$(OO):	osmoke.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+otarget$(OO):	otarget.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+otower$(OO):	otower.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+oxplane$(OO):	oxplane.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+oyplane$(OO):	oyplane.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+oviewer$(OO):	oviewer.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+panel$(OO):	panel.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+pid$(OO):	pid.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+piper$(OO):	piper.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+pitch$(OO):	pitch.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+player$(OO):	player.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+prm$(OO):	prm.c $(HPLANE)
+	$(CC) $(CFLAGSS) -c $*.c
+
+ptrmgr$(OO):	ptrmgr.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGSS) -c $*.c
+
+radar$(OO):	radar.c $(HPLANE)
+	$(CC) $(CFLAGSS) -c $*.c
+
+random$(OO):	random.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+remote$(OO):	remote.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+show$(OO):	show.c $(HFILES)
+	$(CC) $(CFLAGSO) -c $*.c
+
+sky$(OO):	sky.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+sixdof$(OO):	sixdof.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+sndmgr$(OO):	sndmgr.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+speed$(OO):	speed.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+stack$(OO):	stack.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+stfont1$(OO):	stfont1.c $(HFILES)
+	$(CC) $(CFLAGSN) -c $*.c
+
+stfont2$(OO):	stfont2.c $(HFILES)
+	$(CC) $(CFLAGSN) -c $*.c
+
+stores$(OO):	stores.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+stroke$(OO):	stroke.c $(HFILES)
+	$(CC) $(CFLAGSO) -c $*.c
+
+symbols$(OO):	symbols.c $(HFILES)
+	$(CC) $(CFLAGSO) -c $*.c
+
+system$(OO):	system.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+# vc1.5 dies if -G3.
+#
+term$(OO):	term.c $(HFILES)
+	$(CC) $(CFLAGSS) -G2 -c $*.c
+
+tunes$(OO):	tunes.c $(HFILES) notes.h keyofc.h keyofd.h
+	$(CC) $(CFLAGSN) -c $*.c
+
+util$(OO):	util.c $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+version:	version.c $(HFILES)
+	$(CC) $(CFLAGSS) -c version.c
+
+views$(OO):	views.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+vmodes$(OO):	vmodes.c $(HFILES)
+	$(CC) $(CFLAGSS) -c $*.c
+
+vv$(OO):	vv.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+waypoint$(OO):	waypoint.c $(HPLANE)
+	$(CC) $(CFLAGS) -c $*.c
+
+window$(OO):	window.c $(HFILES) keydef.h keymap.h
+	$(CC) $(CFLAGS) -c $*.c
+

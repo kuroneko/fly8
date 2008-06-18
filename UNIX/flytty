@@ -1,0 +1,11 @@
+# flytty
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# An example of setting up a serial line for head-to-head. Someone else should
+# be doing the same thing on the other side of the line...
+#
+
+stty speed 38400 raw crtscts </dev/ttyS1
+fly8 r N1 Tone dnfifo.1:if=/dev/ttyS1:of=/dev/ttyS1 $1 $2 $3 $4 $5 $6 $7 $8 $9 &

@@ -1,0 +1,65 @@
+#if 0
+From alavalle@tuba.aix.calpoly.edu Fri Oct  1 10:04:53 1993
+Return-Path: <alavalle@tuba.aix.calpoly.edu>
+Received: from tuba.aix.calpoly.edu by fir.canberra.edu.au (4.1/SMI-4.1)
+	id AA00723; Fri, 1 Oct 93 10:04:37 EST
+Received: by tuba.aix.calpoly.edu (AIX 3.2/UCB 5.64/4.03)
+          id AA41546; Thu, 30 Sep 1993 17:02:20 -0700
+Date: Thu, 30 Sep 1993 17:02:20 -0700
+From: alavalle@tuba.aix.calpoly.edu
+Message-Id: <9310010002.AA41546@tuba.aix.calpoly.edu>
+To: eyal@fir.canberra.edu.au
+Subject: Fly 8
+Status: OR
+
+Hello. (how do I address you?)
+
+Thanks for the speedy reply to my message.  I look forward to the next realease
+of fly.
+
+I think I decoded the method for the graphics files (not too complex, I know)
+and have begun editing them.  I thought you might like this redesign of the
+MK82 bomb (it used to be a line.)  The drawing isn't bad if I may say so
+myself, but the scale is a bit off... I worked with the smallest integers I 
+could - are decimals allowed?  Another question: what's that second number
+in the file right after the number of lines to read?
+
+Anyhow, here's my bomb :
+#endif
+
+0, -2, 0, 1,
+0, -1, 0, 2,
+1, 0, 0, 2,
+1, 1, 0, 2,
+0, 2, 0, 2,
+-1, 1, 0, 2,
+-1, 0, 0, 2,
+0, -1, 0, 2,
+1, -2, 0, 1,
+-1, -2, 0, 2,
+-1, -1, 0, 2,
+1, -1, 0, 2,
+1, -2, 0, 2,
+0, -1, 1, 1,
+0, -1, -1, 2,
+0, -2, -1, 2,
+0, -2, 1, 2,
+0, -1, 1, 2,
+0, -1, -1, 2,
+0, 2, 0, 1,
+0, 1, 1, 2,
+0, 0, 1, 2,
+0, -1, 0, 2,
+0, 0, -1, 2,
+0, 1, -1, 2,
+0, 2, 0, 2,
+0, 1, 1, 1,
+1, 1, 0, 2,
+0, 1, -1, 2,
+-1, 1, 0, 2,
+0, 1, 1, 2,
+0, 0, 1, 1,
+1, 0, 0, 2,
+0, 0, -1, 2,
+-1, 0, 0, 2,
+0, 0, 1, 2

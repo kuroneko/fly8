@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# flyudp
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# An example of setting up two UDPs for head-to-head. In real life the two
+# processes will be started on different machines.
+#
+# 'localhost' is the name of the host that runs the server. Start the server
+# as 'fly8udp &'. To stop it, run 'udpmgr localhost' and enter 'shutdown'.
+# Then enter 'end' to quit 'udpmgr'.
+
+rm fly1.log fly2.log
+xterm -e ./fly8udp &
+fly8 r dnudp.1:server=localhost:pack=1408 Tone N1 Lfly1.log $* &
+fly8 r dnudp.1:server=localhost:pack=1408 Tone N2 Lfly2.log $* &

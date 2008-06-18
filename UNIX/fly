@@ -1,0 +1,13 @@
+# fly
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# This script will allow running Fly8 from any directory. Note, however, that
+# 'fly.mac' will still be read AND written to in the /usr/games/fly8 dir. Use
+# the 'M$HOME/fly' if you got your own macros file.
+#
+
+FLY8DIR=/usr/local/games/fly8
+
+$FLY8DIR/fly8 F$FLY8DIR L$HOME/fly.log $* &

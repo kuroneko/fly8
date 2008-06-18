@@ -1,0 +1,45 @@
+# makefile
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# make the utilities, for lcc-win32 (NT/W95)
+#
+
+SO=		.asm
+IO=		.i
+OO=		.obj
+EO=		.exe
+LO=		.lib
+OOUT=		-o ./
+EOUT=		-o ./
+LOUT=		/out:
+MAKE=		make
+COPY=		copy
+DEL=		del
+REN=		ren
+CCLIB=		lcclib
+LINK=		lcclnk
+
+CFLAGS= $(XFLAGS) -I.. -I. -I..\$(SYSTEM)
+
+HFILES=	..\keydef.h ..\keymap.h ..\keyname.h
+
+SYSLIB=	..\need$(OO)
+
+
+all:	mac2max$(EO) max2mac$(EO)
+
+mac2max$(OO) max2mac$(OO): $(HFILES)
+
+mac2max$(EO):	mac2max$(OO)
+	$(LINK) $(LFLAGS) mac2max$(OO) $(SYSLIB) $(EOUT)mac2max$(EO)
+
+max2mac$(EO):	max2mac$(OO)
+	$(LINK) $(LFLAGS) max2mac$(OO) $(SYSLIB) $(EOUT)max2mac$(EO)
+
+clean:
+	-$(DEL) *$(OO)
+	-$(DEL) *$(EO)

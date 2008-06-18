@@ -1,0 +1,54 @@
+/* --------------------------------- classic.vx ----------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_PLANE, as it was in the 1970 original.
+*/
+
+#include "shape.h"
+
+static VERTEX vx_plane[] = {
+	{{  1,  -9,  -2}, V_MOVE},	/* main body */
+	{{  1,   0,  -2}, V_DRAW},
+	{{ -1,   0,  -2}, V_DRAW},
+	{{ -1,  -9,  -2}, V_DRAW},
+	{{  1,  -9,  -2}, V_DRAW},
+	{{  1,  -9,   0}, V_DRAW},
+	{{  1,   0,   0}, V_DRAW},
+	{{ -1,   0,   0}, V_DRAW},
+	{{ -1,  -9,   0}, V_DRAW},
+	{{  1,  -9,   0}, V_DRAW},
+
+	{{ -1,  -9,  -2}, V_MOVE},
+	{{ -1,  -9,   0}, V_DRAW},
+
+	{{  1,   0,   0}, V_MOVE},	/* right half of nose */
+	{{  1,   0,  -2}, V_DRAW},
+	{{  0,   6,  -1}, V_DRAW},
+	{{  1,   0,   0}, V_DRAW},
+
+	{{ -1,   0,   0}, V_MOVE},	/* left half of nose */
+	{{ -1,   0,  -2}, V_DRAW},
+	{{  0,   6,  -1}, V_DRAW},
+	{{ -1,   0,   0}, V_DRAW},
+
+	{{  1,  -8,  -1}, V_MOVE},	/* right wing */
+	{{  5,  -8,  -1}, V_DRAW},
+	{{  1,  -2,  -1}, V_DRAW},
+	{{  1,  -8,  -1}, V_DRAW},
+
+	{{ -1,  -8,  -1}, V_MOVE},	/* left wing */
+	{{ -5,  -8,  -1}, V_DRAW},
+	{{ -1,  -2,  -1}, V_DRAW},
+	{{ -1,  -8,  -1}, V_DRAW},
+
+	{{  0,  -7,   0}, V_MOVE},	/* rudder */
+	{{  0,  -8,   1}, V_DRAW},
+	{{  0,  -9,   1}, V_DRAW},
+	{{  0,  -9,   0}, V_DRAW},
+	{{  0,  -7,   0}, V_DRAW},
+
+	{{  0,   0,   0}, V_EOF}
+};

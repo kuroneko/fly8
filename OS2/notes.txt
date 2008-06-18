@@ -1,0 +1,20 @@
+[ 2 Sep 96 EL]
+
+src:
+	- directory not cleaned (stuff from common not removed)
+	- has a file C.CMD ?
+
+binary:
+	- should be in a subdir fly8/*.* to reduce damage from improper
+	  extraction.
+	* data/cpp.exe missing, but used by build. (Mike, did you
+	  check that /data is proper?)
+	* fly8.doc missing ('make install' should copy it). Need to fix
+	  the makefile.
+	- *.mac and *.log should be deleted just before packaging and
+	  fly.ini set to default values.
+
+
+legend:
+- why do you leave me all this work?
+* cannot be released in this way.

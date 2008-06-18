@@ -1,0 +1,89 @@
+# makeex
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for OS2+emx
+#
+
+# With Bitmap/Dive:
+#
+GFLAGS=	-DHAVE_DIVE=1 -DDEBUG_BGR -DUSE_BGRASM
+GOBJS=	grbitmap.o bgr.o bgrasm.o
+
+# No Dive:
+#
+#GFLAGS=
+#GOBJS=
+
+
+# With sockets:
+#
+LFLAGS=
+WCFLAGS= -I.. -DSYS_OS2=1 -DHAVE_UDP=1 /O
+CFLAGS=  -I.. $(XFLAGS) -DHAVE_UDP=1 $(GFLAGS)
+WLIB=	socket bsd
+WPROGS=	fly8udp.exe udpmgr.exe
+WOBJS=	udp.o
+
+# No sockets:
+#
+#CFLAGS= -I.. $(XFLAGS) $(GFLAGS)
+#WLIB=
+#WPROGS=
+#WOBJS=
+
+COBJS1=	drivers.o console.o timer.o os2.o gros2.o misc.o
+COBJS2=	mouse.o stick.o os2stick.o os2sound.o mmsound.o
+COBJS3=	grstat.o common.o plsound.o $(GOBJS) $(WOBJS)
+
+AOBJS=
+
+COBJS=	$(COBJS1) $(COBJS2) $(COBJS3)
+OBJS=	$(COBJS) $(AOBJS)
+
+HFILES = ../config.h ../fly.h ../keydef.h ../keymap.h
+
+PROGS=	fly8udp.exe udpmgr.exe
+
+HFILES=	../fly.h ../config.h
+
+
+.SUFFIXES:	.o .s .x .c
+
+.x.s:
+	$(CC) $(CFLAGS) -x c -E $*.x >$*.s
+
+.s.o:
+#	$(CC) $(CFLAGS) -Wa,-alh, -c $*.s >$*.sl
+	$(CC) $(CFLAGS) -c $*.s
+	rm $*.s
+
+
+all:	fly8sys.a $(PROGS)
+
+fly8sys.a:	$(OBJS)
+	-rm fly8sys.a
+	ar rvs fly8sys.a $(OBJS)
+
+$(COBJS):	$(HFILES)
+
+grasm.o:	bgr.h grasm.h
+
+#
+# udp comms stuff
+#
+udp.o:		fly8udp.h
+udpmgr.o:	fly8udp.h
+fly8udp.o:	fly8udp.h
+
+fly8udp.exe:	fly8udp.o
+	$(CC) $(CFLAGS) -o fly8udp.exe fly8udp.o ../need.o -lsocket -lc_alias
+
+udpmgr.exe:		udpmgr.o
+	$(CC) $(CFLAGS) -o udpmgr.exe udpmgr.o ../need.o -lsocket -lc_alias
+
+clean:
+	-rm *.o *.a $(PROGS)

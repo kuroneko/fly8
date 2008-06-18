@@ -1,0 +1,32 @@
+# grmswin.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# This file defines the video modes for the grmswin driver.
+#
+# Note: we add 8x31 pixels to compensate for the borders and titles.
+#
+
+# These do not have the proper 4:3 aspect ratio
+#
+:320x200x256:0:256:0:0:328:231:0:275:206:8:8
+:640x350x256:0:256:0:0:648:381:0:275:206:8:8
+
+# These have a 5:4 aspect ratio
+#
+:600x480x256:0:256:0:0:608:511:0:275:206:8:8
+:800x640x256:0:256:0:0:808:671:0:275:206:8:8
+:1000x800x256:0:256:0:0:1008:831:0:275:206:8:8
+:1280x1024x256:0:256:0:0:1288:1055:0:275:206:8:8
+
+# These have a proper 4:3 aspect ratio
+#
+:640x480x256:0:256:0:0:648:511:0:275:206:8:8
+:320x240x256:0:256:0:0:328:271:0:275:206:8:8
+:800x600x256:0:256:0:0:808:631:0:275:206:8:8
+:1024x768x256:0:256:0:0:1032:799:0:275:206:8:8
+:1200x900x256:0:256:0:0:1208:931:0:275:206:8:8
+:1400x1050x256:0:256:0:0:1408:1081:0:275:206:8:8
+:1600x1200x256:0:256:0:0:1600:1200:0:275:206:8:8
+

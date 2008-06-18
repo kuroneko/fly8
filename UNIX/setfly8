@@ -1,0 +1,11 @@
+#!/bin/sh
+
+mv amiga	AMIGA
+mv common	COMMON
+mv djgpp	DJGPP
+mv msdos	MSDOS
+mv mswin	MSWIN
+mv os2		OS2
+mv readme	README
+mv unix		UNIX
+chmod +x	UNIX/config

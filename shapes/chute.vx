@@ -1,0 +1,26 @@
+/* --------------------------------- chute.vx ------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_CHUTE.
+*/
+
+#include "shape.h"
+
+#define	S	3
+static VERTEX vx_chute[] = {		/* 3D 9 edges */
+	{{   0,   0, 3*S}, V_MOVE},
+	{{   0,-1*S, 2*S}, V_DRAW},
+	{{   0,   0,-3*S}, V_DRAW},
+	{{ 1*S,   S, 2*S}, V_DRAW},
+	{{-1*S,   S, 2*S}, V_DRAW},
+	{{   0,-1*S, 2*S}, V_DRAW},
+	{{ 1*S,   S, 2*S}, V_DRAW},
+	{{   0,   0, 3*S}, V_DRAW},
+	{{-1*S,   S, 2*S}, V_DRAW},
+	{{   0,   0,-3*S}, V_DRAW},
+
+	{{   0,   0, 2*S}, V_EOF}
+};

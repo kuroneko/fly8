@@ -1,0 +1,15 @@
+# grmswin.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# This file defines the video modes for the gros2 driver.
+#
+# Note: we add 8x35 pixels to compensate for the borders and titles.
+#
+:320x200x256:0:256:0:0:320:200:0:275:206:8:8
+:320x240x256:0:256:0:0:320:240:0:275:206:8:8
+:640x350x256:0:256:0:0:640:350:0:275:206:8:8
+:640x480x256:0:256:0:0:648:515:0:275:206:8:8
+:800x600x256:0:256:0:0:808:635:0:275:206:8:8
+:1024x768x256:0:256:0:0:1032:803:0:275:206:8:8

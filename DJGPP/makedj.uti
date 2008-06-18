@@ -1,0 +1,33 @@
+# makefile
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# make the utilities, for msdos, djgpp with standard make
+#
+
+CFLAGS= $(XFLAGS) -I.. -I. -I../$(SYSTEM)
+
+HFILES=	../keydef.h ../keymap.h ../keyname.h
+
+all:	mac2max.exe max2mac.exe
+
+mac2max.o max2mac.o: $(HFILES)
+
+mac2max.exe:	mac2max.o
+	$(CC) $(CFLAGS) mac2max.o -o mac2max
+	strip mac2max
+	coff2exe mac2max
+	del mac2max
+
+max2mac.exe:	max2mac.o ../need.o
+	$(CC) $(CFLAGS) max2mac.o  ../need.o -o max2mac
+	strip max2mac
+	coff2exe max2mac
+	del max2mac
+
+clean:
+	-del *.o
+	-del *.exe

@@ -1,0 +1,23 @@
+/* --------------------------------- tower.vx ------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_TOWER.
+*/
+
+#include "shape.h"
+
+#define	W	64
+#define	L	1750
+#define	S	250
+#define	SS	(W/8)
+#define	DD	(L+S)/16
+
+static VERTEX vx_tower[] = {
+	{{0, 0,  0}, V_MOVE},
+	{{0, 0, 20}, V_DRAW},
+
+	{{0, 0,  0}, V_EOF}
+};

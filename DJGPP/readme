@@ -1,0 +1,77 @@
+18 Aug 96 Eyal
+
+v1
+==
+
+This port was brought up to date with version 1.12. I had problems with
+'make' running out of memory, so I used NDmake. However, with the
+standard make, if you get errors like 'not enough memory to run GO32'
+then do the make by hand, For example, a batch file like the following
+can be executed from the main directory.
+
+To build, do:
+
+Set your djgpp compiler properly.
+
+	cd fly8
+	djgpp\config v1
+
+And edit the top Makefile for the correct directories.
+
+	cd djgpp
+	make aobjs >>..\errs
+	cd ..
+
+	cd shapes
+	make all >>..\errs
+	cd ..
+
+	cd parms
+	make all >>..\errs
+	cd ..
+
+	make all install >>errs
+
+
+There are a few video drivers:
+
+GrDJ: uses the standard DJgpp graphics library and will work if the
+library works for you.
+
+GrAsm: Handles the video directly. It has native support for ET4000
+based cards and generic support for VESA/VBE compliant cards. If you do
+not have a VESA driver for your card then get 'univbe' off the net and
+it will probably work for you.
+
+GrVBE: Uses VBE 2.0 to access the video memory. Can only be used with
+banked frame buffer modes (not with linear memory). When possible, use
+it since it will work with all VBE enabled cards.
+
+GrAsm (and GrVBE) are much faster than GrDJ and should be used whenever
+possible.
+
+As of this version communication if fully supported, over packet driver,
+either using the raw pc<->pc 'pkt' or the UDP based 'pcudp' drivers.
+
+
+v2
+==
+
+To build, do:
+
+Set your djgpp compiler properly.
+
+	cd fly8
+	djgpp\config v2
+
+And edit the top Makefile for the correct directories, then:
+
+	redir -oe make all install >errs
+
+
+You can use only two graphics drivers, GrAsm and GrVBE. GrAsm can only
+be used with a linear video memory mode.
+
+
+Reagrds
+	Eyal Lebedinsky	(eyal@eyal.emu.id.au)

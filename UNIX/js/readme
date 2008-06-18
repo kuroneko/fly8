@@ -1,0 +1,136 @@
+[ 5 May 1997]
+
+/proc file is now /proc/joystick. Much more information displayed.
+Bit longer load message. Button field returns options on ioctl.
+
+[ 3 May 1996]
+
+Added /proc/net/joystick.
+Made it build on 1.2.13 again.
+Cleaned printk messages.
+
+Do check the makefile for proper options. It is configured for module
+versioning. If you compile for 1.2.13 then set JS_V12.
+
+It was tested with kernels 1.2.13 and the latest up to 1.3.98. It may
+have problems with earlier 1.3.x - I do not have these around anymore.
+
+
+[ 2 Dec 1995]
+
+Kernel 1.3 modules already define 'kernel_version'. Remove the '#if 0'
+part for earlier kernels.
+
+
+[28 Jul 1995]
+
+Hello Everyone,
+
+This is my version of the loadable joystick driver. It is based on
+earlier work by other people and myself. It was recently modified
+significantly and has probably very little left from the original.
+
+The loadable stuff comes from a recent 0.7 driver public release by
+Carlos Puchol (cpg@cs.utexas.edu), the original README is attached
+below; please read it.
+
+This version allows reading all channels in one go. It also fixes some
+problems with the original.
+
+Fly8 will by default access this driver; however, if you specify the
+'game' option on the joystick line in fly.ini then it will use the
+<linux/game.h> driver instead. You must define the correct option or the
+reading will fail!
+
+regards
+	Eyal Lebedinsky (eyal@eyal.emu.id.au)
+
+
+------------------ original README ---------------------------------
+
+This file describes how to install the joystick device driver version
+0.7 for the Linux 1.0 kernel (or previous, if it has the loadable
+modules).
+
+This package includes the following files:
+
+Makefile         - make file for package and test programs
+README           - this README file
+joystick-0.7.lsm - Linux Software map entry for this package
+joystick.c       - The device driver itself
+joystick.h       - The device driver include file
+js.4             - man page
+js.c             - test program
+jscal.c          - calibration program
+
+INSTALLATION:
+
+You will need the modutils to load and remove loadable modules from
+the kernel. They can be found in the kernel directories of the
+Linux sites.
+
+$ make joystick.o
+
+Then in your rc.local insert a line like this:
+
+$ insmod /conf/modules/joystick.o
+
+(chose your own path for joystick.o, I have a conf dir for modules).
+You can try this as well by becoming root.
+
+If you have a kernel where it has the proper symbol table, you
+shouldn't have problems. If not (quite likely for now, unfortunately),
+then you will get an error similar to this:
+
+$ insmod joystick.o
+_xtime undefined
+$
+
+If that is the case, then you need to add those ``undefined'' calls to
+the kernel symbol table in linux/kernel/ksyms.S, then remake the
+kernel, save a backup of your current kernel, and reboot the new
+kernel.
+
+On bootup you should see a message displayed such as the following:
+
+js_init: found 2 joysticks
+
+To use the joystick driver, two files should be made in /dev. To do
+this, go to the directory where the joystick distribution was
+installed and do:
+
+$ make devs
+
+To test the driver, compile and run the programs "js" and "jscal" by
+doing:
+
+$ make all
+
+The program "js" simply prints out the state of the buttons and
+joystick values continuously.
+
+The program "jscal" allows the joysticks to be calibrated to return
+values between 0 and 0xff (or as close as can be done with
+shifting).
+
+To install the man page, do:
+
+$ make man
+
+The original joystick driver was written by Art Smith
+(asmith@cbnewsd.att.com). Changes in version 0.6 were made by Jeff
+Tranter (tranter@software.mitel.com). This version brought to you by
+Carlos Puchol (cpg@cs.utexas.edu).
+
+Changes from version 0.6 to 0.7
+- Support for loadable modules
+
+Changes from version 0.5 to 0.6:
+- updated to work with 0.99pl15 kernel (and hopefully 1.0)
+- wrote man page
+- enhanced "js" and "jscal" programs
+- various minor changes (indenting code, fixing typos, etc...)
+
+One application that supports the joystick driver is the "fly8" flight
+simulator program. Check any of the major Linux archive sites for the
+latest version.

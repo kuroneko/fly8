@@ -1,0 +1,14 @@
+# grvesa4p.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These are for all 4MB VESA cards with extended page flipping.
+#	the 1600x1200 mode is non standard!
+
+:320x200x256:0x13:256:0:0:320:200:65:275:206:8:8:1
+:640x480x256:0x101:256:0:0:640:480:13:275:206:8:8:1
+:800x600x256:0x103:256:0:0:800:600:8:275:206:8:8:1
+:1024x768x256:0x105:256:0:0:1024:768:5:275:206:8:8:1
+:1280x1024x256:0x107:256:0:0:1280:1024:3:275:206:8:8:1
+:1600x1200x256:0x120:256:0:0:1600:1200:2:275:206:8:8:1

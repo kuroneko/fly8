@@ -1,0 +1,57 @@
+# makeb4.par
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# makefile for parms and nav, msdos, Borland b4
+#
+
+CPP=	cpp
+CFLAGS=	-I.. -P-
+AWK=	awk
+COPY=	copy
+DEL=	del
+
+PARMS=	classic.prm basic.prm f16.prm
+NAV=	fly.nav
+LAND=	fly.lnd
+
+.SUFFIXES: .prc .prm .nac .nav .lnc .lnd
+
+.prc.prm:
+	$(COPY) $*.prc $*.c
+	$(CPP) $(CFLAGS) $*.c
+	-$(DEL) $*.c
+	$(AWK) -f expr.awk $*.i $*.prm
+	-$(DEL) $*.i
+
+.nac.nav:
+	$(COPY) $*.nac $*.c
+	$(CPP) $(CFLAGS) $*.c
+	-$(DEL) $*.c
+	$(AWK) -f expr.awk $*.i $*.nav
+	-$(DEL) $*.i
+
+.lnc.lnd:
+	$(COPY) $*.lnc $*.c
+	$(CPP) $(CFLAGS) $*.c
+	-$(DEL) $*.c
+	$(AWK) -f expr.awk $*.i $*.lnd
+	-$(DEL) $*.i
+
+all:	parms nav land
+
+parms:	$(PARMS)
+
+nav:	$(NAV)
+
+land:	$(LAND)
+
+clean:
+	-$(DEL) *.zzz
+	-$(DEL) *.prm
+	-$(DEL) *.nav
+	-$(DEL) *.lnd
+	-$(DEL) *.c

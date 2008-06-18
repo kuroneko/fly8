@@ -1,0 +1,16 @@
+/* --------------------------------- viewer.vx ------------------------------ */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_VIEWER.
+*/
+
+#include "shape.h"
+
+static VERTEX vx_viewer[] = {
+	{{0, 0, 0}, V_MOVE},
+
+	{{0, 0, 0}, V_EOF}
+};

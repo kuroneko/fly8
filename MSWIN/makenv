@@ -1,0 +1,81 @@
+# makenv
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+# machine specific makefile for WIN NT, ms vc2/4/5
+#
+# Read below and comment the appropriate sections.
+
+DEL=		del
+OO=		.obj
+LO=		.lib
+EO=		.exe
+
+
+# GFLAGS:
+#
+# WinG needs:
+#	-DUSE_WING -DDEBUG_BGR -DUSE_BGRASM -DDEBUG_VGR
+#
+# DirectDraw needs (no need to repeat):
+#	-DUSE_DDRAW -DDEBUG_BGR -DUSE_BGRASM
+
+GFLAGS=	-DUSE_DDRAW -DUSE_WING -DDEBUG_BGR -DUSE_BGRASM -DDEBUG_VGR
+
+# GOBJS:
+#
+# WinG needs:
+#	bgr vgr bgrasm(optional)
+# DirectDraw needs (no need to repeat):
+#	bgr bgrasm(optional)
+
+GOBJS=	grwing$(OO) grddraw$(OO) bgr$(OO) vgr$(OO) bgrasm$(OO)
+
+LFLAGS=
+CFLAGS=  -I.. $(XFLAGS) -DHAVE_UDP=1 $(GFLAGS)
+WCFLAGS= -I.. -DSYS_$(SYSTEM)=1 -DHAVE_UDP=1 $(GFLAGS) -W4 -Ox -G5
+WLIB=	wsock32$(LO) user32$(LO)
+WPROGS=	fly8udp$(EO) udpmgr$(EO)
+WOBJS=	udp$(OO)
+
+# Non portable programs. For NT/95 we will need to use w32stick instead
+# of dosstick, when it is finalised.
+#
+COBJS1=	drivers$(OO) console$(OO) timer$(OO) mswin$(OO) grmswin$(OO) misc$(OO)
+COBJS2=	stick$(OO) w32stick$(OO) mouse$(OO) mmsound$(OO) wave$(OO) plmidi$(OO)
+COBJS3=	grstat$(OO) common$(OO) plsound$(OO)
+
+OBJS=	$(COBJS1) $(COBJS2) $(COBJS3) $(GOBJS) $(WOBJS)
+
+HFILES = ../config.h ../fly.h ../keydef.h ../keymap.h
+
+all:	fly8sys$(LO) $(WPROGS)
+
+fly8sys$(LO):	$(OBJS)
+	-$(DEL) fly8sys$(LO)
+	lib /OUT:fly8sys$(LO) $(OBJS)
+
+$(OBJS):	$(HFILES)
+
+udp$(OO):	fly8udp.h
+
+fly8udp$(OO): fly8udp.c fly8udp.h
+	$(CC) $(WCFLAGS) -c fly8udp.c
+
+fly8udp$(EO):	fly8udp$(OO)
+	$(CC) $(LFLAGS) fly8udp$(OO) -link $(WLIB)
+
+udpmgr$(OO): udpmgr.c fly8udp.h
+	$(CC) $(WCFLAGS) -c udpmgr.c
+
+udpmgr$(EO): udpmgr$(OO)
+	$(CC) $(LFLAGS) udpmgr$(OO) -link $(WLIB)
+
+
+clean:
+	-$(DEL) *$(OO)
+	-$(DEL) *$(LO)
+	-$(DEL) *$(EO)
+	-$(DEL) *.rsp
+	-$(DEL) errs

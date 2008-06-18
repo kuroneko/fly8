@@ -1,0 +1,371 @@
+1 FLY
+
+Flight Simulator under X window
+
+Usage:
+
+ $ fly [options]
+
+2 DESCRIPTION
+This program is a flight simulator. It puts more emphasis on
+the dynamics than on the cosmetics: just wire-frame. It  can
+run on any machine but a 386DX is the minimum for any decent
+performance. A fast video controller is a boon as  the  pro-
+gram,  when  running  on a 386DX/40Mhz, spends 70-80% of its
+time pushing pixels. On non-intel machines you can  try  and
+see if it is fast enough...
+
+The  program  was  written  for  fun.  I borrowed ideas from
+everywhere and hope to hear some more. The basic  design  is
+based  on  a  program  I wrote more than 20 years ago at uni
+(the Technion). I had an excellent coach (Danny Cohen) and I
+still have fond memories of those times. But now my computer
+has more than 24Kbytes of memory! so Fly8 is  written  in  C
+(Fly8  was the name of the last version of the original pro-
+gram dated 12-JAN-1974, it was written in PDP15  assembly  -
+macro15 - for a VT15 graphics processor).
+The actual purpose of the program was to give me an opportu-
+nity to experiment with various aspects  of  flight  simula-
+tion, but mostly with (1) the HUD symbology (or, more gener-
+aly, with man-machine interaction) and (2) the  studying  of
+basic  aerodynamics (as well as general real time simulation
+techniques). This explains why there are so many HUD options
+and  such a proliferation of flight dynamics models, as well
+as why the simulation parameters are user definable as input
+files at run time. Of course, the experimental nature of the
+program means that it must be distributed in source form.
+
+On the  PC  the  basic  screen  drawing  uses  the  standard
+Microsoft  graphics library. It is OK but not very fast; the
+main advantage is that it will support most video  adapters.
+The  fast  graphics  driver was built from the routines from
+DJGPP with much personal additions. The flight dynamics  was
+influenced  by  an SGI program I saw and ACM. The timer rou-
+tines come from a microsoft journal article, the  user-input
+routine (notice how you can use arrow keys etc? use up-arrow
+to retrieve history.. I will document it one day) comes from
+DDJ (or was it CUJ? author name is Bob Bybee). Well, I avoid
+re-inventing wheels unless it is fun. The  program  compiles
+with Microsoft C, Borland C, gcc on a friends Amiga, Sun and
+Linux and I hope on other platforms; it  is  written  to  be
+portable.  It runs under MSDOS, MSWindows, Amiga and unix/X-
+Windows... and now on OpenVMS !!
+
+What? what? WHAT? you want to see some action? OK. just skip
+to the next chapter then come back.
+The full set of commands is detailed in the 'commands' chap-
+ter. Here we will look at the program areas in general.
+There are two rather distinct kinds  of  commands  that  one
+uses:  commands  that drive (fly) the game and commands that
+configure, set options and so on (which are used  with  less
+urgency).  It  was  attempted  to get the important commands
+into the keyboard (a one keystroke command) while the others
+go  into  the  main menu system (accessed with the Esc key).
+Some of the urgent commands may bring up a  menu  which  you
+may ignore if you know the keystokes.
+The  urgent commands will control the vehicle flight and the
+other subsystems (radar, HUD, HDD, weapons etc.).  You  will
+notice  early that the program lacks the traditional instru-
+ment panel: it is intended to be driven  from  the  HUD  and
+other digital displays.
+The vehicle is also driven by a pointing device (a mouse or,
+preferably, a joystick). It will run off the keypad when you
+have  no such device.  The pointer is used only for steering
+control although the buttons  can  be  mapped  to  auxiliary
+functions (by default both 'fire').
+ 
+The  display area is typicaly divided into the main view and
+a number of secondary Head Down Displays (HDD).  The  design
+has  a dozen or so on board instruments that generate visual
+data; you select which ones should  be  displayed  on  which
+HDD.  The main view is what you see through the cockpit. The
+HUD can be overlaid onto this view (as is the  case  with  a
+real  plane).  Other  data may also be shown here for conve-
+nience.
+
+One other instrument is designated as an alternate main view
+(use  the 'v' command to see it). The 'windows' menu handles
+the screen format and configuration.
+The program generates various messages  as  it  goes  along,
+these  will  appear at the bottom of the main view and stack
+up. Each message has a time-out for deletion but you can use
+'c'  to  clear the lot. When the program needs user input it
+will open a prompt line at the very bottom of the main  view
+(in  magenta  color)  where your data will show. You can use
+the normal editing keys while entering data here -  previous
+entries  are  accessible with the up/down arrows. See 'input
+line editing' later.
+
+You may find some of the commands/options  strange  (if  not
+outright  insane);  this  will  be  related  to  my taste or
+(mostly) to much history and quick fixing that did not  com-
+pletely  settle  yet.  I have looked at other programs (like
+F3, JF2, ACM and SGI f.s.) but this was after the first ver-
+sion of this program was finished, so some good ideas missed
+the bus this time. In the future I hope to polish  the  user
+interface  (especialy  after  other people get to use it and
+express an opinion).
+
+Being as the program is still evolving you  will  find  some
+areas less complete than others. I hope that there is enough
+of it to make it useful. I expect to see  contributions  (of
+ideas  and  code)  from  other  people;  I  will continue to
+develop the program (at least for a while) and would like to
+see it take it's own path in life [heavy stuff :-)].
+
+
+2 QUICK_START
+In  this  chapter the symbol '@' is used to denote the Enter
+key. This will give you a quick feel for what the program is
+like.  With the program installed, type
+  $ fly -z5
+This  starts  the program in a demo setting and is useful to
+see if all is OK and also great as a screen blanker :-)
+If the fly.ini options are correct then your plane will take
+off  and  start  looking  for action. Some messages are dis-
+played during startup - these will disappear after  a  short
+while.  The  screen will show a simple view of the runway, a
+ground grid (in gray) and an overlaid HUD.
+
+The scene will include you and 5 other planes (drones). Your
+auto-pilot will track and shoot the drones. As they are shot
+down,  new  ones  take  off.  To  take control back from the
+autopilot hit Shift-C. Now use  the  joystick  (or  whatever
+input device you choose) to fly the plane. One mouse or joy-
+stick button shoots (same as F1). When the target is in  the
+correct  position  the autopilot will shoot (unless you tell
+it not to with 'k'). The idea is to fly your plane  so  that
+the  target  is inside the aiming reticle (the small circle)
+and then shoot. A SHOOT cue will flash when your aim is cor-
+rect.
+
+You  may  want  to know the current settings (like throttle,
+flaps   etc.)    Turn   on   the   'misc'    display    (Esc
+hud/options-2/misc).  The  'Esc' key activates the menu sys-
+tem. most selections can be used as a short sequence of  the
+associated letters; the last sequence can be entered as Esc-
+u-2-m-Esc. The hud menu is also directly  available  as  the
+'u' command.
+
+This  how  you  fly  the plane: moving the joystick sideways
+will start the plane rolling. The further you move the stick
+the faster the roll. Once you center the stick the roll will
+stop. In order to fly level you  need  to  roll  either  way
+untill you are level and then center the stick.
+
+To exit hit 'Esc' 'x' and 'y'.
+
+Nota: on a DEC keyboard, ESC = CTRL-3
+
+2 OPTIONS
+Fly8 acquires parameters from three sources:
+
+a) The ini file
+   One parameter per line. Leading blanks are skipped, then first blank
+   terminates the parameter. '#' denotes a comment line.
+b) The environment variable FLY8 (the DCL symbol FLY8 under OpenVMS)
+   Parameters are separated by a semicolon.
+c) The command line options
+   The usual rules apply, but the traditional '-' is NOT required.
+ 
+F       Files Path
+        Path where all files are to be found. Should be used only on the
+        command line.
+
+I       IniFile
+        Specified the name of an init file.
+        The default is 'fly.ini'. The file is searched for in the current
+        directory, then in the home dir (uses HOME env. var.) then the
+        PATH directories are checked. Only the first file found is used.
+        Should be used onlye on the command line.
+
+dp      PointerDriver
+        The pointing device can be one of:
+        keypad, mouse, astick, bstick
+ Can have options as follows [each option is one byte, see example later]:
+        1  [+-]         set 1st channel direction
+        2  [xy]         set 1st channel function (see below)
+        3  [+-]         set 2nd channel direction
+        4  [xy]         set 2nd channel function (see below)
+
+ Example of pointer parameters:
+
+          1234 <-position
+ dpastick:+x+y:.....
+  ^^      ^^^^ ^
+  ||      |||| |
+  ||      |||| |
+  ||      |||| |
+  ||      |||| |
+  ||      |||| |
+  ||      |||| +----------- optionally, more parameters
+  ||      |||+-------------             of up/down    from 1st stick input
+  ||      ||+-------------- +ve control/
+  ||      |+---------------             of left/right from 2nd stick input
+  ||      +---------------- +ve control/
+  |+----------------------- these are for the 'astick' device
+  +------------------------ these are the 'pointer' device parameters
+  +------------------------ these are the 'pointer' device parameters
+
+ Each pointing device can has more parameters. Currently defined are these:
+ keypad:        no parameters
+ mouse:         sx=:sy=
+        Sets the sensitivity of the mouse.
+ stick:         :bx1=:ix1=:by1=:iy1=:by2=:hat:ttl=:four:ndb=:rel=:rd=:dly=
+        b**=    defined the base value for this channel. If the lowest
+                reading is n% of full scale then n is the value to
+                specify here.
+        i**=    the size (in % of active range) of the central region
+                where the reading should be zero.
+          **    x1= main joystick x, y1= its y, x2=2nd joystick x, y2=2nd y.
+                y2 is used for throttle (CH) or hat (FCS).
+        hat     use y2 as the FCS hat. The positions are called 4, 5, 6 & 7.
+        ttl=    use y2 as throttle. The value is the % where the AB detent
+                it. a negative number means that max reading is
+                zero throttle (this is the common case, like CH and analog
+                WCS).
+        four    read all 4 buttons. Then are called 0,1,2 & 3.
+        ndb=    do not debounce these buttons - make then repeating.
+        rel=    issue key release command for these buttons.
+        rd=     read this many times instead of once
+        dly=    wait some time between multiple reads.
+                The last two options are usefull if there is a lot of
+                interruptions (network, multiuser system etc.). The
+                delay may be necessary if doing multiple reads since
+                some joystick ports are slow to reset.
+
+dv      VideoDriver
+        The software video driver. These vary between machines.
+        MSDOS:  grqc (default) or grfast
+        MSWIN:  grmswin
+        UNIX:   grx
+        VMS:    grx
+        AMIGA:  gramiga
+
+dn      NetDriver
+        Network access through driver 'NetPort'. Only msdos has network
+        drivers at the moment:
+        com.2:57600:n:8:1::4000
+                Direct control of the serial port. The parameters are:
+                :speed:parity:bits:stop:xmode:inbuf:outbuf:irq3:base0x2f8
+                Do not specify xmode. irq and base only needed if you
+                have a non-standard setup. the '.2' means 'com2'.
+        slip.1
+                'slip' over the serial port. Requires the 'etherslip'
+                packet driver.
+        pkt.1:0x65:pack:type=
+                packet driver. Use the one for your hardware. 'pack'
+                means that multiple packets will be sent in one ethernet
+                packet. Note that this driver uses the lowest level (MAC
+                addressing). No IP. Packet type is set to F8F8 unless
+                you define type=.
+
+dk      KeyboardDriver
+        Keyboard device name. Usually there is only one defined so leave
+        this parameter out.
+
+ds      SoundDriver
+        Sound device name. Usually there is only one defined so leave this
+        parameter out.
+
+P       PlaneType
+D       DroneType
+        The plane and drone type. If absent then drone type defaults to
+        plane type. Current types are: classic, basic, f16.
+
+V       VideoModesFile
+        The xxx.vmd file to use. [default is 'fly']
+
+m       VideoMode
+        The display mode. This is one of the modes defined in the .vmd
+        file you use.
+
+f       Font
+        Name of test font file. (for GrFast only!). [default is '6x8.fnt']
+
+b       n
+        Screen configuration; see fly8.doc. [obsolete]
+
+r
+        Activate net (used to be 'support Remote players').
+
+N       Handle
+        I will be known as 'Handle'.
+
+T       Team
+        My team's name.
+
+H       Home
+        My home runway (selected from fly.nav file).
+
+q
+        No sound
+
+l
+        Add some landscaping (very rudimentary)
+
+v
+        Verbose (not used)
+
+z       NDrones
+        Screen-blanker mode (with 'NDRONES' drones).
+
+s       PortIO
+        Shutter glasses port addrress (com1 is 0x3f8, com2 is 0x2f8 etc.)
+        Only in MSDOS version.
+
+M       MacroFile
+        Name of keyboard macros file. [default is 'fly']
+
+X       NavFile
+        Name of nav data file. [default is 'fly']
+
+Y       LandFile
+        Name of landscape file. [default is 'fly']
+
+nt      TimeLimit
+        Time limit in seconds (use in batch demos).
+
+v
+        Verbose (not used)
+
+z       NDrones
+        Screen-blanker mode (with 'NDRONES' drones).
+
+s       PortIO
+        Shutter glasses port addrress (com1 is 0x3f8, com2 is 0x2f8 etc.)
+        Only in MSDOS version.
+
+M       MacroFile
+        Name of keyboard macros file. [default is 'fly']
+
+X       NavFile
+        Name of nav data file. [default is 'fly']
+
+Y       LandFile
+        Name of landscape file. [default is 'fly']
+
+nt      TimeLimit
+        Time limit in seconds (use in batch demos).
+
+nb      LineBufferSize
+        Max num of segments in the display list. Default 5000.
+
+ni      MilliSecs
+        Max time for plane dynamics.
+
+nm      Macros
+        Max number of keyboard macros
+
+c       Color
+        Sets any one of the color definition. The color name is the same
+        as used on the color menu. The value is as RGB, each componnent
+        is 8 bits. Example: ch0x60c060 set hud-low color to light green.
+  
+
+2 Author
+Eyal Lebedinsky (eyal@eyal.emu.id.au)
+
+2 VMS_PORT
+Patrick Moreau, CENA/Athis-Mons (pmoreau@cena.dgac.fr)
+

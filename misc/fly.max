@@ -1,0 +1,71 @@
+# The following defines a macro for the Ctrl-a key. This macro is
+# automatically executed at program startup.
+
+def Ctrl a
+	Menu "ur1dnap0C" Menu		# full radar data
+	Ctrl f				# fancy ladder
+	Menu o 1 s k N Menu		# show Smoke, sKy, No stall
+	Menu n c			# net: auto connect
+
+def Ctrl f
+	"\eupl1cfszSr\e"		# fancy ladder
+
+# A very basic (and fast) HUD:
+
+def Ctrl b
+	Menu u t 0			# Classic HUD
+	Menu u 1 1 f 0 x Menu		# coarse detail
+	Menu "ur1dnapv0C" Menu		# full radar data
+	Menu u 2 0 A Menu		# no aural alarms
+	Ctrl f				# fancy ladder
+
+
+# This one builds an F16 fancy HUD:
+
+def Ctrl c
+	Menu u t 2			# FA16 HUD
+	Menu u r 1 d n a 0 C Menu	# full radar data
+	Ctrl f				# fancy ladder.
+
+# This one builds an Ether HUD:
+
+def Ctrl e
+	Menu w e Menu			# Ether configuration
+	Menu u t 4			# Ether HUD
+	Menu u d 0 p Menu		# no Panel
+	Menu u r 1 d n a 0 C Menu	# full radar data
+	Ctrl f				# fancy ladder.
+	Menu s 0 b			# show borders (blanker off)
+
+# set up colored ether configuration
+
+def Ctrl y
+	Menu w e
+	    b 1 n
+	      2 d
+	      4 G
+	Menu
+	Menu s p n - - - Menu
+		d + + Menu
+		G - - - Menu
+	Menu
+	Menu u t 4
+	Menu u d 0 p Menu
+	VZoomIn VZoomIn VZoomIn VZoomIn VZoomIn VZoomIn 
+	Menu u d 1 c 0 q Menu
+	d
+	Menu u r 0 n v Menu
+
+# Set up drones and our gun
+
+def Ctrl z
+	Menu e y 5 Ent Menu		# Emit 5 drones
+	w r l				# Weapon=gun, Radar on, radar Locked
+	C				# Chase
+	k				# Kill
+	Menu u d 0 p Menu		# no panel
+
+# Two buttons are expected on most pointer drivers.
+
+Def Btn 0	Fire		# trigger button shoots
+Def Btn 1	RadarSelect	# second button reselect target

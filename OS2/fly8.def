@@ -1,0 +1,14 @@
+; fly8.def
+;
+; This is part of the flight simulator 'fly8'.
+; Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+;
+; Defines Fly8's executable file characteristics.
+;
+
+NAME Fly8 WINDOWAPI         
+                               
+DESCRIPTION 'Fly8 by Eyal Lebedinsky - OS/2 Port by Michael Taylor'   
+                               
+STACKSIZE   65536              
+

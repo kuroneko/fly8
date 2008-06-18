@@ -1,0 +1,65 @@
+# wcs.max
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+# The button assignments are as follows:
+#
+#	T1  a middle finger button
+#	T2  b bottom index button
+#	T3  c top index button
+#	T4  d top thumb button
+#	T5  e buttom thumb button
+#	T6  f rear thumb button
+#	T7  g rocker up
+#	T8  h rocker down
+
+# Example of button usage. Let us define the trigger (button 0) as the
+# 'fire' function:
+
+Def Btn 0	F1
+
+# we should use the 'd=0' in the stick options so that this button
+# will produce a repeating action, so you don't have to press/release
+# for each shot. Now let us define the second button as the radar lock
+# release:
+
+Def Btn 1	Sp
+
+# If we have 4 buttons on the main stick then we can use them, like this:
+
+Def Btn 2	w		# toggle weapon
+Def Btn 3	f		# toggle radar acquisition mode
+
+# If we have a 'hat' then we can use it for view control, like:
+
+Def Btn 4	Up Up Up Up Up
+Def Brl 4	*
+Def Btn 5	Right Right Right Right Right
+Def Brl 5	*
+Def Btn 6	Down Down Down Down Down
+Def Brl 6	*
+Def Btn 7	Left Left Left Left Left
+Def Brl 7	*
+
+# now let's use some WCS buttons:
+
+Def Btn c	v		# top index	toggle view
+Def Btn d	F5		# top thumb	zoom in
+Def Btn e	F6		# bottom thumb	zoom out
+Def Btn f	+		# rear thumb	hold speed brakes
+Def Brl f	+
+
+# Note how button f engages the speed brakes on press but then retracts
+# them on release. You must define this button to have a release function
+# (the default). You may also want buttons 4 and 6 to have continuous
+# operation. In summary, the pointer options should be ':d=046'.
+
+# In practice it is safe to leave ALL buttons for 'release' action
+# since undefined keys will be ignores. However it is wastefull
+# to make a key continuous ('d=...') when it is not needed.
+
+# Note how a button can be seen by Fly8 directly through the joystick port
+# or indirectly through the keyboard (using the WCS). This file does not
+# depend on which way this happens. You should program the WCS with the
+# fly8.adv file so that the correct generic key sequences are used.

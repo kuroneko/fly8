@@ -1,0 +1,114 @@
+# makend
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for msdos, djgpp v1 with 'NDmake'.
+#
+
+OO=		.o
+OOUT=		-o ./
+EOUT=		-o ./
+
+# empty the next defs if you do not have watcp.lib
+#
+#WOPTS=	-DHAVE_UDP=1 -DSYS_WATTCP=1
+#WOBJS=	udp$(OO)
+#WPROGS=	fly8udp.exe udpmgr.exe
+#WLIB=	-lwatcp
+
+WOPTS=
+WOBJS=
+WPROGS=
+WLIB=
+
+
+# remove -DUSE_BGRASM for no asm line drawing.
+# add -DDEBUG_BGR to enable parameter checking in bgr.c.
+# add -DDEBUG_VGR to enable parameter checking in vgr.c.
+#
+# djgpp v2.0 needs -D_NAIVE_DOS_REGS
+#
+CFLAGS= $(XFLAGS) -I.. -I. -DUSE_BGRASM $(WOPTS)
+
+COBJS1=	drivers$(OO) console$(OO) pctimer$(OO) djgpp$(OO) misc$(OO) pcmouse$(OO)
+COBJS2=	stick$(OO) dosstick$(OO) plsound$(OO) plspeak$(OO) pcudp$(OO) packet$(OO)
+COBJS3= grvbe$(OO) vbe$(OO) vgr$(OO) grasm$(OO) bgr$(OO) low$(OO) grdj$(OO) \
+	grstat$(OO) plmidi$(OO) plfm$(OO) pladlib$(OO)
+
+AOBJS=	ints$(OO) chksum$(OO) bgrasm$(OO) vbeasm$(OO)
+
+COBJS=	$(COBJS1) $(COBJS2) $(COBJS3) $(WOBJS)
+OBJS=	$(COBJS) $(AOBJS)
+
+HFILES=	../fly.h ../config.h
+
+RSP=	fly8.rsp
+
+.SUFFIXES:	$(OO) .x
+
+.x$(OO):
+	echo $(CFLAGS) >$(RSP)
+	$(CC) @$(RSP) -x c -E $*.x >$*.s
+	-del $(RSP)
+	$(CC) $(CFLAGS) -c $*.s
+	-del $*.s
+
+.c$(OO):
+	echo $(CFLAGS) >$(RSP)
+	$(CC) @$(RSP) -c $*.c
+	-del $(RSP)
+
+
+all:		fly8sys.a banktool.exe $(WPROGS)
+
+aobjs:		$(AOBJS)
+
+fly8sys.a:	$(OBJS)
+	-del fly8sys.a
+	ar q fly8sys.a $(COBJS1)
+	ar q fly8sys.a $(COBJS2)
+	ar q fly8sys.a $(COBJS3)
+	ar q fly8sys.a $(AOBJS)
+	ranlib fly8sys.a
+
+$(COBJS):	$(HFILES)
+stick$(OO):	stick.h
+dosstick$(OO):	stick.h
+pcudp$(OO):	pcudp.h
+
+grasm$(OO):	bgr.h grasm.h
+low$(OO):	bgr.h grasm.h
+
+grvbe$(OO):	vgr.h vbe.h
+vbe$(OO):	vbe.h
+vgr$(OO):	vgr.h
+
+fly8udp.exe:	fly8udp$(OO)
+	$(CC) $(CFLAGS) $(EOUT)fly8udp fly8udp$(OO) $(WLIB)
+	strip fly8udp
+	coff2exe fly8udp
+	-del fly8udp
+
+udpmgr.exe:	udpmgr$(OO)
+	$(CC) $(CFLAGS) $(EOUT)udpmgr udpmgr$(OO) $(WLIB)
+	strip udpmgr
+	coff2exe udpmgr
+	-del udpmgr
+
+banktool$(OO):	banktool.c
+
+banktool.exe:	banktool$(OO)
+	$(CC) $(CFLAGS) $(EOUT)banktool banktool$(OO) $(WLIB)
+	strip banktool
+	coff2exe banktool
+	-del banktool
+
+clean:
+	-del *.exe
+	-del *$(OO)
+	-del *.a
+	-del *.s
+	-del *.sl

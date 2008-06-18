@@ -1,0 +1,22 @@
+How to use the Linux binaries for Fly8:
+
+1  To change the initial window size, adjust the fly.ini option:
+	mstandard
+   to some other mode from grx.vmd, or otherwise adjust the definition
+   of 'standard' in grx.vmd.
+   You can always resize the window later...
+
+2  To use the joystick select a new pointer device in fly.ini by commenting
+   out the current 'dp...' line (which by defaults uses the mouse) to one
+   of the joystick lines ('dpAstick').
+   Note that if you use the <linux/game.h> type joystick driver then you MUST
+   add the ':game' option to the stick definition. The default assumes a
+   <linux/joystick.h> style driver.
+   You may want then to adjust the other stick parameters for your situation.
+
+3  For multiplayer games you will need to enable some of the lines at the
+   bottom of fly.ini; refer to the doc file for networking information.
+
+
+regards
+	Eyal Lebedinsky	eyal@eyal.emu.id.au

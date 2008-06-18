@@ -1,0 +1,11 @@
+WING32.DLL
+_WinGCreateDC@0
+_WinGRecommendDIBFormat@4
+_WinGCreateBitmap@12
+_WinGGetDIBPointer@8
+_WinGGetDIBColorTable@16
+_WinGSetDIBColorTable@16
+_WinGCreateHalftonePalette@0
+_WinGCreateHalftoneBrush@12
+_WinGBitBlt@32
+_WinGStretchBlt@40

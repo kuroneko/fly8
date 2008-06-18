@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# This script installs the sources and builds the binaries for Fly8.
+# You should modify the path for the *.zip file as well as review the
+# makefile contents before running it. Then comment the two lines below.
+
+echo did you change the paths as needed?
+exit 1
+
+log=$HOME/installfly8.log
+echo `date` install Fly8 started >$log
+
+# Some older versions use -xa
+#
+unzip -La ..../fly8???1.zip 1>>$log 2>&1
+
+cd fly8
+sh unix/setfly8 1>>$log 2>&1
+#
+# Use 'lx' for Linux, 'sp' for Sun Sparc.
+#
+UNIX/config lx 1>>$log 2>&1
+
+#
+# Now would be a good time to review the Makefiles.
+#
+
+make all 1>>$log 2>&1
+(cd docs; dodoc) 1>>$log 2>&1
+make install 1>>$log 2>&1
+cd ..
+echo `date` install Fly8 ended >>$log

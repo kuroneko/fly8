@@ -1,0 +1,1 @@
+cat tmac.gm fly8.mm | sed "/^$/d" | groff -rO1.25i -Tascii >fly8.doc

@@ -1,0 +1,17 @@
+/* --------------------------------- m61.vx --------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_M61.
+*/
+
+#include "shape.h"
+
+static VERTEX vx_m61[] = {
+	{{ 0,  0,  0}, V_MOVE},
+	{{ 0,  1,  0}, V_DRAW},
+
+	{{ 0,  0,  0}, V_EOF}
+};

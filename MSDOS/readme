@@ -1,0 +1,128 @@
+# readme
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# Specific notes for the MSDOS version.
+
+[26 December 1995]
+
+UDP support was added using direct packet driver access. This now allows
+msdos and unix to work together. The server must still run on the unix
+side. Mswin311 now supports UDP as well and can also run the UDP server,
+so you do not have to have a unix server.
+
+For graphics you can use these modes:
+
+1 Generic graphics. Slow but works with most cards. It uses the microsoft
+  C library graphics support. It even supports Hercules if you install
+  msherc.com (found in utils.zip). It does not support double buffering
+  at high resolutions (640x350x16 is the higest for this). Use it if all
+  else fails.
+
+  Use 'dvgrqc Vgrqc' for the microsoft graphics. It should work on all cards.
+
+NOTE: in the distributed binary this driver was removed in order to save
+memory!
+
+2 Lean and mean 'GrFast'. I wrote this low level driver for high performance.
+  It does not support all chips and probably never will. However this is your
+  best mode if it works.
+
+  Use 'dvgrfast:* Vgr#' with '*' and '#' from the table at the end of this
+  file.
+
+3 Second best, use GrFast with VESA support. For this your card should
+  support VESA page flipping. Many don't. However, there is a nice shareware
+  program 'univbe' which supports many cards, give it a try.
+
+  Use 'dvgrfast:vesa Vgrvesa1p'. For 2MB cards use '2p'. If your card does
+  not support page flipping (Fly8 with double buffering gives garbage) then
+  use 'grvesa1' and '2'. This will work with most VESA drivers even if
+  they do not have page flipping but you will see some flicker.
+
+4 A VESA VBE based driver 'grvesa'is not as fast as 'grfast' but is leaner
+  since it has NO native support for any chip. In the future I will remove
+  all native chip support and trust the VBE BIOS to be there.
+
+5 The version built with bcc has a BGI based driver, 'grbgi' but it was
+  found to be slow and limited so I do not recommend it.
+  If I see enough need for it then I will put some effort into upgrading it.
+
+NOTE: in the distributed binary this driver was removed in order to save
+memory!
+
+  You will probably put the 'dvgr# Vgr*" options in your fly.ini so that you
+will not need to repeat it for each run.
+
+  A description of the *.vmd file structure is given in the doco. The
+important item is the video mode which is the first option after the mode
+name (e.g. 0x13 for 320x200x256 mode). GrFast supports only the 256 color
+modes (called PL8 in whatvga.lst). GrQc supports all modes.
+
+  To create the missing gr#.vmd files consult the attached whatvga.lst
+file. It comes from the vgadoc3.zip file which is available on common
+archive sites and included with the msdos binaries.
+
+  The whatvga.exe program can detect the type of graphics chip in your
+machine. It is from the vgadoc3.zip package, the whatvga.doc file describes
+what it does.
+
+
+  The above files are packages inside whatvga.zip.
+
+  Test against your card. Be carefull not to blow your screen (all too
+easy to do with older ones). Please email me any working *.vmd files for
+inclusion in later releases.
+
+  You can name the modes file whatever you want (with the extension .vmd)
+but you cannot change the 'dvgrfast:*' chip name, you must quote one of
+the names from the next list.
+
+
+*		#	tested?
+====		====	=======
+
+vga		vga	  OK	only 320x200x256 single buffering...
+vesa			  OK	use 'unibve' if you don't have a vESA driver.
+ati			no
+aheada			no
+aheadb			no
+chips			no	for chips 451
+chips2			no	for chips 452
+chips3			  OK	for chips 453
+everex			no	for native Everex
+				Use t88/t89/et4k for cards based on these chips
+genoa			no
+oak			no	for OTI-077
+oak87			no	for OTI-087
+paradise		  OK	tested at 640x480 on a laptop
+paradisep		no	for PVGA
+t88		t88	no	512k trident 8800
+t89		t89	  OK	1m trident 8900
+t89cl			no	trident 8900CL
+video7			no
+et3k			no	TsengLab ET3000
+et4k		et4k	  OK	TsengLab ET4000
+et4kw32		vesa2p	  OK	TsengLab ET4000W32p
+ncr			no
+s3		vesa2p	  OK	S3-928
+acumos			no
+al2101			no	Avance logic 2101
+mxic			  OK
+p2000			no	Primus
+rt3106			no	RealTek 3106
+cirrus		cirrus	  OK	tested with CL5420 & 5424
+cirrusa		cirrus	  OK	for cirrus '26
+
+
+Note:
+
+Common VESA *.vmd files are:
+
+		vesa1p	1MB w/ double buffering
+		vesa2p	2MB w/ double buffering
+		vesa4p	4MB w/ double buffering
+		vesa1	1MB no double buffering
+		vesa2	2MB no double buffering
+		vesa4	4MB no double buffering

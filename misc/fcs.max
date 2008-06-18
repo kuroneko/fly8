@@ -1,0 +1,31 @@
+# fcs.max
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+# Example of button usage. Let us define the trigger (button 0) as the
+# 'fire' function:
+
+Def Btn 0	F1
+
+# we should use the 'd=0' in the stick options so that this button
+# will produce a repeating action, so you don't have to press/release
+# for each shot. Now let us define the second button as the radar lock
+# release:
+
+Def Btn 1	Sp
+
+# If we have 4 buttons on the main stick then we can use them, like this:
+
+Def Btn 2	w		# toggle weapon
+Def Btn 3	f		# toggle radar acquisition mode
+
+
+# use the hat for power management, since we do not have a throttle on
+# this stick.
+
+Def Btn 4	9		# up	power up
+Def Btn 5	.		# right	100%, then AB power
+Def Btn 6	3		# down	power down
+Def Btn 7	0 +		# left	idle power
+Def Brl 7	+

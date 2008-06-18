@@ -1,0 +1,209 @@
+# makec8
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for msdos, ms vc1 (c8)
+#
+
+CDIR=	..\..
+HH=	$(CDIR)\h
+RSP=	$(TMP)\libfly8.rsp
+LZEXE=	lzexe
+
+# These are needed for UDP support using MSCWATCP
+#
+#WATTCP=	$(CDIR)\vcwattcp
+#WLIB=	$(WATTCP)\lib\wattcplg.lib
+#WFLAGS=	-DHAVE_UDP=1 -DSYS_WATTCP=1 -I$(WATTCP)\include
+
+# If you want to include the grvesa.c video driver then add:
+#	-DINCLUDE_GRVESA
+
+CFLAGS=	-I$(HH) -I.. $(WFLAGS) $(XFLAGS)
+
+#	Non portable programs
+#
+COBJS=	pcmouse.obj stick.obj dosstick.obj console.obj pctimer.obj \
+	pcserial.obj pcdos.obj drivers.obj misc.obj \
+	plspeak.obj plsound.obj plmidi.obj plfm.obj pladlib.obj \
+	pcudp.obj packet.obj slip.obj udp.obj \
+	grfast.obj grstat.obj \
+	grvesa.obj vesa.obj vgr.obj \
+	grqc.obj \
+	s3.obj
+
+AOBJS=	msubs.obj
+
+OBJS=	$(COBJS) $(AOBJS)
+
+HFILES=	..\fly.h ..\config.h
+
+.PRECIOUS: msubs.obj
+
+
+all:	fly8sys.lib exe
+
+exe:	gettimer.exe settimer.exe joytest.exe banktool.exe fly8udp.exe \
+	udpmgr.exe
+
+fly8sys.lib:	$(OBJS)
+	if exist fly8sys.lib del fly8sys.lib
+	echo fly8sys >$(RSP)
+	echo y >>$(RSP)
+	echo +pcmouse +stick +console +pctimer +pcserial & >>$(RSP)
+	echo +msubs +dosstick +grstat & >>$(RSP)
+	echo +pcdos +drivers +grqc +grfast +s3 +misc & >>$(RSP)
+	echo +slip +pcudp +packet +udp & >>$(RSP)
+	echo +plspeak +plsound +plmidi +plfm +pladlib & >>$(RSP)
+	echo +grvesa +vesa +vgr; >>$(RSP)
+	lib @$(RSP)
+	-del $(RSP)
+
+$(COBJS):	$(HFILES)
+
+drivers.obj:	drivers.c
+	$(CC) $(CFLAGS) -c $*.c
+
+pcmouse.obj:	pcmouse.c
+	$(CC) $(CFLAGS) -c $*.c
+
+console.obj:	console.c
+	$(CC) $(CFLAGS) -c $*.c
+
+pcdos.obj:	pcdos.c
+	$(CC) $(CFLAGS) -c -G2 $*.c
+
+pcserial.obj:	$(HH)\com.h
+	$(CC) $(CFLAGS) -c $*.c
+
+pctimer.obj:	pc8254.h
+	$(CC) $(CFLAGS) -c $*.c
+
+stick.obj:	stick.h
+	$(CC) $(CFLAGS) -c $*.c
+
+dosstick.obj:	stick.h
+	$(CC) $(CFLAGS) -c $*.c
+
+misc.obj:	misc.c
+	$(CC) $(CFLAGS) -c $*.c
+
+
+packet.obj:	$(HH)\pktdrvr.h
+	$(CC) $(CFLAGS) -G2 -c $*.c
+
+slip.obj:	$(HH)\pktdrvr.h
+	$(CC) $(CFLAGS) -G2 -c $*.c
+
+pcudp.obj:	pcudp.c
+	$(CC) $(CFLAGS) -G2 -c *.c
+
+udp.obj:	udp.c
+	$(CC) $(CFLAGS) -G2 -c $*.c
+
+
+plsound.obj:	$(HFILES) ..\notes.h
+	$(CC) $(CFLAGS) -c $*.c
+
+plspeak.obj:	$(HFILES) ..\notes.h pc8254.h
+	$(CC) $(CFLAGS) -c $*.c
+
+plmidi.obj:	$(HFILES) ..\notes.h
+	$(CC) $(CFLAGS) -c $*.c
+
+plfm.obj:	$(HFILES) ..\notes.h
+	$(CC) $(CFLAGS) -c $*.c
+
+pladlib.obj:	$(HFILES) ..\notes.h
+	$(CC) $(CFLAGS) -c $*.c
+
+
+grfast.obj:	$(HFILES) ..\colors.h $(HH)\gr.h
+	$(CC) $(CFLAGS) -c $*.c
+
+grvesa.obj:	$(HFILES) ..\colors.h vgr.h vesa.h
+	$(CC) $(CFLAGS) -c $*.c
+
+vesa.obj:	$(HFILES) vgr.h vesa.h
+	$(CC) $(CFLAGS) -c $*.c
+
+vgr.obj:	$(HFILES) vgr.h
+	$(CC) $(CFLAGS) -c $*.c
+
+grqc.obj:	$(HFILES) ..\colors.h
+	$(CC) $(CFLAGS) -c $*.c
+
+s3.obj:		s3.c
+	$(CC) $(CFLAGS) -c $*.c
+
+grstat.obj:	grstat.c
+	$(CC) $(CFLAGS) -c $*.c
+
+
+msubs.obj:	msubs.qc
+	copy msubs.qc msubs.obj
+
+#
+# Utility programs
+#
+
+gettimer.obj:	gettimer.c
+	$(CC) $(CFLAGS) -c $*.c
+
+gettimer.exe:	gettimer.obj
+	$(CC) $(CFLAGS) gettimer.obj
+	$(LZEXE) gettimer.exe
+	-del gettimer.old
+
+settimer.obj:	settimer.c
+	$(CC) $(CFLAGS) -c $*.c
+
+settimer.exe:	settimer.obj
+	$(CC) $(CFLAGS) settimer.obj
+	$(LZEXE) settimer.exe
+	-del settimer.old
+
+
+joytest.obj:	joytest.c
+	$(CC) $(CFLAGS) -c $*.c
+
+joytest.exe:	joytest.obj
+	$(CC) $(CFLAGS) joytest.obj
+	$(LZEXE) joytest.exe
+	-del joytest.old
+
+
+banktool.obj:	banktool.c
+	$(CC) $(CFLAGS) -c $*.c
+
+banktool.exe:	banktool.obj
+	$(CC) $(CFLAGS) banktool.obj
+	$(LZEXE) banktool.exe
+	-del banktool.old
+
+
+fly8udp.obj: fly8udp.c
+	$(CC) $(CFLAGS) -DDEBUG_FLY8UDP -c $*.c
+
+fly8udp.exe: fly8udp.obj $(WLIB)
+	$(CC) $(CFLAGS) fly8udp.obj $(WLIB)
+	$(LZEXE) fly8udp.exe
+	-del fly8udp.old
+
+udpmgr.obj: udpmgr.c
+	$(CC) $(CFLAGS) -c $*.c
+
+udpmgr.exe: udpmgr.obj $(WLIB)
+	$(CC) $(CFLAGS) udpmgr.obj $(WLIB)
+	$(LZEXE) udpmgr.exe
+	-del udpmgr.old
+
+
+clean:
+	-del *.exe
+	-del *.obj
+	-del *.lib
+	-del *.rsp

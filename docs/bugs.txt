@@ -1,0 +1,10 @@
+bugs.txt
+
+This is part of the flight simulator 'fly8'.
+Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+
+Known bugs are fixed by the release date, then this file will start to
+grow. No bugs are recorded before release unless these are expected to
+remain.
+

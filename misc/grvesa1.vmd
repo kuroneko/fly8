@@ -1,0 +1,12 @@
+# grvesa1.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These are for all 1MB VESA cards with no page flipping.
+#
+
+:320x200x256:0x13:256:0:0:320:200:1:275:206:8:8:1
+:640x480x256:0x101:256:0:0:640:480:1:275:206:8:8:1
+:800x600x256:0x103:256:0:0:800:600:1:275:206:8:8:1
+:1024x768x256:0x105:256:0:0:1024:768:1:275:206:8:8:1

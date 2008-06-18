@@ -1,0 +1,10 @@
+# grvga.vmd
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+# These modes to be used with the MSDOS grfast video driver.
+# These are for 320x200x256 on plain VGA.
+#
+
+:320x200x256:0x13:256:0:0:320:200:1:275:206:8:8:1

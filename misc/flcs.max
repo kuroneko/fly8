@@ -1,0 +1,126 @@
+# flcs.max
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+
+# The button assignments are as follows:
+#
+#	S1  2 index finger button
+#	S2  1 thumb button
+#	S3  3 pinky switch
+#	S4  9 paddle switch
+#	TG1 8 trigger - first  detent
+#	TG2 0 trigger - second detent
+#	H1U 4 "coolie" hat
+#	H1R 5
+#	H1D 6
+#	H1L 7
+#	H2U i "ridged" hat
+#	H2R j
+#	H2D k
+#	H2L l
+#	H3U m "castellated" hat
+#	H3R n
+#	H3D o
+#	H3L p
+#	H4U q "gray H" hat
+#	H4R r
+#	H4D s
+#	H4L t
+
+# Example of button usage. This is for a stand alone FLCS. This file will
+# be part of the full macro file that also defines keyboard keys (normally
+# fly.max).
+
+# Let us define the trigger (button 0) as the 'fire' function. I prefer to
+# use the full-depress (btn 0) for this rather than the ligher 1st detent
+# (btn 8).
+
+Def Btn 0	F1
+
+# we should leave this button non-debounced ('d=0') in the stick options so
+# that this button will produce a repeating action, and you won't have to
+# press/release the button for each shot.
+
+# button '1' is defined further down.
+
+# we have 4 buttons, so we can use the rest like this:
+
+Def Btn 2	w		# red index: toggle weapon
+Def Btn 3	+		# red pinky: speed brakes (momentary)
+Def Brl 3	+
+
+
+# use the main hat (top grey) for power management, since we do not have
+# a throttle on this stick.
+
+Def Btn 4	9		# up	power up
+Def Btn 5	.		# right	100%, then AB power
+Def Btn 6	3		# down	power down
+Def Btn 7	0		# left	idle power
+
+# and let's put speed brakes control on the red paddle switch:
+
+Def Btn 9	+		# engage  Speed Breaks
+Def Brl 9	+		# release Speed Breaks
+
+# So now we can quickly set the throttle, and if we neede to slow down in
+# a hurry then we can pull the red paddle with the little finger. This looks
+# nice but is not as comfortable as I would like. Basically I find myself
+# either resting against the bottom platform, where the top hat is a tad too
+# far, or I hold the stick high and the bottom red buttons are out of reach.
+# Also, I don't seem to find a good grip where the buttons are out of risk
+# of accidental presses - there is just not enough rest space.
+
+
+# set hat 2 (left black) for targeting functions. This will allow us to
+# manage the radar and related features.
+
+Def Btn i	f		# up	toggle radar acquisition mode
+Def Btn j	Sp		# right	radar target reselect
+Def Btn k	r		# down	radar on/off
+Def Btn l	l		# left	target radar lock on/off
+
+
+# set hat 3 (right black) for view functions. It shows a view to either of
+# four direction while the hat is held.
+
+Def Btn m	Up Up Up Up Up
+Def Brl m	*
+Def Btn n	Right Right Right Right Right
+Def Brl n	*
+Def Btn o	Down Down Down Down Down
+Def Brl o	*
+Def Btn p	Left Left Left Left Left
+Def Brl p	*
+
+# use S1 (top red button) to switch alternate view momentarily. This allows
+# glimpsing at the radar map. Use hat 4 to swap the view for a longer
+# period.
+
+Def Btn 1	v		# toggle view
+Def Brl 1	v		# toggle view
+
+
+# set hat 4 (low grey) for view/zoom functions
+
+Def Btn q	F5		# up	zoom in
+Def Btn r	v		# right	swap view
+Def Btn s	F6		# down	zoom out
+Def Btn t	i		# left	intel mode (momentary)
+Def Brl t	i
+
+
+# Note how button 'f' (hat left) engages the speed brakes on press but
+# then retracts it on release. You must define this button to have
+# a release function (the default). You may also want buttons 4 and 6 to
+# have continuous operation. 
+# In summary, the pointer options should be ':d=046'.
+
+# In practice it is safe to define ALL buttons for 'release' action
+# since undefined keys will be ignores. However it is wasteful
+# to make a key continuous ('d=...') when it is not needed.
+
+# You must program the FLCS with fly8.b50 in order to use it in this way.
+# You can, of course, program the FLCS to directly generate any Fly8
+# commands that you wish without the use of this .max file.

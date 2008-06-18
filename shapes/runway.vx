@@ -1,0 +1,105 @@
+/* --------------------------------- runway.vx ------------------------------ */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_RUNWAY.
+*/
+
+#include "shape.h"
+
+#define	W	64
+#define	L	1750
+#define	S	250
+#define	SS	(W/8)
+#define	DD	(L+S)/64
+
+static VERTEX vx_runway[] = {
+	{{ W,  W, 0}, V_MOVE},
+	{{ L,  W, 0}, V_DRAW},
+	{{ L, -W, 0}, V_DRAW},
+	{{ W, -W, 0}, V_DRAW},
+	{{ W, -S, 0}, V_DRAW},
+	{{-W, -S, 0}, V_DRAW},
+	{{-W, -W, 0}, V_DRAW},
+	{{-S, -W, 0}, V_DRAW},
+	{{-S,  W, 0}, V_DRAW},
+	{{-W,  W, 0}, V_DRAW},
+	{{-W,  L, 0}, V_DRAW},
+	{{ W,  L, 0}, V_DRAW},
+	{{ W,  W, 0}, V_DRAW},
+#define YLINE(y) \
+	{{ 0, -S+DD*(4*y),   0}, V_MOVE}, \
+	{{ 0, -S+DD*(4*y+1), 0}, V_DRAW}
+
+	YLINE (0),
+	YLINE (1),
+	YLINE (2),
+	YLINE (3),
+	YLINE (4),
+	YLINE (5),
+	YLINE (6),
+	YLINE (7),
+	YLINE (8),
+	YLINE (9),
+	YLINE (10),
+	YLINE (11),
+	YLINE (12),
+	YLINE (13),
+	YLINE (14),
+	YLINE (15),
+
+#define XLINE(x) \
+	{{-S+DD*(4*x),   0, 0}, V_MOVE}, \
+	{{-S+DD*(4*x+1), 0, 0}, V_DRAW}
+
+	XLINE (0),
+	XLINE (1),
+	XLINE (2),
+	XLINE (3),
+	XLINE (4),
+	XLINE (5),
+	XLINE (6),
+	XLINE (7),
+	XLINE (8),
+	XLINE (9),
+	XLINE (10),
+	XLINE (11),
+	XLINE (12),
+	XLINE (13),
+	XLINE (14),
+	XLINE (15),
+
+	{{ W-3*SS,  L-14*SS, 0}, V_MOVE},	/* 18 */
+	{{ W-5*SS,  L-16*SS, 0}, V_DRAW},
+	{{ W-5*SS,  L-8*SS,  0}, V_DRAW},
+
+	{{ W-8*SS,  L-8*SS,  0}, V_MOVE},
+	{{ W-8*SS,  L-16*SS, 0}, V_DRAW},
+	{{ W-14*SS, L-16*SS, 0}, V_DRAW},
+	{{ W-14*SS, L-8*SS,  0}, V_DRAW},
+	{{ W-8*SS,  L-8*SS,  0}, V_DRAW},
+	{{ W-8*SS,  L-12*SS, 0}, V_MOVE},
+	{{ W-14*SS, L-12*SS, 0}, V_DRAW},
+
+	{{ L-10*SS, -W+3*SS,  0}, V_MOVE},	/* 27 */
+	{{ L-10*SS, -W+7*SS,  0}, V_DRAW},
+	{{ L-8*SS,  -W+7*SS,  0}, V_DRAW},
+	{{ L-8*SS,  -W+3*SS,  0}, V_DRAW},
+	{{ L-4*SS,  -W+3*SS,  0}, V_DRAW},
+	{{ L-4*SS,  -W+7*SS,  0}, V_DRAW},
+
+	{{ L-10*SS, -W+9*SS,  0}, V_MOVE},
+	{{ L-10*SS, -W+13*SS, 0}, V_DRAW},
+	{{ L-7*SS,  -W+10*SS, 0}, V_DRAW},
+	{{ L-4*SS,  -W+10*SS, 0}, V_DRAW},
+
+#if 0
+	{{ 0,    8,   6, V_MOVE},	/* paralax adjustment tool */
+	{{ 0,    8,  10}, V_DRAW},
+	{{-2,    8,   8}, V_MOVE},
+	{{+2,    8,   8}, V_DRAW},
+#endif
+	{{ 0,    0,   0}, V_EOF}
+};

@@ -1,0 +1,45 @@
+/* --------------------------------- fly.nac -------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* This is a list of ILS nav points.
+ *
+ * note that here x=east, y=north, z=up .
+*/
+
+#include "parms.h"
+
+4,					/* number of points needed */
+
+"A18",
+	V(0), V(0), V(0),		/* [x,y,z] meters */
+	149*60+10, -(35*60+20),		/* longitude, latitude minutes */
+	0, -500, 			/* localizer relative [x,y] meters */
+	0, 1500,			/* glide-path relative [x,y] meters */
+	0,				/* heading of forward beam angle */
+	D(3),				/* pitch of beam angle */
+"A27",
+	V(0), V(0), V(0),
+	149*60+10, -(35*60+20),
+	-500, 0, 
+	1500, 0, 
+	D(90), 
+	D(3),
+"B18",
+	V(10000), V(10000), V(0), 
+	149*60+16, -(35*60+15),
+	0, -500, 
+	0, 1500,
+	0, D(3),
+"B27",
+	V(10000), V(10000), V(0), 
+	149*60+16, -(35*60+15),
+	-500, 0, 
+	1500, 0, 
+	D(90), 
+	D(3),
+
+
+"" /* must be last */

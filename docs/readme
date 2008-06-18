@@ -1,0 +1,51 @@
+# --------------------------------- readme ---------------------------------
+
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+To install fly8, unpack the archive in a directory called fly8 (or
+whatever you prefer). You should have now the main directory with a
+number of sub-directories for the different platforms and a DOCS
+directory.
+
+ If you are installing on a supported platform then use that directory
+and just add some extra switches to the programs when you find some
+minor incompatibilities.
+
+ If this is a new platform then create a new sub-directory and copy into
+it the files from the most similar platform already supported.
+
+ Now if you (say) are installing on a unix platform called MOON, do the
+following:
+
+1 Copy (or link) the file 'UNIX/makefile.top' to 'makefile' in the main
+directory.
+
+2 Edit 'makefile' so that these two lines now read:
+
+SYSTEM= UNIX
+SFLAGS= -D$(SYSTEM) -DMOON
+
+ Also adjust the libs as needed (SCO needs -lsocket):
+
+LIBS = -lm -lX11
+
+
+3 'UNIX/makefile' does a 'ranlib'. If you do not use it then comment that
+line.
+
+4 do 'make' in the main directory. Then do 'make install'.
+
+ If all went ok then you now have 'fly8'. Try it by running 'fly' in the
+install directory (you should have X active or else set the DISPLAY
+environment variable to an X server display).
+
+ If you have problems, edit as needed. Try and use '#ifdef MOON'
+whenever possible. If you have to change anything in the main directory
+then please email me about it. Also I will be glad to hear about any new
+port.
+
+ For all bug reports, suggestions, questions etc. contact me by email.
+

@@ -1,0 +1,102 @@
+31 August 1997
+
+This is version 1.12 of Fly8, a flight simulator which I wrote. It
+can be freely distributed in the spirit of the GNU copyleft. It includes
+the full sources.
+
+It is available for FTP from
+
+	ftp://samba.anu.edu.au/pub/eyal/fly8/beta
+	http://samba.anu.edu.au/eyal
+
+
+What's new in 1.12:
+-------------------
+
+WinNT, 95:
+ DirectDraw support (thanks Chris!)
+
+win3.11:
+ winsock networking supported.
+
+djgpp:
+ v2 supported.
+ networking supported.
+
+
+The files are:
+--------------
+
+Each binary package is complete and needs no other files.
+
+
+[Some binaries may be missing... use the sources please]
+
+
+fly8.txt 	This file
+
+fly81121.zip	sources: all platfroms
+fly81122.zip	sources: special msdos support.
+fly81123.zip	msdos: objects for the asm modules (*.qc, *.b3).
+
+fly8112d.zip	binaries: msdos (using VisualC 1.5)
+fly8112e.zip	binaries: OS/2 (using emx)
+fly8112i.tgz	binaries: Irix (using SGI cc)
+fly8112j.zip	binaries: msdos (using djgpp v2)
+fly8112l.tgz	binaries: Linux (X11 and svgalib)
+fly8112n.zip	binaries: mswinNT and 95 (using VisualC 5.0)
+fly8112o.zip	binaries: OS/2 (using VisualAge/C)
+fly8112s.tgz	binaries: Sun Sparc/X11
+fly8112w.zip	binaries: mswin3 (using VisualC 1.5)
+
+
+Linux
+=====
+
+The Linux version expects a joystick driver (if you want to use the joystick).
+A driver is provided in the UNIX/js directory of the source release. It is
+a loadable module so there is no point is releasing it in binary form.
+
+
+msdos
+=====
+
+The msdos port needs at least a 386!.
+
+It works with microsoft (qc, c7, vc1 (c8)), Borland (c2, c3, c4) and
+DJgpp (v1 v2).
+
+
+After unpacking the binaries the game should be playable. However, you
+should review the contents of the fly.ini file and adjust it for your
+environment. For example, the msdos defaults to run at 640x350 (which is
+bad and slow) and you will want to switch to something like 800x600 or
+1024x768 (or better if you got the memory) using the 'grfast' driver.
+You may also wish to change the pointing device to joystick or mouse
+(depending on what is available on your platform).
+
+The msdos port includes a modified graphics driver which may not work on all
+machines. I will try and help but, real problems can only be solved by
+someone with access to your type of video system.
+
+A new program, the 'univbe' driver has been out for a while and it provides
+support for most video cards. However, it is shareware, so I cannot bundle it
+with my free game. If enough people start using the univbe and will ask for
+a driver that uses it then I should be able to do so.
+
+
+msdos/DJgpp
+===========
+
+There are two internal graphics drivers, grdj and grasm. The first one uses
+the standard graphics library that comes with DJgpp. The second is my own
+asm level rewrite which is faster and supports double buffering. You need
+an ET4000 card or a VESA VBE compatible driver to use grasm. Have a look at
+the readme and at fly.ini.
+
+The v2 build had it's own driver 'grvbe' which needs a VBE environment
+to run in.
+
+
+Regards
+	Eyal Lebedinsky	(eyal@eyal.emu.id.au)

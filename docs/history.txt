@@ -1,0 +1,1771 @@
+history.txt
+
+This is part of the flight simulator 'fly8'.
+Author: Eyal Lebedinsky
+email:	eyal@eyal.emu.id.au
+
+
+
+Changes in release 1.12
+=======================
+
+[25 June 99]
+- On linux use do_gettimeofday.
+
+[21 February 98]
+- replace some static tables with mallocs since Win3.1 finds the
+  result too large...
+- Add NT mingw32 and lcc-win32.
+- Streamline welcome message.
+- retest the builds on NT, msdos, win3.1 and Linux.
+
+[ 7 September 97]
+- Add more key names. mac2max now shows function names, which may at
+  times be overkill - use '-r' option to have raw names.
+- rewrite macro expansion.
+
+[ 4 September 97]
+- Fix problem where F8 macros could not be used.
+
+[31 August 97]
+- NT/95: read all extra buttons.
+- tighten CHPRO hat interpretation.
+- build on SGI Irix.
+
+[30 August 97]
+- change format of axes override.
+
+[29 August 97]
+- update doco to point to ftp://samba.anu.edu.au/pub/eyal/fly8 as primary
+  site.
+- Call it 1.12 officially (no more beta).
+- Fix w32stick for NT.
+
+[1 June 97]
+- Merged Chris' stuff in.
+- found out that inlined asm in vc5.0 now sometimes pushes ebp too.
+  Fixed mswin/bgrasm.c, now WinG and DirectDraw work.
+
+[1 June 97] - Chris
+- Fixed a stupid little bug in the Win32 Joystick Driver, when emulating
+  a chpro, it was setting the buttons according to the hat, then setting
+  the buttons to their states.  The correct order for this is, of course,
+  the other way 'round, as button state would overwrite the hat position
+  data  (its also a CHPro design flaw - can't use the buttons whilst
+  using the hat).
+- Fixed an "oversight" where buttons 1 & 2 could be pressed simultaniously
+  when the chpro emulation was enabled.  Doing so on a real chpro is not
+  possible since it would cause a "Hat Left" signal instead.
+
+[31 May 97] - Chris
+- Finished DirectDraw Support (NT4/W95).  Doesn't run too fast on my 5x86,
+  but it works, and I didn't need to use any CPP. :-) on my 5x86/160 in
+  800x600x256, speeds are 20-30fps with line sky, 30-60fps with no sky, and
+  10fps for solid sky.  Discovered that this run was with a pentium optimised
+  copy :-)  5x86's are not pentiums :-(
+- Win32 joystick support fixed -- Dunno if it works with a hat yet, I
+  don't have a joystick with a w95 supported hat to test it with.
+  The way the new joystick driver works it that it breaks down the
+  option string (again) to get user capabilities - and from that, it
+  emulates the devices specified if they can be found on the joystick
+  Interface.  If it works, everything is going well.
+
+[20 May 97]
+- Built with ms vc5.0, no drama. [but see 1 Jun 97 entry]
+- use my new email address everywhere (eyal@eyal.emu.id.au).
+
+[10 May 97]
+- Figured out why we segfault every once in a blue moon. The check for
+  a live owner object is too weak. Some object have apointer to an owner
+  object. However, objects disapper (naturally) and the children may
+  find the pointer to not be valid. So the owner object id is also
+  stored with the pointer and this is compared against the owner to
+  see that it really is the one. Well, one in a while a completely
+  unrelated piece of memory reuses the dead owner memory and happens
+  to have the correct value in the 'id' offset. Bad luck, we assume
+  the owner is there and we go to never never land.
+  A stronger test is now done - we verify a few more fields to be
+  valid too. A new stats item 'Fix1' counts how many times the new code
+  saved our butt.
+
+[19 Apr 97]
+- Chris is writing a Win32 joystick driver. Not yet working.
+
+[ 9 Apr 97]
+- Fix more bugs in rudder code in stick.c. Really embarrasing...
+
+[ 6 Apr 97]
+- Fix bug in rudder code in stick.c.
+
+[ 9 Mar 97]
+- minor makefile/install changes.
+
+[10 Feb 97]
+- minor change in shutdown stats report
+
+[ 9 Feb 97]
+- fix bug in ptrmgr.c which caused pointer-device problems.
+- clean up the pointer code.
+- remove some 'interval' parameters, these are leftover from an old
+  abandoned change.
+- impose stricter simulation time limits - on fast machines (very short
+  time intervals, under 10ms) the integer maths suffers significant
+  truncation errors.
+
+[19 Jan 97]
+- upgrade djgpp/grvbe.c to support both banked and linear modes. Add
+  new 'banked' option to ignore the linear buffer. Some cleanup too.
+
+[18 Jan 97]
+- Implement new parameters for VBE func9 (djgpp/grvbe.c). Ad new
+  option 'xyf7' to enable obsolete prot-mode func7(x,y) call.
+- add sys_poll() calls to [bv]gr.c so as not to lose clock ticks on
+  slow msdos machines.
+
+[ 7 Jan 97]
+- Allow 10+26+26 pointer buttons. Reorg do_btn().
+- add Thrustmaster F22/TQS definition files.
+
+[25 Dec 96]
+- rename utils: get_p[i]arg -> get_s[i]arg, get_[i]arg -> get_p[i]arg.
+
+[23 Dec 96]
+- allow Fly8 server UDP port argument as:
+	fly8udp [port]
+	udpmgr [host][:port]
+  'port' is decimal, default is IPPORT_FLY8 = 0xf8f8.
+  'host' default is 'localhost'.
+- fix udpmgr to not wait for input if HAVE_SELECT and !interactive.
+- replace FLY8_EWOULDBLOCK with FLY8_SOCKWOULDBLOCK.
+
+[15 Dec 96]
+- Initial successfull build using Cygwin32-1.7.1 on NT. Only GDI (slow)
+  graphics, udp works OK.
+  Still needs:
+	- WinG [.lib] (the official wing.h is OK)
+	- Wave playing [.h] (no mmsystem.h)
+	- joystick driver
+  I had to do this:
+	- modify in Windows32.h/sockets.h 'fd_set" to 'eyal_fd_set'.
+	- add my own small mmsystem.h (see mmsystem.cyg).
+
+[16 Oct 96]
+- mswin/WinG: Add test for proper display mode.
+
+[13 Oct 96]
+- mswin/nt: Start DirectDraw port (Chris). Replace the icon with a working
+  one too.
+
+[10 Oct 96]
+- mswin/nt: use vgaset() for VGASET. This brings the grvWinG driver closer
+  to the speed of grWinG.
+
+[ 8 Oct 96]
+- note: mswin/grwing.c should check for 8bit mode! It now ungracefully
+  crashes if it's not.
+
+[ 7 Oct 96]
+- Try the Cygnus gcc for win32. Too many problems (missing functions and
+  types). Still, it's a nice setup, I should try to fix it.
+- Replace WATTCP with SYS_WATTCP. Replace SYS_MSWIN with SYS_WINSOCK where
+  appropriate.
+- rename MSWIN platform names and update config.bat.
+- use WSAEWOULDBLOCK for winsock.
+
+[ 4 Oct 96]
+- Even cleaner OS/2 builds, for both emx and va.
+
+[ 3 Oct 96]
+- Some cleanup.
+- new os2/emx makefiles from Mike.
+- add (open) VMS directory, to be later merged into UNIX.
+
+[ 1 Oct 96]
+- tested, the NT version works fine on 95.
+
+[29 Sep 96]
+- tested: Linux.
+- add NT asm support for graphics (mswin/bgrasm.c). Almost doubles the drawing
+  speed.
+- NT compile with -G5 (pentium).
+- win 3.1: remove '-Zp' flag.
+- notes that the win3.11 version, when run undel NT, fails if networking
+  is attempted.
+- fix bug in mswin/grmswin.c - now all graphics drivers work under NT.
+
+[28 Sep 96]
+- add win NT support. It still uses the WinG interface, but it is a native
+  32bit application.
+- note: for NT, only the WinG drivers work!
+- expect wing.h/lib in the compiler directory and not in a WinG directory.
+- tested: win 3.11 vc1; win NT vc4; msdos vc1; msdos djgpp v2;
+
+[27 Sep 96]
+- add termgp() to unix/gpport.c when no USE_GP.
+- disable bgrasm.x if no USE_BGRASM.
+- add some comments to Linux makefiles for non-intel platforms.
+
+[ 2 Sep 96]
+- updated makefile/config for os2/emx [miket].
+- the binary package is not clean yet.
+
+[29 Aug 96]
+- updated makefile for os2/emx [miket].
+
+[26 Aug 96]
+- fixed mswin/os2 mouse position handling [miket].
+- update b11 with above fix.
+
+[19 Aug 96]
+- fixed the UNIX icon.
+- update fly81121.zip with above fix.
+
+[16 Aug 96]
+- noted that the unix icon feature is incorrect (will be fixed soon).
+- Fly8 1.12b11 released.
+
+[16 Aug 96]
+- Fix SixDOF() bug.
+- General cleanup.
+
+[14 Aug 96]
+- add icon to unix (thanks Chris).
+- add object update rate control.
+
+[27 Jul 96]
+- enough is enough - make 1.12 official. We'll worry about winNT/95 native
+  ports later.
+
+[26 Jul 96]
+- fix unix makefiles.
+
+[10 May 96]
+- djgpp/v2 needs the "b" in fopen() for binary mode (caused fm sound to not
+  work...).
+
+[21 April 96]
+- add proper delay to plfm/pladlib. Noted that the whole effect business
+  needs a healthy look at.
+
+[14 April 96]
+- minor makefiles changes in msdos.
+- tested: msdos: b2, b3, b4, b4.5
+
+[13 April 96]
+- debug the c8 build.
+- upgrade all makefiles to include fm sound.
+- upgrade all makefiles to include udp program (even when dummied).
+- tested: msdos: c8, qc, dj1, dj2
+- tested: linux
+- tested: mswin: c8
+
+[11 April 96]
+- renamed PID to F8PID (OS/2 conflicts).
+- was oversealous: sometimes added too many args for fcntl()
+- some OS/2 updates from Mike.
+
+[10 April 96]
+- added FM sound support from Chris (djgpp and msdos).
+- added OS/2 port from Mike.
+- added third parameter to fcntl() in common/fly8udp.c & common/udpmgr.c
+- do proper messaging from fly8udp to udpmgr.
+
+[9 April 96] - Chris
+- discovered that Win95 really hates DJv2 version of Fly8, crashes without
+  recovery every time.  :-)  well,.....
+- added basic SoundBlaster FM support (after having to work it out,
+  and fix my use of case.. DOH!) 
+- debugged most of my basic FM support - discovered that FM volume is
+  0 -> 127, not 0 -> 255!  This led to having not much sound at all....
+- added banktool to the djgpp release for manipulating the fm banks.
+  still need an external editor, I recommend bunked.
+- added more advanced fm support.  FM now has crude patch implemtation,
+  different patches for different sounds!  Probably will be broken if
+  any more sounds are added to the system, but can easily be fixed.
+
+[8 April 96] - Chris
+- Discovered that GAWK doesn't like eyal's awk scripts....  I'll let eyal
+  fix that.
+
+[31 March 96]
+- update doco to point to ftp://ftp.canberra.edu.au/pub/ise/eyal as primary
+  site.
+
+[22 March 96]
+- fix mswin/wing Polygon when 'inverted'.
+
+[ 2 March 96]
+- fix UNIX/fifo.c bad packet_del().
+- fix UNIX/fifo.c memory allocation bug (when packing).
+- reorganize memory.c debugging options.
+- adjust UNIX/flyudp and ./flyfifo scripts.
+
+[25 February 96]
+- fixed NULL ref in unix/gri.c
+- add ELF names to bgrasm.x.
+- move bgrasm.o to AOBJS.
+- use HAVE_SVGALIB for svgalib driver rather than SYS_LINUX.
+- properly set and install mgr/server scripts.
+- replace color ST_INFO with ST_IFG.
+- change gr_color() to handle 16bit colors properly.
+- add init/term to plspeak.c.
+- add init/term messages to nosound.c.
+- use #if rather than #ifdef for all NEED_* and HAVE_* manifests.
+- tested X11 16bpp OK now.
+- Noted: XFillPolygon() leaved unfilled edges (or bottom of polygons and
+  probably on right too).
+- uploaded beta9.
+
+[20 February 96]
+- build with official djgpp v2.00. OK.
+
+[ 6 February 96]
+- update doco to point to ftp://ise.canberra.edu.au as primary site.
+
+[ 3 February 96]
+- further fixed common/udpmgr.c+fly8udp.c
+
+[31 January 96]
+- use select() for udpmgr wait on input. Added HAVE_SELECT to config.h.
+- add detection of VBE supplemental functions to djgpp/grvbe.c. Not working
+yet
+
+[27 January 96]
+- added the midi sound driver to mswin, msdos and djgpp.
+
+[23 January 96]
+- fixed Linux/svgalib driver (was drawing in black...).
+- upgraded *.b3 files.
+
+[22 January 96]
+- improve horiz line drawing for vga.
+- simplify sky.c.
+- tested: msdos/msc:qc,7,8/bcc:2,3,4,4.5,mswin/c8
+- cleaned /gr/line*.c and the makefiles.
+
+[21 January 96]
+- clean up vgr.c.
+- add Polygon() and Clear() to msdos gr library.
+- tested: msdos/c8, mswin/c8, djgpp/v2+v1, Linux/X11
+- uploaded beta8.
+
+[20 January 96]
+- fix (last?) Polygon drawing bug.
+
+[19 January 96]
+- add midi sound to Linux version.
+- add Polygon() to gr drivers. Now used to draw the sky/earth background, but
+  ready for use to do polygon based graphics in general.
+- tested: Linux, mswin/c8, djgpp/v2.
+
+[14 January 96]
+- move CC copy into oplane.c:plane_xfer(), now objects.c has no plane stuff.
+- tested msdos/qc OK.
+- add new syntax for Plane/Drone type to support arbitrary object type. Now
+  one should say "Pplane:f16" where it was "Pf16".
+- for all get_*() in utils.c, allow the leading ':' to be missing.
+- fixed a (probably very old) bug in obox.c where the trigs were not filled
+  in and they would show up as single lines...
+- upload beta7.
+
+[13 January 96]
+- Chris wanted to see how one adds a new vehicle type so we added a 'car'.
+  This broke a few modules that thought all vehicles are planes (stupid
+  computers!)... there probably are still a few snags.
+- fixed a few (expected) problems with ANGLE type
+- general test with djgpp/v2 works fine. Need a few more tests before I
+  upload it though.
+- tested Linux/X11 OK.
+- add '-c' and '-e' options to 'udpmgr' to do a quick command:
+	# udpmgr -e stats
+	# udpmgr -e shutdown
+  '-c' sends the command and stays interactive, '-e' executes and exits.
+- finish mswin/grmswin.c:Clear().
+- add linear accels to object structure, and start using it:
+  obasic.c, oxplane, oyplane [sixdof]
+- tested msdos/c8 OK.
+- tested mswin/c8 OK.
+
+[12 January 96]
+- move HUD_PANEL to HDD_PANEL.
+- reorganize the whole picture drawing. Stereo is not working until this is
+  finished.
+- remove 'clear' option from gr drivers. Use the Fly8 'oc' startup option
+  to enable the usage of the driver's Clear() function for screen clearing.
+- ensure all debug options are named DEBUG_*.
+- fix bug in bgr.c where we failed to use private WriteMode values.
+- access machine is back! try and upload something that works...
+
+[ 9 January 96]
+- noted that the whole business of solid background does not work properly
+  with the current logic in loop.c:show_picture(). We should modify the
+  render_bg() and _fg() to have a 'render' mode and a 'show' mode to cater
+  for the two things. As it is, the background may be painted at the wrong
+  time (or into the wrong buffer) and be later cleared.
+- fixed!
+
+[ 8 January 96]
+- fix mswin/wing Clear() for inverted writing.
+- fix bug in oviewer.c: GAZE view was not setting the sine/cosine, so the
+  sky was showing wrong in this view.
+- ready to upload beta7, but access machine is down :-(
+
+[ 7 January 96]
+- fix Clear() everywhere to NOT translate color index.
+- initialize st.colors[] to -1 (for unallocated).
+- change most 'short's to 'ints' for platforms that do better that way.
+- fix bgr.c/bClear() to use 'vgaset' instead of 'memset'.
+- The short<->int change exposed a sign extension problem in the comms; fixed.
+- add fast .asm 'memset' to msdos & mswin to double the speed of background
+  drawing.
+- disallow RedBlue stereo with SolidSky.
+- tested: djgpp/v1+2, msdos/c7+c8+qc/bcc2+4+4.5, mswin/c8, linux/X11+svga
+- ready to upload beta7, but access machine is down :-(
+
+[ 6 January 96]
+- remove obsolete 'font name' option.
+- reorder critical init/term order.
+- add system driver option string. Note: system and time driver strings
+  are not yet used.
+- add size+color parameters to gr driver Clear().
+- fix last (?) problems that caused sky lines to fail.
+- allow null Sys amd Tm Init()/Term().
+- count solid-sky into video rather than 2D.
+- fiddle with the clipping logic in show.c.
+- djgpp: low.c now sets number of pages.
+- tested: djgpp/v2, mswin/c8, msdos/c8, Linux/X11
+- ready to upload beta7, but access machine is down :-(
+
+[ 5 January 96]
+- tested with bcc 4.5 - OK
+- tested mswin 3.1 - OK
+- tested under Win NT - OK, as fast as Win31 (using WinG).
+  tried compiling native NT but got zilion errors from system headers.
+- tested under OS/2 - OK, as fast as Win31 (using WinG).
+- used some 32bit instruction in msdos graphics, bulk move/clear now runs
+  twice as fast.
+- fix two problems that cause sky lines to fail - it was not critical before
+  but is very bad with solid background.
+- ready to upload beta7, but access machine is down :-(
+
+[ 4 January 96]
+- add option for number of sky lines.
+- add solid sky option (under screen menu)
+- add "clear" option to djgpp video drivers; not really needed anymore.
+- fixed scenery() to know about DHT_STORES.
+- rename more colors.
+- rename menu color names to a straight alpha list.
+
+[ 3 January 96]
+- minor reorg of DEVICE/SCREEN structures.
+- show_fixed() was not locking set_sim() which gave interesting visual
+  effects.
+- get it working if Gr->Clear is enabled - was broken. Add "clear" option
+  to grvbe/grasm.
+
+[ 1 January 96]
+- even more cleaning. Ensure all headers have proper include wrappers.
+- merge djgpp video drivers, now grasm and grvbe can both be used in both
+  systems, but they use different techniques in each.
+- add control over the packet recv rate for the polled djgpp drivers.
+- uploaded beta5.
+
+[31 December 95]
+- further refine djgpp/grvbe VBE video driver.
+
+[30 December 95]
+- add rudder option to joystick (:rdr[-]). Could not test it though...
+- remove usage of libgr from v2, use the msdos mouse driver instead.
+- djgpp/grasm.c also independent of libgr now (it is used in grdj.c only).
+
+[29 December 95]
+- finally got the gfx to work fast with djgpp v2.
+- call get_cue() from oplane.c rather than during HUD drawing.
+- add grasm (linear frame buffer) to djgpp v2,
+	BUT IT DOES NOT WORK YET!!!
+- uploaded beta4.
+
+[27 December 95]
+- oops, fixed bug in udp.c where unix was loosing *lots* of packets.
+- noted that udpmgr eats tons of CPU in a busy wait, must insert some
+  control over it or positively block on user (stdin) input.
+- minor changes to info.c displays.
+- new structure for mswin\config.bat
+- rename mswin executable 'fly8.exe' as the rest.
+- log "active" messages.
+
+[26 December 95]
+- now have a working djgpp v2 video driver, but bankswitching is too slow.
+  need to investiagte the protected-mode VBE 2.0 features.
+
+[25 December 95]
+- further clean the winsock stuff, looks solid now.
+- clean warnings in unix/js/js.c and jscal.c
+- fix unix/flyudp for latest syntax
+- new mswin/config.bat procedure, with WinG and winsock integrated.
+- show time on 'stats' screen.
+- change mmsound.c to square wave.
+
+[24 December 95]
+- mswin winsock driver now works. Still GPFs at times. Probably a true
+  NULL reference in ochute.c, will check [yes, that was it].
+- mswin version sometimes won't start: mswin/mswin.c fixed.
+- add djgpp/v2 setup and change 'config dj' to 'config v1'. v2 still does
+  NOT work.
+
+[23 December 95]
+- winsock driver works, sort of.
+- fix NULL references in init.c
+
+[22 December 95]
+- test djgpp v2: not working, I need to find out where video memory is
+  mapped to (used to be 0xd0000000).
+- replace system name with SYS_*
+- fix memory leak in udp.c
+- start work on mswin winsock driver.
+
+[14 December 95]
+- Now working:
+  - msdos: b2, b3, b4, b45, qc, c7, c8, djgpp v1
+  - Linux
+- show ip:port addresses in dot format whenever applicable.
+
+[13 December 95]
+- msdos: suspect that 'ds' is not available when entering pkint(), so I
+  restored the old pkint()/pkset() method. We'll see. [seems to help]
+- remove yet a few more warnings.
+- Another micro&soft bug... this time with c8.00c (vc++ 1.5). Depending on
+  the order of 'make'ing the support libraries, the objects are different.
+  If I 'make serial net gr' then 'gr/low.o' is wrong, while if I 'make gr
+  serial net' then it is fine.
+- c7.00 still locks up, need to play with the optimization switches.
+- expect IP numbers in pcudp.c as n.n.n.n rather than a hex number.
+
+[10 December 95]
+- port pcudp.c (low level packet-driver based UDP net driver) to djgpp.
+  Still need to split into packet-support and Fly8 proper; another day...
+- fix memory leak in djgpp\grasm.c
+- ensure all drivers title their Log messages.
+- move *.adv *.awk *.b50 *.bat files to misc/.
+- move msdos/grvesa*.vmd and djgpp/grvesa*.vmd to misc/.
+
+[ 7 December 95]
+- c7/c8 still dies. narrowed it down to msdos/pcudp.c.
+- still testing... some adjustment to net/pkint.asm may solve the crashes.
+- fix memory leak in netmgr.c
+- fix memory leak in message.c
+
+[ 4 December 95]
+- move config.h to main source directory.
+- use AFASTCALL for fastcall compatability with msc.
+- msdos/packet.c: do not report foreign net traffic as errors.
+- bcc now works, as does qc but c7/c8 dies!
+
+[ 3 December 95]
+- add trace option ('ot') for debugging.
+- fix problem where in X11 screen was cleared to white instead of black.
+- bcc 3.0 still locks up: at palette setup.
+- clean up the /GR library
+- decide to go to v1.12 rather than release a patch.
+
+[ 2 December 95]
+- built bcc 3.0 (had to be done outside of windows).
+  later: the binary locks up solid!
+
+[30 November 95]
+- add FAR to Bo* declarations in extern.h
+- fix QC makefile (misspell OOUT=)
+- link of fly8 fails with 'too many segments'. Use '/SE:500'.
+- change the packet-driver xface to use a single array of ints. Hope this
+  is the last portability problem I see in this section.
+- tested OK with: msdos - bcc (2 4 4.5), msc (qc 7 8) and djgpp
+- tested OK with: Linux (kernel 1.3.45, XFree 3.1.2A)
+
+
+Changes in release 1.11
+=======================
+
+[ 9 September 95]
+- djgpp/drivers.c: make 'keypad' the default pointer.
+- Fly8 1.11 released.
+
+[28 August 95]
+- Consolidate unix joystick driver.
+
+[29 July 95]
+- Add GamePort (serial joystick) driver to unix.
+
+[29 June 95]
+- Add credit note to mswin/wave.c (the published programme did not have one).
+
+[23 May 95]
+- update Linux joystick driver to register the ioport.
+
+[18 May 95]
+- Make unix/js/joystick.o work with new modules style.
+- rename wcs.adv->fly8.adv and flcs.b50->fly8.b50 in fly.ini comments.
+
+[ 5 May 95]
+- tiny change to header files casting of '->extra' to be really ANSI.
+
+
+Changes in release 1.10
+=======================
+
+[15 March 95]
+- further clean up shared memory stuff in unix/gri.c.
+- note that in long runs (a week or longer) with many net connect/disconnect
+  we get some memory leaks reported.
+
+[22 February 95]
+- ensure team name is case insensitivity.
+- fix bug where pointer re-init (from Pointer menu) always failed.
+
+[20 February 95]
+- fix bug in Net.Accept when no players (seg fault...).
+
+[18 February 95]
+- fix smoke when time interval is negative.
+- use mode 0x120 for 1600x1200x256 (was somehow used as 0x124).
+  Later: actually, the #9GXEpro-1600 DOES need 0x124. UNIVBE needs 0x120...
+- free shared memory in unix/gri.c when resizing.
+
+[ 4 February 95]
+- include <linux/mm.h> in unix/js/joystick.c.
+
+
+Changes in release 1.10b
+========================
+
+[16 January 95]
+- Fly8 1.10b1 released.
+
+[15 January 95]
+- reinstate 'minextent' to original value, objects where going dull all too
+  soon.
+- update doco for new button stuff
+- change fly.ini option for no-debounce from 'n=' to 'd='. Also make Release
+  the default and 'r=' now disables it.
+- move options 'q' (quiet) and 'v' (verbose) into the 'o' group.
+
+[14 January 95]
+- change buttons menu to only control buttons setup and NOT buttons state.
+- change pointer.d[] to .btn[] and make it Ushort to allow fine shift control.
+- allow better joystick calibration.
+- pointer_select() now initializes and parses all options too.
+- chane pointer 'ndb=' to 'n=' and 'rel=' into 'r='. Add 'a/c/p/s=' too. Allow
+  ranges in these specs.
+- new ptr opt: ":zero" for NO analog buttons.
+- msg_clear() now only deleted permanent messages on shutdown.
+
+[13 January 95]
+- add Button Press (P), Release (R) and Mode (M) commands.
+
+[11 January 95]
+- use vgr.c for mswin/grwing.c.
+- some refinement to vgr.c
+- some refinement to bgr.c
+- fix NULL reference in loop.c:pause_set().
+
+[ 7 January 95]
+- change mswin/wave.c to do square wave instead of sine wave.
+- keep ALL keypresses in mswin/console.c
+- land.c failed compile for mswin too, use -G2.
+- new Frand function.
+
+[ 6 January 95]
+- avoid the Gr->Term in case the ->Init failed (used to seg fault).
+
+[ 5 January 95]
+- allow log flush rate of -1 for 'immediate'.
+- disabled unix/gri.c if pixel depth is not 8 bits.
+- fix null reference in buffers.c: buffer_close().
+- fix using 'ch' instead of 'hdd' in window.c:menu_windows().
+
+[ 4 January 95]
+- show video mode on welcome option.
+- hud.parts.ground now exits when done.
+- fix null reference in editstr.c.
+- log.c: better logic for NOTHINGTOLOG. Also, at startup we set log flush
+  time to zero untill user options are read. Then the default is 1000.
+
+[ 3 January 95]
+- make shape_read a bit more general. Also have it convery object file names
+  to lower case.
+- upload to 'fir' for testing.
+
+[ 2 January 95]
+- fix the stereo.red-blue which was broken by the new color mgmt.
+- fix the stereo hud position when zoomed in.
+- replace 'l' option (landscape) with 'ol' (the generic options parameter).
+
+[ 1 January 95] should I call this version "Fly8 95" :-)
+- remove last externs from the bgr package. merge line.c+ellipse.c->bgr.c.
+- fix bug in draw_border using wrong colors.
+- clear the screen after a new palette setting.
+- add screen.Clear menu option.
+- default mirror to wide angle.
+
+[31 December 94]
+- complete the color management system.
+- upgrade msdos/packet.c to the new header format. Now ComVer 7 is definitly
+  NOT compatible with older versions.
+
+[30 December 94]
+- rename menu_colors -> menu_palette, used (as before) to program the colors
+  palette. Add new menu_colors used to assign colors to image componnets.
+- Note: still need to add dhh colors setup menu.
+
+[29 December 94]
+- have fg/bg/bo color for each HDD. rename some of the st.?fg colors.
+- new color CC_DGREEN (dark green).
+- if the waypoint pointer is off the HUD then shift it in.
+- we now clear all windows when needed rather than trust the video driver
+  (who does not know the backgound color) to do so.
+- the 'Paused' message now uses the XOR write mode (the first time it is
+  used).
+- Noted: need new color mgmt menus:
+	- program palette (as now).
+	- assign logical colors.
+	- assign HDD colors.
+- add MIRROR view.
+- re-arrange the LANDSCAPE view.
+
+[28 December 94]
+- replace the st.white etc. with an array st.colors[] and adjust the graphics
+  logic and drivers for it.
+- move e_plane from 'fly.h' to 'plane.h'. Some minor code movement to make
+  a few modules plane.h clean.
+- test the new system on: msdos (grfast), djgpp, unix (all 3 drivers), mswin
+  (cannot run at home...).
+
+[27 December 94]
+- try to ger 386 mode to work. The problem is that the interrupts arrive
+  without saving the extended registers. The solution is to protect the
+  sensitive modules. I may need to simply ensure that the coms drivers
+  do save extended registers.
+- dynamically adjust the object refresh rate, preventing the lost/found
+  cycle seen on a loaded system.
+- new option 'nl' to set log flush rate. 'nl0' flushes on every log the same
+  way the (removed) 'L.' option did.
+
+[26 December 94]
+- shift to G3 (386 code) on msdos/vc.
+- remove palette setting from video drivers (already done in the mainline).
+  also change white from '1' to '15'.
+- the new colors encoding means that a new com version must be set since
+  colors are exchanged in a non-portable way :-(
+- add pause after 'outp()' for msdos.
+
+[25 December 94]
+- even newer memory manager, used little more space and is quicker.
+- change BUFLINE to a list of shorts instead of the 3-item struct.
+- add st.buf_p/ st.buf_end for speeding up the building of the display list.
+- review compile options to optimize memory usage against speed ("no one will
+  even need more than 640k". yeah).
+
+[20 December 94]
+- use stats.h instead of constants.
+- added sys_poll() to oplane.
+
+[19 December 94]
+- applied Mike's fix for grmswin.
+- noted that memory.c on msdos/vc1.5 often dies horribly is compiled with
+  optimization... Also, the compile step itself dies (needs a hard reboot)
+  all too often.
+- new memory manager is very nice and useful for msdos. Not so much needed
+  for unix.
+
+[18 December 94]
+- packet_new/_del() now uses two parameters for data/header size. Reduce
+  granularity to 32. Allow zero length data/header.
+- add memory garbage collection.
+- add STRdup() that uses our memory mgr.
+- cleanup the memory system now that all modules use it.
+- add debug facilitied to memory mgr (MEM_DEBUG).
+
+[14 December 94]
+- msdos/pcudp no errors now. Also fixed common/udp.c which dropped many
+  packets due to a sign extension bug.
+- add memory shortage recovery (split larger blocks).
+
+[13 December 94]
+- msdos/pcudp now works. Still gets many xmission errors - need to check.
+
+[12 December 94]
+- finish testing the trivial UDP driver.
+- add msdos/pcudp.c.
+
+[11 December 94]
+- fix msdos packet-driver problem!
+- add packet->raw and clean the PACKHEADLEN crap.
+- change packet header to 64 bytes to enable other protocols.
+- move udp stuff to /common.
+- fix fly8udp: don't fall over if a client shudt down.
+- fix fly8udp: ignore + report bad admin messages.
+- establish fly8udp.h.
+
+[ 9 December 94]
+- allow SetMode for stereo.reverse.
+- allow Gr->[SetActive, SetVisual, SetWriteMode, SetPalette, Ellipse]
+  to be NULL.
+
+[ 7 December 94]
+- linux/svga.c: read Ctrl-J as Ctrl-m.
+- add fps to info timing display.
+- use KF_MENU for menu starting.
+- menu.info now toggles by default.
+
+[ 4 December 94]
+- show frm/sec in termination summary.
+- fix pitch.c to NOT zero-divide in get_cue()...
+- accept console keys. Still cannot properly read keyboard keys (like CTRL-F1
+  or such).
+- add menu.options.PauseMsg to elliminate the "paused" message if you want
+  clean screen captures.
+
+[ 1 December 94]
+- add Linux/svgalib driver. Now we can add this line to the table below:
+
+	svgalib (grsvga)  67	1459
+- rename keyboard_* to kbrd_* in keyboard.c to avoid conflicts with svgalib.
+
+[27 November 94]
+- some renaming in grstat.c, also make it part of the bGr family.
+- add Image based X11 driver (Gri) to the Pixmap based (Grx) already
+  there. It is very slow.
+- added shared-memory, MUCH faster! Here are some relative times for or
+  my ISA ET4000 slow card on a 486DX2/66. Time is ms/frame and each test
+  was 100 seconds, in a window of 640x480.
+
+			Time	Frames
+	Gri (ShmImage)	 162	 613
+	Gri (Image)	1897	  52
+	Grx (PixMap)	 225	 443
+	Grx (direct)	 116	 859
+	msdos (grfast)	  62	1552 (expected SVGA performance?)
+
+- for timing, count Flush as 'PageFlip'.
+- move shares sources to /common
+
+[26 November 94]
+- use SetOption() for command toggling too.
+- add 'command' menu.
+- remove ALL video text functions (always use stroke). (all video drivers
+  had functions removed!).
+- allow NULL Flush() and Shutters(). Remove '-s' option and add
+  'shutters=' option to video driver instead. Shutters() returns an 'int'.
+- remove font files (*.fnt) from fly8.
+- add 'colors' list to options menu..
+- convert 'font' display to a proper list
+- show version on strip.
+- add *extra to all drivers.
+- tested: msdos[+], unix[+], djgpp[+]
+- now we call SetVisual(0) even for single buffering.
+- add new options "single" and "direct" to UNIX/grx.c.
+
+[24 November 94]
+- rename 'history' to 'bhistory' etc.
+- split from hud.c: bhistory.c, vv.c, waypoint.c, alarms.c
+- add new 'i' option for 'initkeys'.
+
+[23 November 94]
+- minor naming changes in drivers that use plsound.
+- allow on/off/toggle on screen menu.
+- change the way SF_SIMULATING is reset.
+
+[20 November 94]
+- finally move ALL 'extern' declarations into extern.h.
+- fix djgpp makefile: version 1.12 hangs for hud.c so use '-O1'.
+
+[19 November 94]
+- add HDT_LAMPS.
+- add HUD_TPOINTER ad default for Ether HUD.
+- use Effect for most 'List's. Change parameters for Effect.
+
+[18 November 94]
+- fix memset in msdos/speaker.c
+- split speaker.c into plsound.c (generic) and plspeak.c (msdos).
+- use Effect for 'Beep's, standardize List On/Off.
+
+[17 November 94]
+- add sample program to /serial (pc serial driver).
+
+[ 9 November 94]
+- replace page_reset() with screen_empty() and screen_start().
+- don't show 'Resumed', just erase the 'Paused' message.
+
+[ 8 November 94]
+- add '_xpixels' to buffer-drawing routines.
+
+[ 5 November 94]
+- djgpp/grasm et. al.: add type BPTR for buffer pointer type, add 'b' in
+  front of the function names. This way mswin/WinG can use these routines.
+- remember that DJGpp fails on hud.c, so for now use
+	make SHFLAGS=-O1 hud.o
+
+[29 October 94]
+- djgpp/grasm.c driver: remove usage of gr lib write mode. Split line.c
+  into low.c, now line.c and ellipse.c are very device independent.
+
+[21 October 94]
+- move 'chips' from fly8/msdos/grfast.c to h/chips.h.
+
+[19 October 94]
+- merge djgpp\line.c and linec.c.
+
+[16 October 94]
+- set new version 1.10
+- reorganize makefile for new directory name /fly8* instead of /fly
+- fixed stray LOCAL_FUNC in: ifuncs.c, menus.c.
+- djgpp/grdj.c: remove Sync() 
+- pitch.c: get_cue(): initialize 'a'.
+- oplane.c: do_radar(): add parens to avoid warning.
+- ofplane.c: declare dynamics_oyplane().
+- msdos/console.c: kSpecial(): replace 'return' with 'break'.
+- max.c: rename getkey() to maxkey() to avoid DJGPP conflict.
+- djgpp/makedj.top: minor changes due to slash/backslash problems.
+- remove 'history' from binary releases.
+
+
+Changes in release 1.09
+=======================
+
+[16 October 94]
+- Release 1.09 uploaded to csc ftp.
+
+[15 October 94]
+- clean the source archive (fly81091.zip).
+
+[14 October 94]
+- rename getstr.c to editstr.c.
+- minor fix related to editstr().
+
+[ 2 September 94]
+- split getstr().
+
+[30 August 94]
+- added grdriver.doc about porting the Fly8 graphics driver.
+
+[23 August 94]
+- getstr() now uses the argument as the default for the string, so you can
+  pre-fill a value in the input field.
+  Now you can edit pointer options etc. from the old value.
+- Also fixes getstr() so that Ctrl-keys work again.
+
+[13 August 94]
+- add 1600x1200x256 mode to msdos/grvesa*.vmd
+- add the GrBGI driver to msdos for Borland, not fully operational yet.
+
+[11 August 94]
+- minor doco fixes.
+
+[10 August 94]
+- fix divide exception in pitch.c:get_cue()
+- add HUD_TRUEHEADING for ether style true heading scale.
+- turn msdos UDP off - too big (but it works!).
+- cleanup of msdos/dosstick.c
+
+[24 July 94]
+- minor fix to netport.c
+- share udp stuff between unix and msdos
+
+[ 3 July 94]
+- allow longer (1500 bytes) packets.
+- massage the comms stuff a bit more.
+
+[ 2 July 94]
+- add udp/ip comms to msdos (using wattcp).
+
+[25 June 94]
+- minor cleanup in vv rendering.
+
+[19 June 94]
+- merge pullup-cue and xbreak calcs. Change bomb pullup cue calcs.
+
+[18 June 94]
+- split hud.parts menu since it was too long.
+- add option for Xbreak style.
+- add missing menu descriptions for pitch ladder parts.
+
+[17 June 94]
+- widen the usage of the pull-up cue.
+
+
+Changes in release 1.08
+=======================
+
+[12 June 94]
+- release 1.08 uploaded for ftp.
+
+[11 June 94]
+- add caged vv option (default for FA18 HUD)
+
+[ 4 June 94]
+- change video stats display (msdos, djgpp).
+- add alternate view zoom commands (F9 and F10).
+- do not zoom incrementally.
+- avoid divide-overflow in sky.c for very large zoom factors.
+- add more dependencies to the makefiles.
+- add a WCS-II fly8.adv file to the release.
+
+
+Changes in release 1.07
+=======================
+
+[ 3 June 94]
+- release 1.07 uploaded for ftp. Some binaries included.
+
+[28 May 94]
+- ILS was not activated properly... neither was the director [fixed]
+- noted that a network player is recognized by the ADDRESS, so if you drop
+  out and re-join, you are considered to be the same player; for one, your
+  FRIEND flag is NOT updated, so you CANNOT change teams :-( [fixed]
+- on msdos, Ctrl-c was not properly intercepted [fixed]
+
+
+Changes in release 1.06
+=======================
+
+[23 May 94]
+- release 1.06 uploaded for ftp. All binaries included.
+
+[23 May 94]
+- fix mswin\config.bat
+- test build-mswin. OK
+- test build-DJgpp. OK
+- fix null reference in window.c
+- test build-Linux. OK.
+  Noted that F1-F5 are not recognized at all.
+  mouse buttons 1 & 2 not recognized until mouse is moved.
+- final test-build msdos. OK
+
+[15 May 94]
+- simplify the format of *.max:
+  - a comment starts with a hash symbol (not '##')
+  - a string starts with a double-quote (not '#"')
+  - escape sequences are allowed everwhere now.
+  - default HUD to Ether for Ether configuration.
+  - rename the release 1.06. It's time.
+
+
+Changes in release 1.05
+=======================
+
+[14 May 94]
+- do not show radar acqusition mode if no weapon selected.
+- cleanup of Linux joystick jscal.c program.
+- rename static funcitons in /MSDOS.
+
+[ 8 May 94]
+- fix sky display in HDDs.
+- a bit more low-level asm in msdos graphics.
+- don't automatically release a locked target when it is killed.
+- slightly change ground target behaviour.
+- reduce engine noise pitch.
+- the msdos graphics has too many alternatives which needlessly use memory,
+  some need to be removed.
+- add graphics stats to djgpp line.c+grasm.c.
+
+[ 7 May 94]
+- handle engine noise correctly. Add list stop in msdos/speaker.c.
+- rewrite low level gr/line.c in asm for some extra performance on short
+  lines.
+
+[ 4 May 94]
+- Tested with Borland c4, works OK.
+
+[31 April 94]
+- clear msdos graphics asm support a bit.
+
+[30 April 94]
+- some minor graphics cleaning.
+- gather line size stats (optional).
+
+[29 April 94]
+- test with vc1.5, no problems.
+- msdos: change itabs to 'far' arrays to redunce load on near segment (the
+  mswin version ran out of it...)
+
+[27 April 94]
+- add some more low level graphics stats.
+- add numlock logic back to djgpp/console.
+
+[26 April 94]
+- bc3 now works too. Needed to remove optimization from some more modules :-(
+
+[25 April 94]
+- unified joystick driver for unix and dos.
+- Linux now supports both <linux/game.h> and <linux/joystick.h>.
+- upgraded my Linux joystick driver to a loadable module.
+
+[24 April 94]
+- GrFast: MXIC tested OK
+- GrFast: now supports VESA drivers!
+- DJGPP:  now supports VESA drivers!
+
+[23 April 94]
+- cleanup the makefiles and archives. Some blind upgrade of the amiga stuff.
+
+[22 April 94]
+- bc3 serial comms ok, packet still dies.
+
+[21 April 94]
+- Borland c2 works OK. bc3 still dies on comms.
+
+[20 April 94]
+- Borland c3 now works with full optimization and with asm support. It seems
+  to have a bad habit of not maintaining 'ds' so the low level routines had
+  to be upgraded to look after themselves. More testing needed.
+
+[19 April 94]
+- Borland c3 works fine, but had to disable all optimizations. Will give it
+  a bit more time.
+
+[18 April 94]
+- start adding Borland support. Got everything to compile but it does not
+  work...
+
+[17 April 94]
+- got the djgpp port working again (using 1.10).
+- tested on SunSparcstation. The udp stuff has some problems. Fixed!
+
+[16 April 94]
+- fixed bug in bullet-history which caused some divide overflow aborts.
+- all local (static) functions now can be declared 'extern' to make debugging
+  easier (this is the default for now).
+- fixed the doco to list all joystick options.
+
+[15 April 94]
+- added latest mswin from Mike. Boy it is sooooo slooooow!
+
+[14 April 94]
+- grfast for Trident 8900 tested and is working!
+- menue system does bring up help if not in verbose mode. use 'uh' to toggle
+  HUD help. verbose is off by default.
+
+[10 April 94]
+- compile with ms/c7.00,ms/qc2.51 (some minor adjustments were required)
+- oops! reinstate grqc driver!
+- add error messages if bad video driver given
+- add page size option to grfast
+- bumped version to 1.05
+
+[ 9 April 94]
+- fix gr drivers logic.
+
+[ 8 April 94]
+- add init/term code to grfast drivers.
+
+[ 7 April 94]
+- fix broken 'shutters' selection.
+
+
+Changes in release 1.04
+=======================
+
+[ 5 April 94]
+- released 1.04
+
+[23 March 94]
+- rename some functions so as not to clash with borland names.
+- slight rearrangement of extern.h.
+- add FLY8_MSC etc. for msdos compiler type.
+
+[21 March 94]
+- Bumped version to 1.04.
+- make 'killers' kill again...
+- set F_DONE early to avoid multual-target loop.
+- fix 'o' command.
+
+[ 1 March 94]
+- document Net.AutoConnect option.
+
+[26 February 94]
+- fix reduce spoiler command.
+
+[20 February 94]
+- remote.c: do not reset 'rtimeErr' if already 'playing'.
+- UNIX/stick.c: fix hat reading (FCS).
+- fix bug in oviewer.c: eject would core dump.
+- fix CCIP display so that the tti stays inside the window.
+
+[18 February 94]
+- check why unix/fifo on the serial port hangs when the line is dropped.
+
+[16 February 94]
+- try the Cirrus chip once more... no good, I give up.
+- fix net info messages
+
+[15 February 94]
+- add autoconnect option to net: will repeatedly attempt to connect.
+- fix menu/net/manual-reply to NOT reuse the letter 'q'.
+
+
+Changes in release 1.03
+=======================
+
+[13 February 94]
+- Bumped version to 1.03. (partly released as Linux version)
+- add output buffering to msdos/flytty.bat.
+- rewrite the Linux joystick driver, it was limiting the usability of Fly8.
+  I notified the author, hopefuly he will make fresh driver release.
+
+[12 February 94]
+- Add CH Pro support to unix/stick.c. Need the driver buttons fix!
+- Upgrade doco. All files are now  in fly8.mm.
+
+[ 8 February 94]
+- rename fly8srv -> fly8udp and udpcli ->udpmgr. Set default server to
+  localhost.
+- Add CH Pro support to msdos/stick.c
+
+[ 7 February 94]
+- add udp.doc and fifo.doc to the release.
+- allow '-V' option for version info.
+- build hddmenu.c as a vehicle for all instruments settings. Not yet finished.
+
+
+Changes in release 1.02
+=======================
+
+[ 7 February 94]
+- Fly8 1.02 released onto csc.canberra.edu.au: /pub/ise/eyal/fly8.
+
+[ 6 February 94]
+- fix bug in UNIX/ctime.c chopping off the year in messages.
+- add ':pack' to standard ini files net drivers parameters.
+- fix UDP logic so it works on SUN too.
+- add strerror() to need.c
+- use need.c and config.h in UNIX UDP related programs.
+
+[ 5 February 94]
+- add UDP level multi-player capability to the unix port.
+
+[ 4 February 94]
+- Force brake on when new plane created (only CC).
+- Adjust chute descent command ('D') to 10 meters (2 seconds worth).
+- include <errno.h> in UNIX/fifo.c.
+
+[ 3 February 94]
+- Fix bug in unix mouse driver.
+
+[ 1 February 94]
+- move 'tpointer' to 'radar' menu and add 'vpointer option.
+- add simple fifo.c driver to unix port. It now allows playing head-to-head
+  between two FIFOs or across a serial link. See 'flytty' and 'flyfifo'.
+
+[30 January 94]
+- oops! gear[] array was defined as [3] but prm.c was storing [5]!
+- Keep track of gear up/down position.
+- Add more integer-divide-overflow resistance to gear.c and sixdof.c. But you
+  can still blow it during violent landings!
+- Rudder commands now move it 10% instead of 1%.
+
+[29 January 94]
+- add 'stores' display. New module stores.c.
+- fix bug is map hight being wrong.
+- fix power-up/down slipup.
+
+[28 January 94]
+- add speed director to ether hud.
+- add clipping to the director.
+
+[26 January 94]
+- test on SUN SparcStation 10. Compile OK, now needs testing...
+- fix minor printing problem in info.c
+- use strtol() instead of strtoul(). We may have to add it to our need.c.
+- re-test on msdos, still OK.
+- properly split UNIX/mouse.c+grx.c. mouse.c now identical on X11 and MsWin.
+
+[25 January 94]
+- fixed keypad for when in AUTO mode.
+- build the MsWin port (from Mike). Works OK, still slow...
+
+[24 January 94]
+- joystick linear/log option is in the .prm file, makes no sense! also means
+  that keypad behaviour is unusable unless it is set to 'linear'. Added
+  'linear' option to stick instead. Now the linux version works fine too.
+- now pointer->a[] is the actual control input and pointer->l[] is the
+  transfered command. The plane only sees the l[]. The pilot delivers the a[].
+
+[22 January 94]
+- bumped version to 1.02 for imminent release.
+
+
+Changes in release 1.01
+=======================
+
+[20 January 94]
+- add 'nexttime' tracking to msdos/speaker.c.
+- add PgDn/PgUp to menus for last/first selection. Accept Left/Right as
+  Up/Down.
+
+[19 January 94]
+- fix bug in max.c which, on 32bit machines, would store bad key names
+  of input definition thus finding all .max keys undefined.
+- reduce MACRO to use Ushort instead of int.
+- fix 'basic' model to properly level when on ground.
+- change command options for numbers:
+  B	nb	max display list lines
+  t	nt	secs to shutdown
+        nm	num of macros (new)
+  i	ni	min millisec for plane dynamics
+- changed parameters for get_narg() and get_inarg()!
+- changed init numeric options to accept common base notation.
+
+[18 January 94]
+- Change 'st' (status) to NEAR.
+- Add va_end() in message.c. ANSI says so.
+- Bug fix: Snd->List was called after Snd was closed (set to zero).
+  Now Snd and Kbd are set to valid dummy drivers when not active (same as
+  Tm and Sys already do). New nokbd.c.
+- Looks good, proceed with release packaging. Linux builds and runs with no
+  problems. MsWindows now works too.
+- rename pointer options to shorter names.
+
+[17 January 94]
+- fix null dereferencing in nav.c:nav_find().
+- fix definition of my_sinc() in extern.h.
+- minor adjustment to msdos\stick.c.
+
+[16 January 94]
+- remove parameters from show.c:show_line().
+- allow timer driver options as 'dt...'
+- add 'rate' option to msdos\timer.c to control hardware timer period. This is
+  needed when profiling.
+
+[15 January 94]
+- my_sina() added to assembly.
+- use NEAR for static functions.
+- miscellaneous optimizations.
+
+[14 January 94]
+- play with the source profiler.
+- add cos/sin of Euler to object structure.
+- reduce CCshow()/DDshow() overhead.
+- allow '0' for Poll() function of drivers, when not needed.
+
+[10 January 94]
+- change field.c: field_read() to use field length for ints.
+- show bomb tti.
+- unix now works too (was missing timer->Interval...)
+
+[ 9 January 94]
+- joystick options: hat, throttle, counter, ndb, four, base*, read, delay.
+- mouse options: speedx, speedy.
+- pointer only has 4 options now e.g.: "dpMouse:+x+y"
+- add buttons menu. Button names are 0-9, a-z. This way we have 36 virtual
+  buttons. The joystick uses 0-3 for the main ones, 4-7 for the hat and 8
+  for the hat-center position. The mouse uses 0-1.
+- add button release feature.
+
+[ 8 January 94]
+- define all analog functions as pointer input.
+- use max file for buttons function definition.
+- some related mods to /utils.
+
+[ 7 January 94]
+- allow setting r, b, g separately for colors menu.
+
+[ 2 January 94]
+- further refine the fcs driver.
+
+[ 1 January 94]
+- add target pointer option to HUD.
+
+[30 December 93]
+- add interval measurment facility to the timer driver.
+- performance stats now has resolution of 1/10th millisec.
+- re-assign the debug switches:
+  W account for pitch derivatives
+  X show the graph
+  Y use yplane instead of fplane
+  Z fplane: use the fundamental method
+
+[28 December 93]
+- new 'd' command to declutter the HUD.
+- new target designator for pan/target HDDs.
+- print program name to log.
+- new option for orthogonal compass ticks.
+
+[27 December 93]
+- fix bug in handling bad plane name.
+- don't show the 'W' if the '+' is shown.
+
+[26 December 93]
+- put atmospheric calcs into airdata.c while improving it.
+- new option to display calibrated airspeed.
+
+[25 December 93]
+- upgrade F16 HUD format.
+
+[23 December 93]
+- add bullet history trail.
+
+[21 December 93]
+- add support for thrustmaster FCS.
+
+[19 December 93]
+- use WIN_ and VIS_ manifests instead of numbers.
+- fixed gr.lib to not loose the write mode...
+- add hdd menu to top level and move some options into it.
+- cosmetic adjustments to cockpit.c.
+
+[18 December 93]
+- new target speed/acceleration acquisition logic.
+- rename the HDD stuff.
+- pan/target HDD now shows absolute Heading/Pitch.
+
+[16 December 93]
+- ether HUD heading is real world scale.
+- ether radar data can use the full screen.
+- add piper Vc to ether HUD.
+- show xbreak only on hud.
+
+[15 December 93]
+- add 'ether' screen layout.
+- add 'ether' HUD style.
+
+[12 December 93]
+- always call show_pitch().
+- properly handle the display of the flight director.
+
+[ 9 December 93]
+- add leading edge flaps.
+
+[ 8 December 93]
+- play with ILS controlled autopilot.
+
+[ 4 December 93]
+- F15 HUD adjustments.
+- add aural attention to messages.
+- reduce refuel rate to 100lb/sec (still very fast).
+- add a parameter to sound driver Poll().
+- add frac_size().
+
+[29 November 93]
+- update models oclassic, obasic and oxplane.
+- centralize input file reading (file.c).
+- reorganize include files.
+- read landscape from file (fly.lnd).
+
+[28 November 93]
+- move drawing of basic HUD symbols to symbols.c
+- fix long/lat logic.
+- read nav data from a file (fly.nav).
+
+[27 November 93]
+- use wing cord for pitch derivatives instead of wing span.
+
+[26 November 93]
+- rename derivatives to aerodynamics jargon.
+
+[23 November 93]
+- default set to 'allow stall'.
+- delfault shows panel.
+- debug data font forced to 0.
+
+[17 November 93]
+- new F16 hud format.
+- show waypoint diamond (at ILS origin).
+- split into 'panel.c' the control panel data display.
+- start using the HUD struct.
+
+[14 November 93]
+- changing target-acquisition mode releases the current target.
+
+[10 November 93]
+- work around the msc7.00 bug in init.c and vmodes.c where
+	a[strlen(a)-1] = '\0';
+  fails and corrupts memory!
+
+[ 6 November 93]
+- do a better job of tail stuff.
+- add 'no stall'
+
+[ 5 November 93]
+- add trim (on Ctl-Arrows).
+
+[ 3 November 93]
+- hud/type now is option 't' instead of 'y'.
+
+[ 2 November 93]
+- get_num() and SetOption() are generic menu utilities.
+- hud on/off added to main menu (instead of toggle).
+
+[31 October 93]
+- organize autopilot actions: AUTOFLAP, AUTOELEVATOR, AUTORUDDER.
+- sky show OK in rotated views now.
+- identify the M61 as GUN on the HUD.
+
+[30 October 93]
+- improve load-limiting procedure.
+- add automatic flaps assistance on high alpha.
+
+[29 October 93]
+- new option: screen/stereo/hudpos: show HUD at infinity or on screen.
+- new option: ladder/negtip.
+- create views.c:get_area().
+
+[26 October 93]
+- Some more work on clip_to_screen.
+
+[24 October 93]
+- turning off fast write on the StelthPro stops the frequent lockups.
+- fix clip_to_screen() to be relative to boresight center rather than
+  HUD center.
+
+[18 October 93]
+- add 'action' to flight models for private init/term management.
+
+[16 October 93]
+- debug gear.c
+- add VxMmul() to handle the many Mxpose() pairs.
+- keep more data in object and e_plane.
+- use '()' to control wheel brakes and '<>' for speed brakes.
+
+[10 October 93]
+- fdiv() added in assembly. SOme cosmetic changes to debug messages.
+- remove references to obsolete Mangles1().
+
+[09 October 93]
+- gear.c landing gear interaction. needs much more work.
+- new Euler() routine to track orientation.
+
+[08 October 93]
+- sixdof.c implements the proper kinematics equations.
+
+[02 October 93]
+- add MINLIFT to plane parameters.
+- add Xbreak HUD option.
+- start oyplane.c with proper units and corrected calcs.
+- allow wheels to slide sideways.
+
+[01 October 93]
+- Better G load limiting.
+- change FA18 to linear controls.
+
+[28 September 93]
+- hud cursor now relative to HUD center.
+- msdos\stick.c: set a 25% dull edge.
+
+[26 September 93]
+- serious playing with aero model and auopilot.
+
+[25 September 93]
+- some steamlining in stroke.c
+- added type cast to some trig functions.
+- version.c now has the welcome() message. Remote.c has ComVersion. version.c
+  always recompiled on build.
+
+[22 September 93]
+- HUD_CORNER not anymore the default.
+- add PATHSEP to config.h
+
+[21 September 93]
+- make ALL ladder options modifiable. Plan to extend this to full HUD
+  options with a config file.
+- remove wing_stall.
+
+[19 September 93]
+- now have EX->power. Display as P on misc, thrust displayed as TST over the
+  airbrake.
+- some headers cleanup.
+- remove st.indicators (finally).
+- start work on oxplane.c again.
+
+[18 September 93]
+- added engine.c: F16 engine model from AC&S.
+
+[17 September 93]
+- flush log regularly.
+- show no tips on +-90 degrees ladder steps.
+- pendulum (ground pointer) now available in all HUD types.
+- rewrite pitch.c
+
+[16 September 93]
+- new HUD options:
+	ladder pinned (rotates around HUD center)
+	ladder color cue
+	ladder numbers only on the right
+	ladder numbers roll with the steps
+	ladder is funnel shaped
+	ladder steps are slanted
+	ladder zenith/nadir shown as markers
+
+[15 September 93]
+- since fixeng the S3 bank switching code I had no more machine lockups.
+  This may have been related - but keep testing.
+- fix bug in reading fly.max.
+- more fiddling with the autopilot.
+
+[12 September 93]
+- remove t4k.c from the graphics library.
+- ensure I alway show as 'friend' (light blue).
+- fix bug in svgakt32 sv_banks.asm S3_bank handling of large memory.
+- play a bit more with the autopilot code.
+
+[11 September 93]
+- remove EX->misc[17], and use st.hudshift.
+- allow whitespace before '#' in ini file.
+- fix bug in 'debug' display.
+- fix color input to actually accept rrggbb (used to be bbggrr). this changes
+  fly.ini.
+- fix map to show friends is lblue rather than blue.
+- make 'simple' easier to fly. Also make the autopilot parameter a bit better.
+
+[10 September 93]
+- fix bug where selecting pointer dynamically was always failing.
+- allow defining all colors through parameters: 'cxrrggbb' where 'x' is
+  the color (see colors menu) and rrggbb are hex values for primaries.
+- remove st.hud_color.
+- clean hud info screen.
+- reduce default font size.
+
+[ 9 September 93]
+- allow setting of all colors
+
+[ 6 September 93]
+- grab sv_page.asm and sv_banks.asm from svgakt32.zip. Add some more
+  parameters to settype() in grfast.c.
+
+[ 5 September 93]
+- got the page/bank code from svgakt32.zip and put into grfast. It should
+  now support many more cards. The VESA support is not done yet.
+- msdos\timer.c now supports timer modes 2 and 3 (the most common modes) so
+  it should run OK in a mswin dos window.
+
+[ 4 September 93]
+- make engine noise follow the thrust rather than the speed. (Should really
+  follow the RPM if we had it).
+
+[ 3 September 93]
+- remove debug from grfast.c. It still locks up.
+
+[ 1 September 93]
+- add some debug to grfats.c. Why is the S3 locking sometimes (but will
+run for 10-15 hours at times with no problems)?
+
+[31 August 93]
+- add timeout check to grfast.c sync wait.
+
+[29 August 93]
+- some cleanup in pcserial.c
+- create notimer.c and nosystem.c for safer aborts.
+
+[22 August 93]
+- find .vmd, .mac and .max in the files directory.
+- do not specify .vmd etc. extension in parameters. FLY.INI CHANGES.
+- add max.c. We now read text macros if we find them, then binary macros.
+  We still write BINARY, so that we do not overwrite our text comments.
+- fix bug when early abort would hang (due to Sys driver not yet active).
+- fixed bug in BuildFileName() when there is no extension.
+- add xstrdup() to memory.c to protect the malloc system.
+
+[21 August 93]
+- add ellipse drawing to djgpp VGA driver.
+- standardize device drivers options format. ADDED A NEW PARAMETER TO SOME
+  DRIVERS INIT CALLS!!
+- change drivers name options. FLY.INI CHANGES.
+
+[17 August 93]
+- add need.c for common missing functions. Write my own s/rand().
+
+[16 August 93]
+- change msdos to use simple timer probing for timekeeping.
+- add color to intel info.
+- added strings to max2mac.
+- then to close the day, the game dies whenever a key is touched...
+
+[15 August 93]
+- finish the djgpp port. Noted that page crossing has a high cost.
+
+[11 August 93]
+- add add_line() declaration to extern.h.
+- change Enable/Disable to use Ulong flags.
+- remove 'extern' from driver definitions.
+
+[10 August 93]
+- got a working djgpp port. The graphics can use some speedup.
+
+[ 8 August 93]
+- make all object names unique, even statics.
+- undefine all #defines in each module.
+- do some other cleanup.
+- redo the comms. Now when choosing a player (at any prompt) you can
+  select '+' for all team members (can still use '*' for ALL players).
+  You select a player by giving the start of the name (or the team or both):
+  the match is tested only for the length of the reply. Only the first match
+  is selected.
+- change the interface to remote.c: remove 'mode' and use special 'player'
+  records to denote special destinations.
+
+[ 7 August 93]
+- new option -Snnn to supply sound device. moved nosound.c to main directory
+  (no need to include it in drivers.c).
+- move stfonts out of drivers.c into stroke.c
+- remove 'misc' from makefiles (no such file).
+- fixed the bad foreign object position extrapolation. It is now as smooth as
+  it was meant to be.
+- removed the 'assignment in condition' warnings by using the T() and F()
+  macros to denote these situations.
+- fiddle a bit with the 'shoot' cue accuracy. Still not as good as it should
+  be.
+
+[ 6 August 93]
+- add font_set() to stroke.c. Add st.StFontPtr
+- use NEAR and FAR to designate the drivers and associated arrays.
+- modify makefiles to more cleanly do 'ifuncsm'.
+
+[ 5 August 93]
+- renamed macro progs to 'mac2txt' and 'txt2mac'. Fixed them too.
+
+[ 4 August 93]
+- add ALT-A...ALT-Z to the msdos keyboard driver.
+- now ALTa-z and CTRLa-z are hot keys.
+- change format of listmac in preparation for the complementary program.
+- wrote buildmac.c.
+
+[ 1 August 93]
+- get stable makefiles for c8 and qc. Also done to Linux.
+- fix bug in loop.c not going into fast refresh when it should.
+- add team name (-Naaa -Tbbb shows as aaa:bbb). show team members in blue.
+  Radar does not lock on team members.
+- replace color 'st.lblue' with 'st.skyblue' and add new color 'st.lblue'. All
+  graphics drivers now need update (done to msdos, mswin and unix).
+- remove 'stealth' from 'blanker' mode.
+- add 'classic' and 'basic' planes.
+
+[31 July 93]
+- add 'config' and clean support for the msdos compilers.
+- fix pcdos.c and find.* for the different offsets.
+- set net to auto-accept as default.
+- go through the net menu even if the net is down.
+- fix recently introduced bug in log handling.
+
+[30 July 93]
+- add -L. option to turn on log file flushing.
+- try c8. nothing works!
+
+[26 July 93]
+- clean some warnings: menu.c, ifuncs.c, oplane.c.
+- use -fomit-frame-pointer with gcc. Any good? code is slightly larger.
+- noted that the dos '!' looses the keyboard on return.
+
+[25 July 93]
+- add manifest HAVE_JOYSTICK to unix
+- modify unix makefile.top
+
+[23 July 93]
+- use Sys->BuildFileName() to generate full path names.
+- config.h: Remove DIRSEP. add PRM_EXT and SHP_EXT.
+
+[20 July 93]
+- fix 1: command.c to set wepon WE_M61 for killers.
+- fix 2: oplane.c, beep on target lock only for main player.
+
+
+Fly8 1.00[beta] released mid May 93 but took a while to get there. I
+returned home by the end of June and did some more uploading.
+

@@ -1,0 +1,92 @@
+# makefile
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for Linux
+#
+
+# Remove USE_JOY    on non intel platforms.
+# Remove USE_BGRASM on non intel platforms.
+#
+CFLAGS= $(XFLAGS) -I.. -I. -DUSE_JOY -DUSE_GP -DDEBUG_BGR -DUSE_BGRASM \
+	-DHAVE_MIDI=1 -DHAVE_GETTIMEOFDAY=1
+
+# Remove JSDIR on non intel platforms.
+#
+JSDIR=	jsdir
+
+COBJS=  drivers.o console.o timer.o unix.o mouse.o misc.o fifo.o udp.o \
+	xkeys.o grx.o gri.o bgr.o grstat.o \
+	stick.o ustick.o joyport.o gameport.o gpport.o \
+	grsvga.o svga.o vgr.o \
+	plsound.o plmidi.o
+
+AOBJS=  bgrasm.o
+
+OBJS=   $(COBJS) $(AOBJS)
+PROGS=  fly8udp udpmgr
+
+HFILES= ../fly.h ../config.h
+
+
+.SUFFIXES:      .o .s .x .c
+
+.x.s:
+	$(CC) $(CFLAGS) -x c -E $*.x >$*.s
+
+.s.o:
+#       $(CC) $(CFLAGS) -Wa,-alh, -c $*.s >$*.sl
+	$(CC) $(CFLAGS) -c $*.s
+	rm $*.s
+
+all:    fly8sys.a $(PROGS) $(JSDIR)
+
+jsdir:
+	(cd js ; make all)
+
+fly8sys.a:      $(OBJS)
+	-rm fly8sys.a
+	ar q fly8sys.a $(OBJS)
+	ranlib fly8sys.a
+
+$(COBJS):       $(HFILES)
+xkeys.o:        grx.h
+grx.o:          grx.h
+gri.o:          grx.h bgr.h
+bgr.o:          bgr.h
+
+#
+# svgalib video driver.
+#
+grsvga.o:       grx.h svga.h
+svga.o:         svga.h vgr.h
+vgr.o:          vgr.h
+
+#
+# Joystick stuff.
+#
+stick.o:        stick.h
+ustick.o:       stick.h ustick.h
+joyport.o:      stick.h ustick.h
+gameport.o:     stick.h ustick.h
+gpport.o:       stick.h ustick.h
+
+#
+# udp comms stuff
+#
+udp.o:          fly8udp.h
+udpmgr.o:       fly8udp.h
+fly8udp.o:      fly8udp.h
+
+fly8udp:        fly8udp.o
+	$(CC) $(CFLAGS) -o fly8udp fly8udp.o ../need.o
+
+udpmgr:         udpmgr.o
+	$(CC) $(CFLAGS) -o udpmgr udpmgr.o ../need.o
+
+clean:
+	-rm *.o *.a $(PROGS)
+	-(cd js ; make clean)

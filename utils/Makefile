@@ -1,0 +1,29 @@
+# makefile
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# make the utilities, for unix
+#
+
+CFLAGS= $(XFLAGS) -I.. -I. -I../$(SYSTEM)
+
+HFILES=	../keydef.h ../keymap.h ../keyname.h
+
+SYSLIB=	../need.o
+
+all:	mac2max max2mac
+
+mac2max.o max2mac.o: $(HFILES)
+
+mac2max:	mac2max.o
+	$(CC) $(CFLAGS) mac2max.o $(SYSLIB) -o mac2max
+
+max2mac:	max2mac.o
+	$(CC) $(CFLAGS) max2mac.o $(SYSLIB) -o max2mac
+
+clean:
+	-rm *.o
+	-rm mac2max max2mac

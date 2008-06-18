@@ -1,0 +1,294 @@
+Creating a new graphics driver for Fly8
+=======================================
+
+The structures
+==============
+
+A graphics driver is a structure which nominates some basic functions (the
+primitives) that Fly8 can utilise for it's graphics needs. Here is what
+this structure contains:
+
+struct GrDriver {
+	char	*name;
+	Ushort	flags;
+	void	*extra;
+	DEVICE	*devices;
+	int	(FAR* Init) (DEVICE *dev, char *options);
+	void	(FAR* Term) (DEVICE *dev);
+	void	(FAR* MoveTo) (Uint x1, Uint y1);
+	void	(FAR* DrawTo) (Uint x2, Uint y2, Uint c);
++	int	(FAR* SetVisual) (int page);
++	int	(FAR* SetActive) (int page);
++	void	(FAR* Clear) (SCREEN *scr);
++	int	(FAR* WriteMode) (int mode);
++	int	(FAR* SetPalette) (int index, long color);
++	void	(FAR* DrawEllipse) (Uint x, Uint y, Uint rx, Uint ry, Uint c);
++	void	(FAR* Flush) (void);
++	int	(FAR* Shutters) (int eye);
+};
+
+Except for the the function marked with '+', which may be set to NULL,
+the other fuctions must have valid values. A dummy function should be
+provided for unimplemented mandatory functions.
+
+A reference to the driver should be included in the drivers register
+(normally 'drivers.c') like this:
+
+	extern struct GrDriver NEAR GrFoo;
+	extern struct GrDriver NEAR GrBar;
+
+	struct GrDriver NEAR* FAR GrDrivers[] = {
+		&GrFoo,
+		&GrBar,
+	0};
+
+There can be more than one driver defined. The first one is the
+'default' driver. You select a driver using the 'dv' option (for example
+'dvFoo' of 'dvBar') as a Fly8 option.
+
+
+Associated with the driver is the 'device' information kept in a
+structure which is supplied to some of the calls.
+
+struct device {
+	DEVICE	*next;
+	char	*name;
+	void	*pdevice;	/* private device data */
+	int	mode;		/* vga bios mode etc. */
+	int	colors;		/* number of colors */
+	int	minx;		/* physical */
+	int	miny;		/* physical */
+	int	sizex;		/* physical */
+	int	sizey; 		/* physical */
+	int	npages;		/* how many display pages */
+	int	lengx;		/* millimeter */
+	int	lengy;		/* millimeter */
+	int	flags;		/* driver private */
+};
+
+
+Most of the fields come from the *.vmd line that was selected, and
+appear here in the same order. A quick look at a *.vmd file will clarify
+what these fields mean. The 'leng*' fields are actual screen measurments
+and are used to establish the pixel aspect ration. The 'Font*' are not
+used anymore so just leave these as '8'.
+
+'pdevice' is here to allow you to keep other private data associated
+with this device which you establish at Init() time and wish to access
+later.
+
+You select a device using the 'V' and 'm' options, for example:
+	VFooBar m1024x768x256
+
+The first options tells Fly8 to read the file 'FooBar.vmd', the second
+option tells it to look for a line identified as '1024x768x256' and use
+it's contents when building the 'device' structure.
+
+
+About color
+===========
+
+Fly8 uses a maximum of 16 colors (0-15) but will use more in the future.
+When a color is programmed, you are given an index and a color. You
+should set you palette and then store the color id into st.color[index].
+Fly8 will store the color itself (the RGB value) into st.palette[index].
+
+The drawing functions (DrawTo and DrawEllipse) will be called with the
+contents of st.colors[index]. It is important to note that this is often
+NOT the same as the color index used inside Fly8.
+
+
+The Fields
+==========
+
+
+char	*name;
+-------------
+
+This is the driver's name. It is not case sensitive. This is the name
+that you will use to select this driver (with the 'dv*' option). It does
+not have to be the same as the structure name used for this driver.
+
+
+Ushort	flags;
+-------------
+
+A general purpose flags word. Drivers store here status flags. Not used
+by Fly8 main part.
+
+Normally left as zero.
+
+
+DEVICE	*devices;
+----------------
+
+The list of kind of devices that this driver can be set to use. This is
+an internalizes form of the *.vmd file contents. On PCs this actually
+represents one device that can be configured to operate in many forma
+(video modes). Define it as zero.
+
+
+void	*extra;
+--------------
+
+This is an unused member. It is here to allow you to keep private
+information for use by this driver.
+
+Normally left as NULL.
+
+
+int	(FAR* Init) (DEVICE *dev, char *options);
+------------------
+
+This is called when initializing a device. It should return 0 if
+successful.
+
+This is the most involved procedure and needs to do a few things.
+
+The 'options' field is not used in most cases but can allow users to
+supply special options to the driver through the command line (or
+fly.ini). You can see how it is used by msdos/grfast.c.
+
+The 'dev' is a structure describing the device characteristics. You
+should attempt to make the graphics device operate in this mode.
+Otherwise you can modify the contents of this structure to reflect the
+mode achieved.
+
+The device is expected to have a clear screen after this call is
+successful. However, the program will later clear the used area
+privately.
+
+If you cannot double buffer then set 'dev->npages' to 1.
+
+
+void	(FAR* Term) (DEVICE *dev);
+------------------
+
+Called upon closing the device. Fly8 will not access the device after
+this call without calling Init() first.
+
+
+void	(FAR* MoveTo) (Uint x1, Uint y1);
+--------------------
+
+Requsest to set a new current position on the screen. It does not draw
+any pixels. Many implementations will simply store the (x1, y1) values
+for later use during the line draw.
+
+In Fly8, the (x, y) will be referenced to (0, 0) being the top left
+corner of the screen, 'x' is the horizontal position and 'y' is the
+vertical position. The positions any unsigned integers.
+
+
+void	(FAR* DrawTo) (Uint x2, Uint y2, Uint c);
+--------------------
+
+Draw a line from the 'current position' to (x2, y2). The end pixel is
+expected to be drawn.
+
+You can optimize the drawing by NOT drawing the end pixel if the next
+line starts at the same point. In this case some other calls will need
+to show the end pixel of the previous line segment.
+
+The color 'c' is the value that was stored into st.colors[] when the
+color was programmed. It is expected to draw in the color that was then
+provided and stored into st.palette[].
+
+
+int	(FAR* SetVisual) (int page);
+-----------------------
+
+Used for double buffering. It requests that you set the visible page to
+be as specified. In single buffered mode it is called only with the
+value 0 (zero) so you may wish to NOT implement it initially.
+
+
+int	(FAR* SetActive) (int page);
+-----------------------
+
+Uset to set the active page (the one where pixels are being set in) to
+the specified page. Again, only really used for double buffering and can
+be left out initially.
+
+
+void	(FAR* Clear) (SCREEN *scr);
+-------------------
+
+A request to clear the whole screen. If this is set to NULL then it is
+not called. Otherwise it is used to clear the screen before each frame.
+Note that on many systems this operation is expensive and erasing a
+image by re-tracing it with the background colour is faster (and this is
+what Fly8 will do if this is function not supplied).
+
+
+int	(FAR* WriteMode) (int mode);
+-----------------------
+
+Sets the write mode to one of
+
+  T_MSET
+	The standard 'overwrite' pixel setting.
+
+  T_MOR
+	OR mode, each pixel value is ORed to the previous. Only used for
+	the red/blue stereo mode.
+
+  T_MXOR
+	XOR mode. Not used by Fly8.
+
+If not implemented then you will not be able to use the red/blue stereo
+mode, also the 'paused' message will fail to show. It should in this
+case be always drawing in 'set' mode.
+
+
+int	(FAR* SetPalette) (int index, long color);
+------------------------
+
+Called to set palette entry 'index' to the RGB value 'color'. Fly8 uses
+an RGB colour representation where red is the lower byte, green is the
+middle byte (mask 0x0000ff00L) and blue is the high byte (mask
+0x00ff0000L).
+
+You can extract the red, green and blue color componnents using:
+
+	C_RGB_R (c)
+	C_RGB_G (c)
+	C_RGB_B (c)
+
+If not implemented then the colors are expected to be fixed. Have a look
+at init.c to see what each color is expected to be and tray and assign
+good matches.
+
+
+void	(FAR* DrawEllipse) (Uint x, Uint y, Uint rx, Uint ry, Uint c);
+-------------------------
+
+Draw an ellipse at position (x, y) with major axes (rx, ry) in colour
+'c'. If your screen has square pixels then 'rx' will always be equal to
+'ry' since Fly8 only needs to draw circels.
+
+If not implemented then a 16 sided polygon will be drawn instead (and it
+does not look bad at all).
+
+
+void	(FAR* Flush) (void);
+-------------------
+
+Request to flush any unfinished graphics primitives. It is called after
+the last graphics operation in a frame.
+
+If not implemented then you are expected to make sure the image is on
+the screen in other ways.
+
+
+int	(FAR* Shutters) (int eye);
+----------------------
+
+Used to synchronize shutter glasses by turning on each eye in time. the
+values are
+	 0	right (I think...)
+	 1	left
+	-1	both on
+	-2	both off
+
+If not implemented then this type of stereo view will not be available.

@@ -1,0 +1,61 @@
+# makefile
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for unix
+#
+
+CFLAGS= $(XFLAGS) -I.. -I. -DDEBUG_BGR -DUSE_GP
+
+COBJS=	drivers.o console.o timer.o unix.o mouse.o misc.o fifo.o udp.o \
+	xkeys.o grx.o gri.o bgr.o grstat.o \
+	stick.o ustick.o joyport.o gameport.o gpport.o
+
+AOBJS=
+
+OBJS=	$(COBJS) $(AOBJS)
+
+HFILES=	../fly.h ../config.h
+
+all:	fly8sys.a fly8udp udpmgr
+
+fly8sys.a:	$(OBJS)
+	-rm fly8sys.a
+	ar q fly8sys.a $(OBJS)
+
+$(COBJS):	$(HFILES)
+xkeys.o:	grx.h
+grx.o:		grx.h
+gri.o:		grx.h bgr.h
+line.o:		bgr.h
+ellipse.o:	bgr.h
+
+#
+# Joystick stuff.
+#
+stick.o:	stick.h
+ustick.o:	stick.h ustick.h
+joyport.o:	stick.h ustick.h
+gameport.o:	stick.h ustick.h
+gpport.o:	stick.h ustick.h
+
+#
+# udp comms stuff
+#
+udp.o:		fly8udp.h
+udpmgr.o:	fly8udp.h
+fly8udp.o:	fly8udp.h
+
+fly8udp:	fly8udp.o
+	$(CC) -o fly8udp fly8udp.o ../need.o
+	strip fly8udp
+
+udpmgr:		udpmgr.o
+	$(CC) -o udpmgr udpmgr.o ../need.o
+	strip udpmgr
+
+clean:
+	-rm *.o *.a

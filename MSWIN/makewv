@@ -1,0 +1,96 @@
+# makewv
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for WIN 3.1, ms vc1
+#
+# Read below and comment the appropriate sections.
+
+
+# With WinG:
+#
+GFLAGS=	-DUSE_WING -DDEBUG_BGR -DDEBUG_VGR
+GOBJS=	grwing.obj bgr.obj vgr.obj
+
+# No WinG:
+#
+#GFLAGS=
+#GOBJS=
+
+
+# With winsock:
+#
+LFLAGS=	-AL -Mq
+CFLAGS=  -I.. $(XFLAGS) -DHAVE_UDP=1 $(GFLAGS)
+WCFLAGS= -I.. -DSYS_$(SYSTEM)=1 -DHAVE_UDP=1 -Mq -W4 -O2 -ALw
+WLIB=	winsock
+WPROGS=	fly8udp.exe udpmgr.exe
+WOBJS=	udp.obj
+
+# No winsock:
+#
+#CFLAGS= -I.. $(XFLAGS) $(GFLAGS)
+#WLIB=
+#WPROGS=
+#WOBJS=
+
+
+
+RSP=	$(TEMP)\libfly8.rsp
+
+#	Non portable programs
+#
+COBJS1=	drivers.obj console.obj timer.obj mswin.obj grmswin.obj misc.obj
+COBJS2=	stick.obj dosstick.obj mouse.obj mmsound.obj wave.obj plmidi.obj
+COBJS3=	grstat.obj common.obj plsound.obj
+
+AOBJS=	msubs.obj
+
+OBJS=	$(COBJS1) $(COBJS2) $(COBJS3) $(AOBJS) $(GOBJS) $(WOBJS)
+
+HFILES = ../config.h ../fly.h ../keydef.h ../keymap.h
+
+all:	fly8sys.lib $(WPROGS)
+
+fly8sys.lib:	$(OBJS)
+	if exist fly8sys.lib del fly8sys.lib
+	echo fly8sys >$(RSP)
+	echo y >>$(RSP)
+	for %i in ($(COBJS1)) do echo +%i &>>$(RSP)
+	for %i in ($(COBJS2)) do echo +%i &>>$(RSP)
+	for %i in ($(COBJS3)) do echo +%i &>>$(RSP)
+	for %i in ($(AOBJS))  do echo +%i &>>$(RSP)
+	for %i in ($(GOBJS))  do echo +%i &>>$(RSP)
+	for %i in ($(WOBJS))  do echo +%i &>>$(RSP)
+	lib @$(RSP);
+	del $(RSP)
+
+$(OBJS):	$(HFILES)
+
+msubs.obj:	msubs.qc
+	copy msubs.qc msubs.obj
+
+udp.obj:	fly8udp.h
+
+fly8udp.obj: fly8udp.c fly8udp.h
+	$(CC) $(WCFLAGS) -c fly8udp.c
+
+fly8udp.exe:	fly8udp.obj
+	$(CC) $(LFLAGS) fly8udp.obj -link $(WLIB)
+
+udpmgr.obj: udpmgr.c fly8udp.h
+	$(CC) $(WCFLAGS) -c udpmgr.c
+
+udpmgr.exe: udpmgr.obj
+	$(CC) $(LFLAGS) udpmgr.obj -link $(WLIB)
+
+
+clean:
+	-del *.obj
+	-del *.lib
+	-del *.exe
+	-del *.rsp
+	-del errs

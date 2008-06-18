@@ -1,0 +1,10 @@
+#include <os2.h>
+
+#define ID_WINDOW 256
+
+ICON    ID_WINDOW OS2\fly8.ico
+
+ACCELTABLE ID_WINDOW
+BEGIN
+  "C",   101,              CONTROL, SHIFT, ALT
+END

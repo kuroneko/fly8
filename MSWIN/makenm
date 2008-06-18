@@ -1,0 +1,124 @@
+# makenm
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for mingw32 (gcc for NT/95)
+#
+
+LINK=		$(CC)
+RANLIB=		ranlib
+LIB=		ar q
+STRIP=		strip
+DEL=		del
+
+OO=		.o
+LO=		.a
+EO=		.exe
+OOUT=		-o ./
+EOUT=		-o ./
+
+# GFLAGS:
+#
+# WinG needs:
+#	-DUSE_WING -DDEBUG_BGR -DUSE_BGRASM -DDEBUG_VGR
+#
+# DirectDraw needs (no need to repeat):
+#	-DUSE_DDRAW -DDEBUG_BGR -DUSE_BGRASM
+
+# GOBJS:
+#
+# WinG needs:
+#	grwing bgr vgr bgrasm(optional)
+# DirectDraw needs (no need to repeat):
+#	grddraw bgr bgrasm(optional)
+
+# No WinG:
+#
+GFLAGS=	
+GOBJS=	
+
+
+# With winsock:
+#
+LFLAGS=
+CFLAGS=  -I.. $(XFLAGS) -DHAVE_UDP=1 $(GFLAGS)
+WCFLAGS= -I.. -DSYS_$(SYSTEM)=1 -DHAVE_UDP=1 $(GFLAGS) -Wall -O3
+WLIB=	-lwsock32 -luser32
+#WLIB=
+WPROGS=	fly8udp$(EO) udpmgr$(EO)
+WOBJS=	udp$(OO)
+
+# No winsock:
+#
+#LFLAGS=
+#CFLAGS= -I.. $(XFLAGS) $(GFLAGS)
+#WCFLAGS=$(CFLAGS)
+#WLIB=
+#WPROGS=
+#WOBJS=
+
+
+RSP=	$(TEMP)\libfly8.rsp
+
+OBJS=	drivers$(OO) console$(OO) timer$(OO) mswin$(OO) grmswin$(OO) \
+	misc$(OO) stick$(OO) mouse$(OO) mmsound$(OO) wave$(OO) plmidi$(OO) \
+	grstat$(OO) common$(OO) plsound$(OO) $(GOBJS) $(WOBJS)
+
+LIBS= -lwsock32
+
+HFILES= ../fly.h ../config.h
+
+
+.SUFFIXES:	$(OO) .s .c .x
+
+.x.s:
+	$(CC) $(CFLAGS) -x c -E $*.x >$*.s
+
+.s$(OO):
+	$(CC) $(CFLAGS) -c $*.s
+	$(DEL) $*.s
+
+.x$(OO):
+	$(CC) $(CFLAGS) -x c -E $*.x >$*.s
+	$(CC) $(CFLAGS) -c $*.s
+	$(DEL) $*.s
+
+all:	fly8sys$(LO) $(WPROGS)
+
+fly8sys$(LO):	$(OBJS)
+	-$(DEL) fly8sys$(LO)
+	$(LIB) fly8sys$(LO) $(OBJS)
+	$(RANLIB) fly8sys$(LO)
+
+$(COBJS):	$(HFILES)
+
+bgrasm$(OO):	bgrasm.x
+
+#
+# udp comms stuff
+#
+udp$(OO):	fly8udp.h
+udpmgr$(OO):	fly8udp.h
+fly8udp$(OO):	fly8udp.h
+
+fly8udp$(OO):	fly8udp.c fly8udp.h
+	$(CC) $(WCFLAGS) -c fly8udp.c
+
+fly8udp$(EO):	fly8udp$(OO)
+	$(LINK) $(LFLAGS) $(EOUT)fly8udp$(EO) fly8udp$(OO) ../need$(OO) $(WLIB)
+	$(STRIP) fly8udp$(EO)
+
+udpmgr$(OO):	udpmgr.c fly8udp.h
+	$(CC) $(WCFLAGS) -c udpmgr.c
+
+udpmgr$(EO):	udpmgr$(OO)
+	$(LINK) $(LFLAGS) $(EOUT)udpmgr$(EO) udpmgr$(OO) ../need$(OO) $(WLIB)
+	$(STRIP) udpmgr$(EO)
+
+clean:
+	-$(DEL) *$(OO)
+	-$(DEL) *$(LO)
+	-$(DEL) *$(EO)

@@ -1,0 +1,64 @@
+/* f16
+ * contributed by Paul Thomas (paul.thomas@uk.ac.ox.eng)
+*/
+
+#include "shape.h"
+
+static VERTEX vx_plane[] = {
+        {{0,6,0},V_MOVE},
+        {{-1,2,0},V_DRAW},
+        {{-1,-8,0},V_DRAW},
+        {{0,-8,1},V_DRAW},
+        {{1,-8,0},V_DRAW},
+        {{1,2,0},V_DRAW},
+        {{0,6,0},V_DRAW},
+
+        {{0,6,0},V_DRAW},
+        {{0,2,2},V_DRAW},
+        {{0,0,1},V_DRAW},
+        {{0,-3,1},V_DRAW},
+        {{0,-6,2},V_DRAW},
+        {{0,-7,3},V_DRAW},
+        {{0,-9,3},V_DRAW},
+        {{0,-8,1},V_DRAW},
+        {{0,-3,1},V_DRAW},
+
+        {{-1,2,0},V_MOVE},
+        {{-2,-1,0},V_DRAW},
+        {{-5,-3,0},V_DRAW},
+        {{-5,-2,0},V_MOVE},
+        {{-5,-4,0},V_DRAW},
+        {{-1,-4,0},V_DRAW},
+
+        {{-1,-6,0},V_MOVE},
+        {{-3,-7,0},V_DRAW},
+        {{-3,-8,0},V_DRAW},
+        {{-1,-8,0},V_DRAW},
+
+        {{1,-8,0},V_MOVE},
+        {{3,-8,0},V_DRAW},
+        {{3,-7,0},V_DRAW},
+        {{1,-6,0},V_DRAW},
+
+        {{1,-4,0},V_MOVE},
+        {{5,-4,0},V_DRAW},
+        {{5,-2,0},V_DRAW},
+        {{5,-3,0},V_MOVE},
+        {{2,-1,0},V_DRAW},
+        {{1,2,0},V_DRAW},
+
+        {{1,1,0},V_MOVE},
+        {{0,1,-1},V_DRAW},
+        {{-1,1,0},V_DRAW},
+        {{0,1,-1},V_MOVE},
+        {{0,-8,-1},V_DRAW},
+        {{1,-8,0},V_DRAW},
+        {{0,-8,-1},V_MOVE},
+        {{-1,-8,0},V_DRAW},
+
+        {{1,1,0},V_MOVE},
+        {{0,2,2},V_DRAW},
+        {{-1,1,0},V_DRAW},
+
+        {{  0,   0,   0}, V_EOF}
+};

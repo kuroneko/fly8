@@ -1,0 +1,116 @@
+How to install the sources from a xxxx.zip file:
+
+1) unzip -La xxxx.zip
+
+   On older 'unzip' use:
+
+   unzip -xa xxxx.zip
+
+   Will create a directory 'fly8' with all the stuff underneath. The '-a'
+   is needed since it was packed on MSDOS. If you do not have 'unzip'
+   then get it, it compiles nicely on most systems.
+
+   I normally install it under games/src.
+
+2) cd fly8
+
+   That's where everything is.
+
+3) sh unix/setfly8
+
+   All platform directories should be uppercase. MSDOS looses the case.
+
+4) UNIX/config lx	(for Linux)
+   UNIX/config sp	(for SUN SparcStation)
+   UNIX/config ix	(for SGI Irix)
+
+   Will set everything up. For other systems you will need to update all
+   the *lx* files into new *zz* files for your platform. However, except
+   for the joystick driver there is no Linux specific code, so just
+   disabling the stick (in config.h) may get it going on your *unix*.
+   Most of the dependencies are in the config.h file. Also, some
+   makefiles use 'awk' or 'nawk'.
+
+5) About Linux joysticks.
+
+   If you use the 'joystick.o' driver, you will, in the /js directory:
+
+	cp joystick.h /usr/include/linux
+
+   Kernel 1.2.x and early 1.3.x need kernel_version[] to be defined in each
+   loadable module - in which case you need to replace the "#if 0" with
+   "#if 1" early in js\joystick.c. To build do:
+
+	make
+	make devs
+
+   The last step is required if you do not yet have /dev/js0 and /dev/js1.
+
+   To copy the module to the right place do:
+
+	make install
+
+   Before using the joystick, you will have to load the module:
+
+	insmod joystick.o
+
+   To see if your joystick was recognized, check
+
+	dmesg
+
+   and you may remove the driver with:
+
+	rmmod joystick
+
+   Note that you will want to have "-DUSE_JOY" in the top Makefile to enable
+   this joystick support.
+
+   If you are using the game.h based joystick then define "-DUSE_GAME".
+
+   To use the Colorado Workstation GamePort define "-DUSE_GP".
+
+6) make all
+
+   But first check 'Makefile', esp. the INSTALLDIR definition.
+
+7) cd docs
+   ./dodoc
+   cd ..
+
+   This will create fly8.doc from fly8.mm. Or do 'dodvi' for fly8.dvi. I
+   think that these days there may already be a fly8.doc in the package
+   though; it sure is in the binary packages.
+
+8) make install
+
+   Will copy stuff to the install directory. Check the makefile first as
+   to where it installs it (INSTALLDIR).
+
+9) Now use it. Change to the install directory and run as 'fly8 &'. Or
+   try 'fly8 z5 &' for 5 drones and autopilot engaged.
+
+10) There is a script 'fly' which may be placed in your /usr/loacl/bin or
+   something which will then run fly8 from any directory directly. Just
+   change the install directory there. Note that if you often use common
+   options then these can be put into the fly.ini file or left in the
+   FLY8 environment variable.
+
+
+In summary, here is the script that I use to rebuild Fly8 on Linux. I
+run it from /usr/local/src.
+
+	#!/bin/sh
+	unzip -La fly8???1.zip
+	cd fly
+	sh unix/setfly8
+	sh UNIX/config lx
+	(cd UNIX/js; cp joystick.h /usr/include/linux; make devs all)
+	make all 1>errs 2>&1
+	(cd docs; ./dodoc)
+	make install
+	cd ..
+
+On SUN you do not need the joystick stuff and the config is for 'sp'.
+
+Regards
+	Eyal Lebedinsky	(eyal@eyal.emu.id.au)

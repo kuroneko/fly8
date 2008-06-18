@@ -1,0 +1,236 @@
+#!/bin/sh
+
+###############################################################################
+##
+## File:	install.sh
+##
+## Purpose:	Clean install for Eyal's fly8 UNIX source code
+##
+## Author:	Robert Nader. Email: naderr@topaz.cqu.edu.au
+##
+## Date:	03/96 
+##
+##
+##
+##
+##
+##
+##
+###############################################################################
+
+##
+##
+## USER MODIFIABLE VARIABLES
+##
+## Fill in SOURCE_PATH, INSTALL_PATH, ARCH and USE_JOYSTICK or 
+## have the script prompt you for them.
+##
+
+#
+# OS Architecture:
+#
+# For LINUX     : ARCH=lx
+# For SUN SPARC : ARCH=sp
+#
+ARCH=lx
+
+##
+## EYAL, the ARCH should be prompted but it's a pain scripting it.
+##
+
+# Path to where installation *.zip files are located
+SOURCE_PATH=
+#/c1/ftp/download/games/fly8/beta
+
+## Path to where the source code will be installed
+INSTALL_PATH=
+#/usr/local/src
+
+# 
+# Set USE_JOYSTICK=1 for joystick kernel module
+# or  USE_JOYSTICK=0 not to use it.
+#
+USE_JOYSTICK=1
+
+##
+## EYAL, the same here; it should prompt (SPARC joystick module ??? ) ;)
+##
+
+
+## Installation log file
+log=$HOME/installfly8.log
+
+
+###############################################################################
+## NOTHING TO CHANGE BELOW THIS LINE
+###############################################################################
+
+true=0
+false=1
+
+## Display banner: no trap
+echo "Running fly8 quick install. To abort press Ctrl-C ..."
+echo ""
+
+
+#------------------------------------------------------------------------------
+# SCRIPT FUNCTIONS
+#------------------------------------------------------------------------------
+
+search_source_path()
+{
+   echo -n "Searching for directory: $1 ... "
+   if [ -d $1 ] ; then
+      echo "found."
+      return $true
+   else
+      echo "not found."
+      return $false
+   fi
+}
+
+search_for_f8_zips()
+{
+#
+# EYAL: as you told me ... we only really need to check for f81121b9.zip
+# and as such there really is no need to make this a function ... but anyway ;)
+   echo -n "Searching for fly8 zip files in $1 ... "
+##   ls $1 | grep f8.......zip
+##   if [ $? -eq $true ] ; then
+##      echo "found."
+##      return $true
+##   else
+##      echo "not found."
+##      return $false
+##   fi
+
+if [ -f $1/f81121b9.zip ] ; then
+   echo "found."
+   return $true
+else
+   echo "not found."
+   return $false
+fi
+}
+
+abort_install()
+{
+   echo $1
+   echo "Aborting."
+   exit $false
+}
+
+get_install_path()
+{
+   # Prompt user for install path
+   echo -n "Please enter the absolute path where to install the fly8 source: "
+   read INSTALL_PATH
+   if ! [ -d ${INSTALL_PATH} ] ; then
+      echo -n "Attempting to create $INSTALL_PATH ... "
+      mkdirhier $INSTALL_PATH
+## mkdirhier will alway return 0 !!! ;(
+#      if [ $? -eq $true ] ; then
+#         echo "done."
+#         return $true
+#      else
+#         echo "failed."
+#         return $false
+#      fi
+   fi
+   return $true
+}
+
+#------------------------------------------------------------------------------
+
+if [ "${SOURCE_PATH}" = "" ] ; then
+   if ! search_for_f8_zips $PWD ; then
+      # Prompt user for zipped source files path.
+      echo -n "Please enter absolute path to fly8 zipped source files: "
+      read SOURCE_PATH
+      if search_source_path $SOURCE_PATH ; then
+         if ! search_for_f8_zips $SOURCE_PATH ; then
+            abort_install "Please check fly8 distribution location."
+         fi
+      else
+         abort_install "Please check fly8 distribution location."
+      fi
+   fi
+fi
+
+##
+## Test for INSTALL_PATH.
+## If it does not exist then create it.
+##
+
+if [ "${INSTALL_PATH}" = "" ] ; then
+   get_install_path
+else
+   if ! [ -d ${INSTALL_PATH} ] ; then
+      get_install_path
+   fi
+fi
+
+
+## Start logging
+echo `date` install Fly8 started >$log
+echo "ARCH=$ARCH" >$log
+echo "SOURCE_PATH=$SOURCE_PATH" >$log
+echo "INSTALL_PATH=$INSTALL_PATH" >$log
+echo "---------------------------------------------------" >$log
+
+
+echo "Changing CWD to $INSTALL_PATH"
+echo "Changing CWD to $INSTALL_PATH" 1>>$log 2>&1
+cd $INSTALL_PATH
+
+
+#
+# This could be better but will do for now.
+#
+echo "Unzipping $SOURCE_PATH/f81121b9.zip"
+unzip -La $SOURCE_PATH/f81121b9.zip 1>>$log 2>&1
+
+
+echo "Changing CWD to fly8"
+cd fly8
+echo -n "Running sh unix/setfly8 .... "
+sh unix/setfly8 1>>$log 2>&1
+echo "done."
+
+#
+# use 'lx' for Linux, 'sp' for sun sparc.
+#
+echo -n "Running UNIX/config $ARCH ... "
+UNIX/config $ARCH 1>>$log 2>&1
+echo "done."
+
+#
+# This needs a bit of work but for now it does it.
+# TODO:
+# - check if /dev/js0 or 1 and make devs ???
+# -  make install to place module ???
+# - insmod joystick.o, then grep dmesg for recognition???
+# - maybe even a couple of script lines to add the insmod to /etc/rc.d/rc.local
+#   on a slackware system or determine where rc.local is ???
+# - etc etc ;)
+
+if [ "$ARCH" = "lx" ] ; then
+   if [ "$USE_JOYSTICK" = "1" ] ; then
+      cp UNIX/js/joystick.h /usr/include/linux
+   fi
+fi
+
+# Now would be a good time to review the Makefiles.
+
+echo -n "Running make all ... "
+make all 1>>$log 2>&1
+(cd docs; dodoc) 1>>$log 2>&1
+echo "done."
+
+echo -n "Running make install ... "
+make install 1>>$log 2>&1
+echo "done."
+
+cd ..
+echo `date` install Fly8 ended >>$log
+

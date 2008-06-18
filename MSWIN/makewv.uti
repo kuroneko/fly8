@@ -1,0 +1,33 @@
+# makevc.uti
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# make the utilities for WIN 3.1, ms vc1
+#
+
+CFLAGS=	-I.. $(XFLAGS) 
+LFLAGS= -link /ST:4000 /PACKCODE /F
+
+HFILES=	..\keydef.h ..\keymap.h ..\keyname.h
+
+all:	mac2max.exe max2mac.exe
+
+mac2max.obj max2mac.obj: $(HFILES)
+	$(CC) $(CFLAGS) -c $*.c
+
+mac2max.exe:	mac2max.obj
+	$(CC) $(CFLAGS) mac2max.obj $(LFLAGS)
+	lzexe mac2max
+	del mac2max.old
+
+max2mac.exe:	max2mac.obj
+	$(CC) $(CFLAGS) max2mac.obj $(LFLAGS)
+	lzexe max2mac
+	del max2mac.old
+
+clean:
+	-del *.obj
+	-del *.exe

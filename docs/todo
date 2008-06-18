@@ -1,0 +1,106 @@
+/* --------------------------------- todo ----------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* This is the place to keep all those notes of ideas and observations that
+ * cannot be done on the spot.
+*/
+
+
+ToDo 1.02
+=========
+
+[30 Jan 94]
+- allow objects of coarse resolution, say *VONE.
+- add missiles, chaff, flares, that sort of stuff.
+- add more planes.
+
+ToDo 1.00
+=========
+
+[8 Aug 93]
+- use speed optimization only on critical modules. Use size opt on the rest.
+  (this is for msdos).
+[done, can do more]
+- document the new mac2max/max2mac.
+[done max.doc]
+- upgrade the networking doco.
+
+[26 July 93]
+- add .ini parameter to supply a 'team' name. Then show all team members in
+  blue (rather than red). team name should be supplied during the negotiation
+  stage.
+[done]
+- add radar option to NOT lock on team members.
+[done]
+- a new program to define macros in a text file. Should use the output of
+  'listmac' as the file format.
+[done]
+
+[general]
+- add dbuff to X11.
+[done one way]
+- add net to unix.
+
+
+============================================================================
+
+
+[28 Oct 92]
+- option to feed startup keystokes.
+- asm implementation of some ifuncs?
+
+[27 Sep 92]
+- should the zero digit be crossed in the stroke font?
+
+[ 1 Oct 92]
+- imported object don't blink red/white when hit.
+
+[26 Oct 92]
+- option for mono reverse-video.
+
+[29 Oct 92]
+- have a generic (void *) pointer in the window/screen structure for the
+  graphics driver to keep its context.
+
+[16 Nov 92]
+- add debug code to memory.c to check for:
+  1 block not already free.
+  2 block in our chunks address but not in the unallocated area.
+
+[17 Nov 92]
+- font id and size should reside in the hud structure.
+- allow specification of X resources; maybe after '--' on command line.
+
+[20 Nov 92]
+- add some mountains?
+
+[25 Nov 92]
+- ALL files should follow the here/HOME/PATH search sequence.
+
+[27 Nov 92]
+- update map less frequently.
+
+[29 Nov 92]
+- idle engine should use fuel!
+
+[6 Dec 92]
+- study the X double buffering examples and do it.
+- revive the Borland port and bring it up to date.
+
+[7 Dec 92]
+- remove the remaining text calls
+- read ILS data from a file
+- read object desc from a file.
+- read land layout from a file (this is where ILS should be).
+
+[16 Dec 92]
+- add fdiva() asm support?
+
+[3 Dec 92]
+- add object description files directory command line option.
+- clear text window with 'c' command. Also when getting out of text window
+  style.
+- stores mgmt HDD needed.

@@ -1,0 +1,45 @@
+/* --------------------------------- house.vx ------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_HOUSE.
+*/
+
+#include "shape.h"
+
+#define	W	5	/* half Width */
+#define	L	10	/* half Length */
+#define	H	3	/* ceiling Height */
+#define	R	2	/* Roof height above ceiling */
+
+static VERTEX vx_house[] = {
+	{{   0,   -L, R+H}, V_MOVE},
+	{{  -W,   -L,   H}, V_DRAW},
+	{{  -W,   -L,   0}, V_DRAW},
+	{{   W,   -L,   0}, V_DRAW},
+	{{   W,   -L,   H}, V_DRAW},
+	{{   0,   -L, R+H}, V_DRAW},
+
+	{{   0,    L, R+H}, V_DRAW},
+	{{  -W,    L,   H}, V_DRAW},
+	{{  -W,    L,   0}, V_DRAW},
+	{{   W,    L,   0}, V_DRAW},
+	{{   W,    L,   H}, V_DRAW},
+	{{   0,    L, R+H}, V_DRAW},
+
+	{{  -W,   -L,   H}, V_MOVE},
+	{{  -W,    L,   H}, V_DRAW},
+
+	{{   W,   -L,   H}, V_MOVE},
+	{{   W,    L,   H}, V_DRAW},
+
+	{{  -W,   -L,   0}, V_MOVE},
+	{{  -W,    L,   0}, V_DRAW},
+
+	{{   W,   -L,   0}, V_MOVE},
+	{{   W,    L,   0}, V_DRAW},
+
+	{{   0,    0,   0}, V_EOF}
+};

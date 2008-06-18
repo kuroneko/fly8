@@ -1,0 +1,162 @@
+# makeb4
+#
+# This is part of the flight simulator 'fly8'.
+# Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+#
+
+#
+# machine specific makefile for msdos, Borland c4 and 4.5
+#
+
+CDIR=	..\..
+HH=	$(CDIR)\h
+RSP=	$(TMP)\libfly8.rsp
+LZEXE=	lzexe
+
+# If you want to include the grvesa.c video driver then add:
+#	-DINCLUDE_GRVESA
+
+CFLAGS=	-I$(HH) -I.. $(XFLAGS) 
+
+#	Non portable programs
+#
+COBJS=	pcmouse.obj stick.obj dosstick.obj console.obj pctimer.obj \
+	pcserial.obj pcdos.obj drivers.obj misc.obj \
+	plspeak.obj plsound.obj plmidi.obj plfm.obj pladlib.obj \
+	pcudp.obj packet.obj slip.obj udp.obj \
+	grfast.obj grstat.obj \
+	grvesa.obj vesa.obj vgr.obj \
+	grbgi.obj \
+	s3.obj
+
+AOBJS=	msubs.obj
+
+OBJS=	$(COBJS) $(AOBJS)
+
+HFILES=	..\fly.h ..\config.h
+
+.PRECIOUS: msubs.obj
+
+
+all:	fly8sys.lib exe
+
+exe:	gettimer.exe settimer.exe joytest.exe banktool.exe fly8udp.exe \
+	udpmgr.exe
+
+fly8sys.lib:	$(OBJS)
+	if exist fly8sys.lib del fly8sys.lib
+	echo fly8sys &>$(RSP)
+	echo +pcmouse +stick +console +pctimer +pcserial & >>$(RSP)
+	echo +msubs +dosstick +grstat & >>$(RSP)
+	echo +pcdos +drivers +grfast +s3 +grbgi +misc & >>$(RSP)
+	echo +slip +pcudp +packet +udp & >>$(RSP)
+	echo +plspeak +plsound +plmidi +plfm +pladlib & >>$(RSP)
+	echo +grvesa +vesa +vgr >>$(RSP)
+	tlib @$(RSP)
+	-del $(RSP)
+
+$(COBJS):	$(HFILES)
+
+plsound.obj:	$(HFILES) ..\notes.h
+
+plspeak.obj:	$(HFILES) ..\notes.h pc8254.h
+
+plmidi.obj:	$(HFILES) ..\notes.h
+
+plfm.obj:	$(HFILES) ..\notes.h
+
+pladlib.obj:	$(HFILES) ..\notes.h
+
+
+grfast.obj:	$(HFILES) ..\colors.h $(HH)\gr.h
+
+grvesa.obj:	$(HFILES) ..\colors.h vgr.h vesa.h
+
+vesa.obj:	$(HFILES) vgr.h vesa.h
+
+vgr.obj:	$(HFILES) vgr.h
+
+grbgi.obj:	$(HFILES) ..\colors.h
+
+pcserial.obj:	$(HH)\com.h
+
+pctimer.obj:	pc8254.h
+
+stick.obj:	stick.h
+
+dosstick.obj:	stick.h
+
+
+packet.obj:	$(HH)\pktdrvr.h
+
+slip.obj:	$(HH)\pktdrvr.h
+
+pcudp.obj:	$(HH)\pktdrvr.h
+
+udp.obj:	udp.c
+
+
+msubs.obj:	msubs.b3
+	copy msubs.b3 msubs.obj
+
+#
+# Utility programs
+#
+
+gettimer.obj:	gettimer.c
+	$(CC) $(CFLAGS) -c $*.c
+
+gettimer.exe:	gettimer.obj
+	$(CC) $(CFLAGS) gettimer.obj
+	$(LZEXE) gettimer.exe
+	-del gettimer.old
+
+settimer.obj:	settimer.c
+	$(CC) $(CFLAGS) -c $*.c
+
+settimer.exe:	settimer.obj
+	$(CC) $(CFLAGS) settimer.obj
+	$(LZEXE) settimer.exe
+	-del settimer.old
+
+
+joytest.obj:	joytest.c
+	$(CC) $(CFLAGS) -c $*.c
+
+joytest.exe:	joytest.obj
+	$(CC) $(CFLAGS) joytest.obj
+	$(LZEXE) joytest.exe
+	-del joytest.old
+
+
+banktool.obj:	banktool.c
+	$(CC) $(CFLAGS) -c $*.c
+
+banktool.exe:	banktool.obj
+	$(CC) $(CFLAGS) banktool.obj
+	$(LZEXE) banktool.exe
+	-del banktool.old
+
+
+fly8udp.obj: fly8udp.c
+	$(CC) $(CFLAGS) -DDEBUG_FLY8UDP -c $*.c
+
+fly8udp.exe: fly8udp.obj $(WLIB)
+	$(CC) $(CFLAGS) fly8udp.obj $(WLIB)
+	$(LZEXE) fly8udp.exe
+	-del fly8udp.old
+
+udpmgr.obj: udpmgr.c
+	$(CC) $(CFLAGS) -c $*.c
+
+udpmgr.exe: udpmgr.obj $(WLIB)
+	$(CC) $(CFLAGS) udpmgr.obj $(WLIB)
+	$(LZEXE) udpmgr.exe
+	-del udpmgr.old
+
+
+clean:
+	-del *.exe
+	-del *.obj
+	-del *.lib
+	-del *.rsp

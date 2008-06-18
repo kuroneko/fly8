@@ -1,0 +1,87 @@
+REM ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+REM บMark II WCS Base Switch Settings                                       บ
+REM บBlack Hat switch = Digital                                             บ
+REM บRed Switch       = Analog                                              บ
+REM ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+REM
+REM NOTE:  No throttle statement is needed with the WCS II run thru the
+REM   FLCS as analog! When no throttle statement is encountered for the
+REM   WCS II, it is assumed ANALOG and the RED switch must be in ANALOG.
+REM
+REM
+REM ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+REM บ This is a TEST file for making sure the FLCS is in     บ
+REM บ proper working order. The key commands listed below2   บ
+REM บ are what should be seen on the screen when the FLCS    บ
+REM บ Has downloaded correctly.                              บ
+REM ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+USE WCS
+
+RATE 5
+
+REM ษออออออออออออออออออออออออป
+REM บFLCS Buttons Commands:  บ
+REM ศออออออออออออออออออออออออผ
+
+BTN TG2 P 0 /R R 0
+BTN S2  P 1 /R R 1
+BTN S1  P 2 /R R 2
+BTN S3  P 3 /R R 3
+
+BTN TG1 P 8 /R R 8
+BTN S4  P 9 /R R 9
+
+REM ษออออออออออออออออออออออออป
+REM บFLCS Main Hat Commands: บ
+REM ศออออออออออออออออออออออออผ
+
+BTN H1U P 4 /R R 4
+BTN H1R P 5 /R R 5
+BTN H1D P 6 /R R 6
+BTN H1L P 7 /R R 7
+
+REM ษออออออออออออออออออออออออป
+REM บFLCS Hat 2 Commands:    บ
+REM ศออออออออออออออออออออออออผ
+
+BTN H2U P i /R R i
+BTN H2R P j /R R j
+BTN H2D P k /R R k
+BTN H2L P l /R R l
+
+REM ษออออออออออออออออออออออออป
+REM บFLCS Hat 3 Commands:    บ
+REM ศออออออออออออออออออออออออผ
+
+BTN H3U P m /R R m
+BTN H3R P n /R R n
+BTN H3D P o /R R o
+BTN H3L P p /R R p
+
+REM ษออออออออออออออออออออออออป
+REM บFLCS Hat 4 Commands:    บ
+REM ศออออออออออออออออออออออออผ
+
+BTN H4U P q /R R q
+BTN H4R P r /R R r
+BTN H4D P s /R R s
+BTN H4L P t /R R t
+
+REM ษออออออออออออออออออออออออป
+REM บWCS II Buttons Commands:บ
+REM ศออออออออออออออออออออออออผ
+
+BTN T1 P a /R R a
+BTN T2 P b /R R b
+BTN T3 P c /R R c
+BTN T4 P d /R R d
+BTN T5 P e /R R e
+BTN T6 P f /R R f
+
+REM ษออออออออออออออออออออออออป
+REM บWCS II Rocker  Commands:บ
+REM ศออออออออออออออออออออออออผ
+
+BTN T7 P g /R R g
+BTN T8 P h /R R h
+

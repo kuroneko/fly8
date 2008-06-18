@@ -1,0 +1,26 @@
+/* --------------------------------- box.vx --------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* Object shape: O_BOX.
+*/
+
+#include "shape.h"
+
+#define	S	10
+static VERTEX vx_box[] = {
+	{{0, 0, 0}, V_MOVE},
+	{{0, S, 0}, V_DRAW},
+	{{S, S, 0}, V_DRAW},
+	{{S, 0, 0}, V_DRAW},
+	{{0, 0, 0}, V_DRAW},
+	{{0, 0, S}, V_DRAW},
+	{{0, S, S}, V_DRAW},
+	{{S, S, S}, V_DRAW},
+	{{S, 0, S}, V_DRAW},
+	{{0, 0, S}, V_DRAW},
+
+	{{0, 0, 0}, V_EOF}
+};

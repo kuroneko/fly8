@@ -1,0 +1,79 @@
+OpenVMS port of Fly8 V 1.11                        Sept 1996
+===========================
+
+ReBuild procedure:
+
+You are into [.VMS] directory:
+
+ 1) Parms and shapes are preprocessed in the VMS distribution of FLY8 (this involves 
+    the use of awk under VMS/posix). However, two DCL scripts are provided.
+
+ 2) Install DCL scripts, config header and link option files with:
+
+  $ @CONFIG.COM
+
+ 3) Optional: rebuild parms and shapes
+
+  $ set def [-.PARMS]
+  $ @PREPROC
+  $ set def [-.SHAPES]
+  $ @PREPROC
+ 4) For VAX platform:
+
+  $ SET DEF [-]
+  $ @COMPILE_VMS_DECC.COM   ! compilation of portable procedure
+  $ set def [.VMS]
+  $ @COMPILE_VMS_DECC.COM   ! compilation of VMS-specific procedures
+  $ set def [-]
+  $ @LINK_VMS_DECC.COM      ! Link all this stuff
+
+ 5) For Alpha platform
+
+  $ SET DEF [-]
+  $ @COMPILE_VMS_AXP.COM   ! compilation of portable procedure
+  $ set def [.VMS]
+  $ @COMPILE_VMS_AXP.COM   ! compilation of VMS-specific procedures
+  $ set def [-]
+  $ @LINK_VMS_AXP.COM      ! Link all this stuff
+
+
+  6) Install procedure:
+
+  $ copy fly8.exe [-.FLY8]* /log     ! exe in the fly8 data directory
+  $ define FLY_DIR the_FLY8_data_diractory
+  $ fly :== "$DISK:[XXXX.FLY8]fly8 """-F FLY_DIR:""""
+
+DO NOT DEFINE FLY8 SYMBOL TO RUN FLY8 ... FLY8 symbol is used to pass
+arguments.....
+
+[-.FLY8] directory must be populated with shapes (.VXX), params (.PRM), init files
+(.INI), video driver modes (.VMD) etc ... With the VMS distribution of FLY8, the
+directory is pre-populated (this distribution can be found at ftp2.cnam.fr and
+ada.cenaath.cena.dgac.fr servers into [.DECWINDOWS] directory):
+
+Directory SUB2:[DECW_PORT.FLY8]
+
+BASIC.PRM;1         BOX.VXX;1           BROKEN.VXX;1        CHPRO.MAX;1
+CHUTE.VXX;1         CLASSIC.PRM;1       CLASSIC.VXX;1       CRATER.VXX;1
+F16.AVX;2           F16.FVX;2           F16.PRM;1           FCS.MAX;1
+FLCS.MAX;1          FLY.INI;14          FLY.INI_NEW;1       FLY.INI_OLD;1
+FLY.LND;1           FLY.LOG;1           FLY.MAC;40          FLY.MAX;1
+FLY.NAV;1           FLY8.EXE;5          GRX.VMD;1           GTARGET.VXX;1
+HOUSE.VXX;1         M61.VXX;1           MK82.VXX;1          PLANE.VXX;1
+RUNWAY.AVX;2        RUNWAY.VXX;1        SMOKE.VXX;1         TARGET.VXX;1
+TOWER.AVX;3         TOWER.VXX;1         VIEWER.VXX;1        WCS.MAX;1
+WF15.VXX;1          WF16.VXX;1          WF18.VXX;1          YPLANE.PRM;1
+
+
+Two X11 graphic drivers are available, GRI (via PutImage) and GRX (using
+Pixmaps). GRI seems faster on Alphas, but you can try GRX. (the driver selection 
+is made via FLY8_DIR:FLY.INI file)
+
+The IP  net stuff is not yet operational under OpenVMS (need of fcntl()).
+
+Enjoy.
+
+Patrick Moreau
+
+pmoreau@cena.dgac.fr
+moreau_p@decus.fr
