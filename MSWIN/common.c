@@ -26,8 +26,10 @@ char _Gbuf[2048] = "";
 HWND		ghWndMain  = (HWND)0;
 HWND		ghWndText  = (HWND)0;
 
+#ifndef HAS_PERROR
 void FAR
 perror (const char *p)
 {
 	MessageBox((HWND)0, (LPCSTR)p, (LPCSTR)"Fly8 Error", MB_OK);
 }
+#endif

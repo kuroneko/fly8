@@ -1,0 +1,117 @@
+/* --------------------------------- config.h ------------------------------- */
+
+/* This is part of the flight simulator 'fly8'.
+ * Author: Eyal Lebedinsky (eyal@eyal.emu.id.au).
+*/
+
+/* System dependent configuration information: Microsoft WIN NT, vc
+ * Microsoft Windows  by Michael Taylor (miket@pcug.org.au)
+*/
+
+#ifndef FLY8_CONFIG_H
+#define FLY8_CONFIG_H
+
+#cmakedefine INIFILE "@INIFILE@"        /* name of ini file */
+#cmakedefine LOGFILE "@LOGFILE@"    	/* name of log file */
+#cmakedefine MAC_EXT "@MAC_EXT@"		/* binary macros file extension */
+#cmakedefine MAX_EXT "@MAX_EXT@"		/* text macros file extension */
+#cmakedefine VMD_EXT "@VMD_EXT@"		/* video modes file extension */
+#cmakedefine PRM_EXT "@PRM_EXT@"		/* plane parameters file extension */
+#cmakedefine SHP_EXT "@SHP_EXT@"		/* object shape file extension */
+#cmakedefine NAV_EXT "@NAV_EXT@"		/* nav data file extension */
+#cmakedefine LND_EXT "@LND_EXT@"		/* landscape file extension */
+
+#cmakedefine	RTMODE	"@RTMODE@"		/* fopen file mode: read  text */
+#cmakedefine	RBMODE	"@RBMODE@"		/* fopen file mode: read  binary */
+#cmakedefine	WTMODE	"@WTMODE@"	    /* fopen file mode: write text  */
+#cmakedefine    WBMODE	"@WBMODE@"		/* fopen file mode: write binary */
+#cmakedefine	ATMODE	"@ATMODE@"		/* fopen file mode: read/write text */
+#cmakedefine	ABMODE	"@ABMODE@"		/* fopen file mode: read/write binary */
+
+#cmakedefine PATHSEP	'@PATHSEP@'  /* path separator */
+
+#cmakedefine FAR    @FAR@
+#ifndef FAR
+#define FAR
+#endif
+
+#cmakedefine NEAR   @NEAR@
+#ifndef NEAR
+#define NEAR
+#endif
+
+#cmakedefine INLINED @INLINED@
+#ifndef INLINED
+#define INLINED
+#endif
+
+#cmakedefine FASTCALL @FASTCALL@
+#ifndef FASTCALL
+#define FASTCALL
+#endif
+
+#cmakedefine AFASTCALL @AFASTCALL@
+#ifndef AFASTCALL
+#define AFASTCALL
+#endif
+
+#cmakedefine C_MAIN     @C_MAIN@
+#ifndef C_MAIN
+#define C_MAIN  main
+#endif
+
+#undef KF_UP
+
+#cmakedefine NOSTDERR
+
+#cmakedefine HAS_STRICMP
+
+#ifndef HAS_STRICMP
+#ifdef HAS_STRCASECMP
+#define stricmp(a,b) strcasecmp(a,b)
+#else
+#define NEED_STRICMP   1
+#endif
+#endif
+
+#cmakedefine HAS_STRNICMP
+
+#ifndef HAS_STRNICMP
+#ifdef HAS_STRNCASECMP
+#define strnicmp(a,b,n) strncasecmp(a,b,n)
+#else
+#define NEED_STRNICMP  1
+#endif
+#endif
+
+#cmakedefine HAS_STRDUP
+#ifndef HAS_STRDUP
+#define NEED_STRDUP    1
+#endif
+
+#cmakedefine HAS_PERROR
+
+#cmakedefine HAVE_JOYSTICK	1
+#cmakedefine HAVE_MIDI	1
+#cmakedefine HAVE_WAVE	1
+#cmakedefine HAVE_UDP   1
+
+#cmakedefine STRICT @STRICT@
+#ifndef STRICT
+#define STRICT
+#endif
+#cmakedefine BPTR @BPTR@
+#ifndef BPTR
+#define BPTR
+#endif
+
+#define VGASET(b, o, c, n)	memset ((b)+(o), (c), (n))
+
+#cmakedefine SYS_MSWIN_32	1
+#cmakedefine SYS_MSWIN_NT	1
+
+#cmakedefine SHORT_TYPE	@SHORT_TYPE@
+
+#cmakedefine SYS_WINSOCK	1
+
+#endif

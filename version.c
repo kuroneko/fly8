@@ -10,8 +10,8 @@
 #include "fly.h"
 
 
-#define	VERSION		"1.12"
-#define	LAST_CHANGE	"20Feb98"
+#define	VERSION		"2.00"
+#define	LAST_CHANGE	"06May20"
 
 extern char * FAR
 welcome (int where)
@@ -22,20 +22,20 @@ welcome (int where)
 
 	switch (where) {
 	case 0:						/* to screen */
-		MsgPrintf (100, "Fly8 %s by Eyal Lebedinsky", ver);
-		MsgPrintf (100, "Build %s %s eyal@eyal.emu.id.au",
+		MsgPrintf (100, "Fly8 %s", ver);
+		MsgPrintf (100, "Build %s %s",
 			__DATE__, __TIME__);
 		break;
 	case 2:						/* to stderr */
 #ifndef NOSTDERR
-		fprintf (stderr, "Fly8 %s by Eyal Lebedinsky\n", ver);
-		fprintf (stderr, "Build %s %s eyal@eyal.emu.id.au\n",
+		fprintf (stderr, "Fly8 %s\n", ver);
+		fprintf (stderr, "Build %s %s\n",
 			__DATE__, __TIME__);
 		break;
 #endif
 	case 1:						/* to log */
-		LogPrintf ("Fly8 %s by Eyal Lebedinsky\n", ver);
-		LogPrintf ("Build %s %s eyal@eyal.emu.id.au\n",
+		LogPrintf ("Fly8 %s\n", ver);
+		LogPrintf ("Build %s %s\n",
 			__DATE__, __TIME__);
 		break;
 	default:					/* just get it */
