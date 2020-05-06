@@ -1,0 +1,1 @@
+cat tmac.gm fly8.mm | sed "/^$/d" | groff -Tpdf -rO1.25i >fly8.pdf
