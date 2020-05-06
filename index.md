@@ -23,9 +23,20 @@ I remember it (I barely touched 1.11).
 The only changes that I've made to the 1.12 branch has been tidying up
 duplicated files (the fly8 build/config process would copy sources around
 when you set it up to target a platform) and a few small adjustments to
-play nice with git and modern tools
+play nice with git and modern tools.
 
-It can still be built, even if it doesn't run properly on most PCs due to
-underflowing the FDM.  It can potentially still be used, as is, on slower
-non-x86 systems and I may yet port it to the few I still run.
+It can still be built, even if it doesn't run properly on most PCs.  It
+can potentially still be used, as is, on slower systems and I may yet port
+it to the few I still run.
 
+Patches against 1.12 should only address bugs that would affect it in it's
+original setting, or add support for legacy platforms.
+
+## WIP Branches (including master)
+
+I've been toying with the idea of slowing rewriting fly8 subsystem by subsystem.
+
+"2.0" so to speak.
+
+The master (and other WIP related) branches reflect that work, including things
+like replacing the platform specific code with SDL bindings.
