@@ -46,7 +46,7 @@ BEGIN	{
 	lineno = 0
 	advance()
 	while (1) {
-		if (tok ~ /^\".*/) {
+		if (tok ~ /^".*/) {
 			printf ("%s\n", tok) >fout
 			advance()
 		} else {
@@ -92,7 +92,7 @@ function advance() {
 	}
 	if (match(line, /^0[xX][0-9a-fA-F]+/) || match(line, /^[.0-9]+/) ||
 	    match(line, /^(<=|==|!=|>=|\|\||&&|>>|<<)/) ||
-	    match(line, /^\".*\"/) ||
+	    match(line, /^".*"/) ||
 	    match(line, /^./)) {
 	    	tok = substr(line, 1, RLENGTH)
 	    	line = substr(line, RLENGTH+1)
