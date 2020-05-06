@@ -1,0 +1,8 @@
+[requires]
+sdl2/2.0.12@bincrafters/stable
+lua/5.3.5
+
+[generators]
+cmake
+
+[options]
