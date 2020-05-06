@@ -238,46 +238,46 @@ SdlConsoleHandleEvent(SDL_Event *event) {
             break;
         default:
             break;
-        }
     }
+}
 
 
-    LOCAL_FUNC int FAR
-    kwait(void) {
-        int esc, c;
+LOCAL_FUNC int FAR
+kwait(void) {
+    int esc, c;
 
-        for (esc = 0; -1 != (c = kread());)
-            if (K_ESC == c)
-                esc = 1;
-        return (esc);
-    }
+    for (esc = 0; -1 != (c = kread());)
+        if (K_ESC == c)
+            esc = 1;
+    return (esc);
+}
 
-    LOCAL_FUNC int FAR
-    kgetch(void) {
-        int c;
+LOCAL_FUNC int FAR
+kgetch(void) {
+    int c;
 
-        while ((c = kread()) == -1)
-            sys_poll(20);
-        return (c);
-    }
+    while ((c = kread()) == -1)
+        sys_poll(20);
+    return (c);
+}
 
-    LOCAL_FUNC int FAR
-    kinit(char *options) {
-        options = options;
-        return (0);
-    }
+LOCAL_FUNC int FAR
+kinit(char *options) {
+    options = options;
+    return (0);
+}
 
-    LOCAL_FUNC void FAR
-    kterm(void) {}
+LOCAL_FUNC void FAR
+kterm(void) {}
 
-    struct KbdDriver NEAR KbdConsole = {
-            .name = "SdlConsole",
-            .Init = kinit,
-            .Term = kterm,
-            .Read = kread,
-            .Getch = kgetch,
-            .Wait = kwait,
-    };
+struct KbdDriver NEAR KbdConsole = {
+        .name = "SdlConsole",
+        .Init = kinit,
+        .Term = kterm,
+        .Read = kread,
+        .Getch = kgetch,
+        .Wait = kwait,
+};
 
 /*FIXME:  this should just be copying state driven by the event loop rather than
  * polling SDL's mouse functions. */
@@ -285,14 +285,14 @@ SdlConsoleHandleEvent(SDL_Event *event) {
 #define MAX_MOUSE_BUTTONS 5
 #endif
 
-    extern int FAR
-    GetMouse(int *x, int *y, char *btn, int *nbtn) {
-        int c;
-        Uint32 buttonMask = SDL_GetMouseState(x, y);
+extern int FAR
+GetMouse(int *x, int *y, char *btn, int *nbtn) {
+    int c;
+    Uint32 buttonMask = SDL_GetMouseState(x, y);
 
-        *nbtn = MAX_MOUSE_BUTTONS;
-        for (c = 0; c < MAX_MOUSE_BUTTONS; c++) {
-            btn[c] = ((buttonMask & SDL_BUTTON(c + 1)) != 0);
-        }
-        return (0);
+    *nbtn = MAX_MOUSE_BUTTONS;
+    for (c = 0; c < MAX_MOUSE_BUTTONS; c++) {
+        btn[c] = ((buttonMask & SDL_BUTTON(c + 1)) != 0);
     }
+    return (0);
+}
