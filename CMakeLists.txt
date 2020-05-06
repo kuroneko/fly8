@@ -282,7 +282,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Windows")
             PRIVATE
             SDL/console.c
             SDL/timer.c
-            SDL/grsdlgl.c
+            SDL/grsdl.c
             SDL/sdlplatform.c
             COMMON/bgr.c
             COMMON/bgr.h

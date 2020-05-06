@@ -18,10 +18,10 @@
 
 #include "fly.h"
 
-extern struct GrDriver NEAR GrSDLOpenGL;
+extern struct GrDriver NEAR GrSDL;
 
 struct GrDriver NEAR * FAR GrDrivers[] = {
-    &GrSDLOpenGL,
+    &GrSDL,
     0};
 
 
