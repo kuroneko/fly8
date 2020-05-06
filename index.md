@@ -11,6 +11,8 @@ the spirit of the GNU copyleft."
 The last official release of Fly8 was actually 1.11.  1.12 sat in Beta for
 an extended period of time and was never rolled into a final release.
 
+The [manual for 1.12](/docs/fly8-1.12.pdf) has been converted to PDF.
+
 I acquired the most recent sources from Eyal back in 2008 after discovering
 that the zip archives had fallen off of the internet.
 
