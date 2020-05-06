@@ -243,6 +243,7 @@ file(GLOB FILES_VMD LIST_DIRECTORIES false ${FLY8_SYSTEM_TYPE}/*.vmd)
 file(GLOB FILES_SYSTEM_READMES LIST_DIRECTORIES false ${FLY8_SYSTEM_TYPE}/readme.*)
 file(GLOB FILES_PARMS LIST_DIRECTORIES false parms/*.prm parms/*.nav parms/*.lnd)
 file(GLOB FILES_SHAPES LIST_DIRECTORIES false shapes/*.vxx)
+file(GLOB FILES_MACROS LIST_DIRECTORIES false misc/*.max)
 file(GLOB FILES_DOCS LIST_DIRECTORIES false docs/*.doc docs/*.pdf)
 
 install(FILES
@@ -252,6 +253,7 @@ install(FILES
         ${FILES_SYSTEM_READMES}
         ${FILES_PARMS}
         ${FILES_SHAPES}
+        ${FILES_MACROS}
         ${FILES_DOCS}
         DESTINATION .)
 # default plane shape
