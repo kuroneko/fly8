@@ -1,23 +1,18 @@
-# Fly8
+# Introduction
 
-Fly8 is an old (mid-90s) flight simulator originally written by Eyal
+Fly8 is an old (90s) flight simulator originally written by Eyal
 Lebedinsky.
 
 Eyal published Fly8 with the permission: "It can be freely distributed in
 the spirit of the GNU copyleft."
 
-## Version 1.12 Beta
+## Version 1.12 Beta (branch: 1.12)
 
 The last official release of Fly8 was actually 1.11.  1.12 sat in Beta for
 an extended period of time and was never rolled into a final release.
 
 I acquired the most recent sources from Eyal back in 2008 after discovering
 that the zip archives had fallen off of the internet.
-
-At the time, Eyal commented that there are better projects to start from
-if you wanted to build a modern flight simulator - however, I'm quite
-nostalgic about Fly8 having spent a bit of my teens hacking on various bits
-of it.
 
 I consider the 1.12 branch to be a record of living history - it's the
 simulator as it was when Eyal stopped working on it, and in the form that
