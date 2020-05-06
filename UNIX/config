@@ -26,11 +26,3 @@ cp COMMON/udp.c		UNIX
 cp COMMON/udpmgr.c	UNIX
 cp COMMON/plsound.c	UNIX
 cp COMMON/plsound.h	UNIX
-
-chmod +x		UNIX/fly
-chmod +x		UNIX/flytty
-chmod +x		UNIX/flyfifo
-chmod +x		UNIX/flyudp
-chmod +x		UNIX/server
-chmod +x		UNIX/mgr
-chmod +x		docs/do*
