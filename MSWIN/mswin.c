@@ -9,13 +9,13 @@
 */
 
 #include <windows.h>
+#include <SDL.h>
 
 #include "fly.h"
 
 #if SYS_MSWIN_16
 #include <toolhelp.h>
 #endif
-
 
 #undef DEBUG_MSWIN
 
@@ -224,6 +224,8 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine,
 	HMENU  	hMenu  = NULL;
 	char	*p;
 	int	i;
+
+	SDL_Init(SDL_INIT_VIDEO);
 
 #ifdef DEBUG_MSWIN
 MswBaderr ("Fly8 starting\n");

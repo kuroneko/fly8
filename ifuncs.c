@@ -501,7 +501,7 @@ emit_angle (char *q, char *name, ANGLE *p, int size)
 extern int
 main (int argc, char *argv[])
 {
-	init_funcs ();
+	funcs_init ();
 	emit_xshort ("static", "FAR log_tab",   log_tab,   sizeof (log_tab));
 	emit_xshort ("",       "NEAR sin_tab",  sin_tab,   sizeof (sin_tab));
 	emit_Uxshort("static", "FAR sqrtab",    sqrtab,    sizeof (sqrtab));

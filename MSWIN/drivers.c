@@ -18,27 +18,11 @@
 
 #include "fly.h"
 
-extern struct GrDriver NEAR GrMSWinS;
-extern struct GrDriver NEAR GrMSWinB;
-#ifdef USE_WING	
-extern struct GrDriver NEAR GrWing;
-extern struct GrDriver NEAR GrvWing;
-#endif
-#ifdef USE_DDRAW
-extern struct GrDriver NEAR GrDDraw;
-#endif
+extern struct GrDriver NEAR GrSDLOpenGL;
 
 struct GrDriver NEAR * FAR GrDrivers[] = {
-	&GrMSWinS,		/* flicker - single buffered		 */
-	&GrMSWinB,		/* uses a bitmap to stop flicker- Slow!! */
-#ifdef USE_WING
-	&GrWing,		/* uses the MS Wing library */
-	&GrvWing,		/* uses the MS Wing library */
-#endif
-#ifdef USE_DDRAW
-	&GrDDraw,
-#endif
-0};
+    &GrSDLOpenGL,
+    0};
 
 
 #if HAVE_WAVE
