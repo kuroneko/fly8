@@ -29,6 +29,7 @@ SdlSysTerm (void)
 }
 
 extern void SdlConsoleHandleEvent(SDL_Event *event);
+extern void FAR SDLStickHandleEvent(SDL_Event *jsEvent);
 
 static void FAR
 SdlSysPoll (void)
@@ -47,6 +48,15 @@ SdlSysPoll (void)
         case SDL_KEYDOWN:
         case SDL_KEYUP:
             SdlConsoleHandleEvent(&event);
+            break;
+        case SDL_JOYAXISMOTION:
+        case SDL_JOYBUTTONDOWN:
+        case SDL_JOYBUTTONUP:
+        case SDL_JOYHATMOTION:
+        case SDL_JOYBALLMOTION:
+        case SDL_JOYDEVICEADDED:
+        case SDL_JOYDEVICEREMOVED:
+            SDLStickHandleEvent(&event);
             break;
         default:
             break;

@@ -44,19 +44,13 @@ struct SndDriver NEAR * FAR SndDrivers[] = {
 
 extern struct PtrDriver NEAR PtrMouse;
 extern struct PtrDriver NEAR PtrKeypad;
-#if HAVE_JOYSTICK
-extern struct PtrDriver NEAR PtrAstick;
-extern struct PtrDriver NEAR PtrBstick;
-#endif
 extern struct PtrDriver NEAR PtrRandom;
+extern struct PtrDriver NEAR PtrSdlStick;
 
 struct PtrDriver NEAR * FAR PtrDrivers[] = {
 	&PtrKeypad,
 	&PtrMouse,
-#if HAVE_JOYSTICK
-	&PtrAstick,
-	&PtrBstick,
-#endif
+	&PtrSdlStick,
 	&PtrRandom,
 0};
 
